@@ -29,7 +29,7 @@
 # Version numbers are generated using nerdbank.gitversioning (NBGV)
 # NBGV is NOT included as a package in the projects themselves, it is only installed and used during the github action build
 # DO NOT INCLUDE NBGV AS A PACKAGE IN YOUR PROJECTS -  it will override the attempts to define the version numbers for packages later on
-# Version numbers and package names are provided as properties to the dotnet pack command (local builds will not have version numbers updated)
+# Version Numbers and Package Names written into the .csproj file (local builds will not have version numbers updated)
 # version.json is used to define Major.Minor.Patch first three integers
 # The user therefore defines these first three integers and should update them when desired (will trigger Nuget feed publish)
 # On a pack from a MASTER pull the four integer NBGV release version number (Major.Minor.Patch.{BuildHeight}, such as 1.2.3.4) is used as package version number
@@ -64,10 +64,12 @@ on:
 env:
   TOPLEVEL_BUILD_DIR: "./src/" # Location of .sln or single .csproj (where job "test" should restore, build and test from)
   PACKAGE_PROJECT_DIR: "Yak2D/" # Location of .csproj to package below TOPLEVEL_BUILD_DIR
-  PACKAGE_NAME: "Yak2D" # Official Nuget.org Package Name
+  PACKAGE_NAME: "yak2D" # Official Nuget.org Package Name
   DEV_PACKAGE_NAME: "yak2d-dev" # Development MyGet build package name
   PUSH_PACK_NON_MASTER_STRING: "push-dev-pack" # String used to signal a Development MyGet package publish for non Master branch
   VERSION_DOT_JSON_DIR: "." # Location of user defined version.json (see format assumptions above)
+  PACKAGE_ID_STRING_IN_CSPROJ: "Yak2D" # The text string in .csproj file <PackageId> that will be replaced
+  VERSION_STRING_IN_CSPROJ: "0.0.0.0" # The text string in .csproj file <Version> that will be replaced:  
   NUGET_SOURCE: "https://api.nuget.org/v3/index.json"
   MYGET_SOURCE: "https://www.myget.org/F/yak2d-dev/api/v3/index.json" 
   # Stop wasting time caching packages
@@ -119,27 +121,41 @@ jobs:
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
           cd ${{ env.TOPLEVEL_BUILD_DIR }}${{ env.PACKAGE_PROJECT_DIR }}
-          dotnet pack -c Release -p:Version="${{ steps.nb.outputs.SimpleVersion }}" -p:PackageID="${{ env.PACKAGE_NAME }}" -o . 
+          sed -i 's/${{ env.PACKAGE_ID_STRING_IN_CSPROJ }}/${{ env.PACKAGE_NAME }}/g' *.csproj
+          sed -i 's/${{ env.VERSION_STRING_IN_CSPROJ }}/${{ steps.nb.outputs.SimpleVersion }}/g' *.csproj
+          dotnet pack -c Release -o .
           dotnet nuget push *.nupkg -s ${{ env.NUGET_SOURCE }} -k ${{secrets.NUGET_API_KEY}} --skip-duplicate 
+          sed -i 's/${{ env.PACKAGE_NAME }}/${{ env.PACKAGE_ID_STRING_IN_CSPROJ }}/g' *.csproj
+          sed -i 's/${{ steps.nb.outputs.SimpleVersion }}/${{ env.VERSION_STRING_IN_CSPROJ }}/g' *.csproj
       - name: If pushing to master, pack a DEBUG version with 1.2.3.4 format and upload to myget under the development name
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
           cd ${{ env.TOPLEVEL_BUILD_DIR }}${{ env.PACKAGE_PROJECT_DIR }}
           rm *.nupkg
-          dotnet pack -c Debug -p:Version="${{ steps.nb.outputs.Version }}" -p:PackageID="${{ env.DEV_PACKAGE_NAME }}" -o .
+          sed -i 's/${{ env.PACKAGE_ID_STRING_IN_CSPROJ }}/${{ env.DEV_PACKAGE_NAME }}/g' *.csproj
+          sed -i 's/${{ env.VERSION_STRING_IN_CSPROJ }}/${{ steps.nb.outputs.Version }}/g' *.csproj
+          dotnet pack -c Debug -o .
           dotnet nuget push *.nupkg -s ${{ env.MYGET_SOURCE }} -k ${{secrets.MYGET_API_KEY}}
+          sed -i 's/${{ env.DEV_PACKAGE_NAME }}/${{ env.PACKAGE_ID_STRING_IN_CSPROJ }}/g' *.csproj
+          sed -i 's/${{ steps.nb.outputs.Version }}/${{ env.VERSION_STRING_IN_CSPROJ }}/g' *.csproj
       - name: If pushing, but NOT master, and top git commit contains string $PUSH_PACK_NON_MASTER_STRING pack a DEBUG version using nerdbank generated metadata version under dev name and upload to myget under dev name
         if: github.ref != 'refs/heads/master' && contains(github.event.head_commit.message, env.PUSH_PACK_NON_MASTER_STRING) && github.event_name == 'push'
         run: |
           cd ${{ env.TOPLEVEL_BUILD_DIR }}${{ env.PACKAGE_PROJECT_DIR }}
-          dotnet pack -c Debug -p:Version="${{ steps.nb.outputs.SemVer2 }}" -p:PackageID="${{ env.DEV_PACKAGE_NAME }}" -o .
+          sed -i 's/${{ env.PACKAGE_ID_STRING_IN_CSPROJ }}/${{ env.DEV_PACKAGE_NAME }}/g' *.csproj
+          sed -i 's/${{ env.VERSION_STRING_IN_CSPROJ }}/${{ steps.nb.outputs.SemVer2 }}/g' *.csproj
+          dotnet pack -c Debug -o .
           dotnet nuget push *.nupkg -s ${{ env.MYGET_SOURCE }} -k ${{secrets.MYGET_API_KEY}}
           rm *.nupkg
+          sed -i 's/${{ env.DEV_PACKAGE_NAME }}/${{ env.PACKAGE_ID_STRING_IN_CSPROJ }}/g' *.csproj
+          sed -i 's/${{ steps.nb.outputs.SemVer2 }}/${{ env.VERSION_STRING_IN_CSPROJ }}/g' *.csproj
       - name: If we are NOT pushing to master, or it's a pull request, pack a DEBUG version using nerdbank git metadata version under dev name (for artifact upload)
         if: github.ref != 'refs/heads/master' || github.event_name == 'pull'
         run: |
           cd ${{ env.TOPLEVEL_BUILD_DIR }}${{ env.PACKAGE_PROJECT_DIR }}
-           dotnet pack -c Debug -p:Version="${{ steps.nb.outputs.SemVer2 }}" -p:PackageID="${{ env.DEV_PACKAGE_NAME }}" -o .
+          sed -i 's/${{ env.PACKAGE_ID_STRING_IN_CSPROJ }}/${{ env.DEV_PACKAGE_NAME }}/g' *.csproj
+          sed -i 's/${{ env.VERSION_STRING_IN_CSPROJ }}/${{ steps.nb.outputs.SemVer2 }}/g' *.csproj          
+          dotnet pack -c Debug -o .
       - name: Upload (latest) built package as action artifact
         uses: actions/upload-artifact@v2
         with:
