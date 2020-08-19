@@ -76,7 +76,7 @@ namespace Yak2D
         public string TextureFolderRootName { get; set; }
 
         /// <summary>
-        /// The root folder (either on disk or as an embedded resource location) for the user font data
+        /// The root folder (either on disk or as an embedded resource location) for the user font data (.fnt files and related .png's)
         /// </summary>
         public string FontFolder { get; set; }
 
