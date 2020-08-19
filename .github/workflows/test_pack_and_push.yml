@@ -68,7 +68,7 @@ env:
   DEV_PACKAGE_NAME: "yak2d-dev" # Development MyGet build package name
   PUSH_PACK_NON_MASTER_STRING: "push-dev-pack" # String used to signal a Development MyGet package publish for non Master branch
   VERSION_DOT_JSON_DIR: "." # Location of user defined version.json (see format assumptions above)
-  PACKAGE_ID_STRING_IN_CSPROJ: "Yak2D-localbuild" # The text string in .csproj file <PackageId> that will be replaced. This MUST only occur in the <PackageId> tag!!!
+  PACKAGE_ID_STRING_IN_CSPROJ: "replaced-in-github-action" # The text string in .csproj file <PackageId> that will be replaced. This MUST only occur in the <PackageId> tag!!!
   VERSION_STRING_IN_CSPROJ: "0.0.0.0" # The text string in .csproj file <Version> that will be replaced:  
   NUGET_SOURCE: "https://api.nuget.org/v3/index.json"
   MYGET_SOURCE: "https://www.myget.org/F/yak2d-dev/api/v3/index.json" 
