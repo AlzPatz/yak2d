@@ -79,6 +79,7 @@ namespace Yak2D.Tests
 
             filesystem.Exists(Arg.Any<string>()).Returns(true);
             filesystem.ReadAllBytes("Directory\\Name.Ext").Returns(new byte[7]);
+            filesystem.ReadAllBytes("Directory/Name.Ext").Returns(new byte[7]);
 
             var loader = new ShaderLoaderFunctions(messenger, components, applicationassembly, graphicsassembly, filesystem);
 
