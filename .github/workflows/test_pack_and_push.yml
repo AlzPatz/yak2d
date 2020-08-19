@@ -64,7 +64,7 @@ on:
 env:
   TOPLEVEL_BUILD_DIR: "./src/" # Location of .sln or single .csproj (where job "test" should restore, build and test from)
   PACKAGE_PROJECT_DIR: "Yak2D/" # Location of .csproj to package below TOPLEVEL_BUILD_DIR
-  PACKAGE_NAME: "yak2D" # Official Nuget.org Package Name
+  PACKAGE_NAME: "Yak2D" # Official Nuget.org Package Name
   DEV_PACKAGE_NAME: "yak2d-dev" # Development MyGet build package name
   PUSH_PACK_NON_MASTER_STRING: "push-dev-pack" # String used to signal a Development MyGet package publish for non Master branch
   VERSION_DOT_JSON_DIR: "." # Location of user defined version.json (see format assumptions above)
