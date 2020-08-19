@@ -1,0 +1,145 @@
+# .NET Core Workflow - Alex Paterson:
+
+# Overview
+# ---------
+# A ci/cd approach that tests and publishes packages from the MASTER branch
+# User controlled Major.Minor.Patch version numbers set in version.json file
+# Publishes new official NUGET package on a change to the user defined version number in version.json
+# Publishes a development package to MyGet on any push to master (with modified package name and four component version number, fourth component auto generated)
+# A development package can be pushed to MyGet from any branch using string sequence in git commit message
+# All pushes and pulls upload a package file as an artifact of the github action
+# Versioning tool (nerdbank.gitversioning) only used by github action, is not (and should not) be present in project itself
+# Therefore, local builds do not stamp version file on assembly 
+# (If required, should still be manually possible if <Version> is defined in the .csproj, but this has not been tested to ensure does not interfere with pack paramter override on github action workflow, should be fine_
+    
+# Extra Detail
+#----------------------------
+# Job #1 "test" -> Checkout, restore, build and test on all major operating systems (windows, linux, osx)
+
+# Job #2 "packandpush"
+# Assumes "test" successful
+# Publishes Official Nuget feed RELEASE if MASTER push contains a NEW version number (three integar format 1.2.3) as defined by user in version.json
+# Publishes Development DEBUG Package to MyGet feed on ALL pushes to master (version number used four integer format 1.2.3.4) - use development package name to differentiate from official nuget name
+# Uses the fact that Nuget.Org will (on skip duplicates) not allow a package with the same version (Major.Minor.Patch) to be uploaded if it exists already (hence official release when user changed Major.Minor.Patch first occurs),
+# and that uploads to MyGet will use 4 component version number meaning each commit does have a unique version number (MyGet publish will work each time as not duplicated version number)
+# Uploads Package as an artifact on all pushes and pulls
+# A Package is also uploaded to the MyGet development feed if the top commit comment for a PUSH on a non-master branch, contains a defined search string ($PUSH_PACK_NON_MASTER_STRING)
+# This pacakge uses Major.Minor.Patch + non-release NBGV metadata tag to generate unique version numbers
+
+# Version numbers are generated using nerdbank.gitversioning (NBGV)
+# NBGV is NOT included as a package in the projects themselves, it is only installed and used during the github action build
+# DO NOT INCLUDE NBGV AS A PACKAGE IN YOUR PROJECTS -  it will override the attempts to define the version numbers for packages later on
+# Version numbers and package names are provided as properties to the dotnet pack command (local builds will not have version numbers updated)
+# version.json is used to define Major.Minor.Patch first three integers
+# The user therefore defines these first three integers and should update them when desired (will trigger Nuget feed publish)
+# On a pack from a MASTER pull the four integer NBGV release version number (Major.Minor.Patch.{BuildHeight}, such as 1.2.3.4) is used as package version number
+# For any non-Master push/pull or master pull, the SemVer2 NBGV version with included build metadata string is used as the version number, such as 1.2.3-g2321387
+
+# This method allows the usage of NBGV to generate unique version numbers, whilst also allowing the publishes of the same packages to different feeds
+# with differing names and versioning numbers, reducing difficulties in switching between consuming the package under nuget and myget
+# the artifacts can allow testing of any push or pull without requiring an upload to a feed (useful for critical pull requests)
+
+# Repo assumptions:
+# version.json present of format:
+# {
+#  "$schema": "https://raw.githubusercontent.com/dotnet/Nerdbank.GitVersioning/master/src/NerdBank.GitVersioning/version.schema.json",
+#  "version": "1.2.3",    <!-- User defined. Update this version on push to MASTER to trigger new official nuget publish. User Major.Minor.Patch format -->
+#  "publicReleaseRefSpec": [
+#    "^refs/heads/master$" <!-- workflow assumes that nerdbank.gitversioning will create a release format version number for master, so ensure this is include as the only release branch tag -->
+#  ]
+# }
+# Contains one project that will be target of nuget packaging
+# Possible to build and test from defined code root (such as having a top level .sln in ./src/ referencing seperate projects in sub-directories)
+
+name: .Net Core  
+on:
+  push:
+      paths:
+          - 'src/**'
+          - 'version.json'
+  pull_request:
+        paths:
+          - 'src/**'
+          - 'version.json'
+env:
+  TOPLEVEL_BUILD_DIR: "./src/" # Location of .sln or single .csproj (where job "test" should restore, build and test from)
+  PACKAGE_PROJECT_DIR: "Yak2D/" # Location of .csproj to package below TOPLEVEL_BUILD_DIR
+  PACKAGE_NAME: "yak2D" # Official Nuget.org Package Name
+  DEV_PACKAGE_NAME: "yak2d-dev" # Development MyGet build package name
+  PUSH_PACK_NON_MASTER_STRING: "push-dev-pack" # String used to signal a Development MyGet package publish for non Master branch
+  VERSION_DOT_JSON_DIR: "." # Location of user defined version.json (see format assumptions above)
+  NUGET_SOURCE: "https://api.nuget.org/v3/index.json"
+  MYGET_SOURCE: "https://www.myget.org/F/yak2d-dev/api/v3/index.json" 
+  # Stop wasting time caching packages
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  # Disable sending usage data to Microsoft
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1.5.0
+      - name: Restore
+        run: |
+            cd ${{ env.TOPLEVEL_BUILD_DIR }}
+            dotnet restore
+      - name: Build
+        run:  |
+            cd ${{ env.TOPLEVEL_BUILD_DIR }}
+            dotnet build -c Release --no-restore
+      - name: Test
+        run: |
+            cd ${{ env.TOPLEVEL_BUILD_DIR }}
+            dotnet test
+  packandpush:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # avoid shallow clone so nerdbank.gitversioning can do its work.
+      - name: Run Nerdbank.GitVersioning
+        id: nb
+        uses: dotnet/nbgv@v0.3.1
+        with:
+          # The path to the directory for which the version should be determined. This should be at or below the directory containing the version.json file. Default is repo root directory.:  
+          path: ${{ env.VERSION_DOT_JSON_DIR }}
+      - name: If pushing to master, pack a RELEASE version with 1.2.3 format and upload to nuget.org
+        # If the 1.2.3 version exists already, the package will not be published. This is the mechanism that drives a new Official Nuget published on every user updated MAJOR.MINOR.PATCH version
+        # The 1.2.3.4 version number format which will be used for MyGet Master will be different per commit (thanks to nerdbank.gitversioning)
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          cd ${{ env.TOPLEVEL_BUILD_DIR }}${{ env.PACKAGE_PROJECT_DIR }}
+          dotnet pack -c Release -p:Version="${{ steps.nb.outputs.SimpleVersion }}" -p:PackageID="${{ env.PACKAGE_NAME }}" -o . 
+          dotnet nuget push *.nupkg -s ${{ env.NUGET_SOURCE }} -k ${{secrets.NUGET_API_KEY}} --skip-duplicate 
+      - name: If pushing to master, pack a DEBUG version with 1.2.3.4 format and upload to myget under the development name
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          cd ${{ env.TOPLEVEL_BUILD_DIR }}${{ env.PACKAGE_PROJECT_DIR }}
+          rm *.nupkg
+          dotnet pack -c Debug -p:Version="${{ steps.nb.outputs.Version }}" -p:PackageID="${{ env.DEV_PACKAGE_NAME }}" -o .
+          dotnet nuget push *.nupkg -s ${{ env.MYGET_SOURCE }} -k ${{secrets.MYGET_API_KEY}}
+      - name: If pushing, but NOT master, and top git commit contains string $PUSH_PACK_NON_MASTER_STRING pack a DEBUG version using nerdbank generated metadata version under dev name and upload to myget under dev name
+        if: github.ref != 'refs/heads/master' && contains(github.event.head_commit.message, env.PUSH_PACK_NON_MASTER_STRING) && github.event_name == 'push'
+        run: |
+          cd ${{ env.TOPLEVEL_BUILD_DIR }}${{ env.PACKAGE_PROJECT_DIR }}
+          dotnet pack -c Debug -p:Version="${{ steps.nb.outputs.SemVer2 }}" -p:PackageID="${{ env.DEV_PACKAGE_NAME }}" -o .
+          dotnet nuget push *.nupkg -s ${{ env.MYGET_SOURCE }} -k ${{secrets.MYGET_API_KEY}}
+          rm *.nupkg
+      - name: If we are NOT pushing to master, or it's a pull request, pack a DEBUG version using nerdbank git metadata version under dev name (for artifact upload)
+        if: github.ref != 'refs/heads/master' || github.event_name == 'pull'
+        run: |
+          cd ${{ env.TOPLEVEL_BUILD_DIR }}${{ env.PACKAGE_PROJECT_DIR }}
+           dotnet pack -c Debug -p:Version="${{ steps.nb.outputs.SemVer2 }}" -p:PackageID="${{ env.DEV_PACKAGE_NAME }}" -o .
+      - name: Upload (latest) built package as action artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.PACKAGE_NAME }}${{ steps.nb.outputs.Version }}${{ steps.nb.outputs.BuildMetadataFragment }}
+          path: ${{ env.TOPLEVEL_BUILD_DIR }}${{ env.PACKAGE_PROJECT_DIR }}*.nupkg
