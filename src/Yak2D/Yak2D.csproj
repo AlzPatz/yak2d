@@ -3,6 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+		<!--Properties for Nuget-->
+		<Authors>Alex Paterson</Authors>
+		<Description>A small C# .NET core framework for interactive 2D cross platform desktop graphics applications, built upon the Veldrid Library</Description>
+		<RequireLicenseAcceptance>False</RequireLicenseAcceptance>
+		<PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/AlzPatz/yak2d</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

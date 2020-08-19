@@ -94,6 +94,8 @@ jobs:
             cd ${{ env.TOPLEVEL_BUILD_DIR }}
             dotnet build -c Release --no-restore
       - name: Test
+	# Skip testing under ubuntu as SDL2 library not installed on OS instance
+	if: matrix.os == 'windows-latest' || matrix.os == 'macos-latest'
         run: |
             cd ${{ env.TOPLEVEL_BUILD_DIR }}
             dotnet test
