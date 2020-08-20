@@ -121,7 +121,7 @@ jobs:
         - name: If pushing to master, pack a RELEASE version with 1.2.3 format and upload to nuget.org
           if: github.ref == 'refs/heads/master' && github.event_name == 'push'
           id: push_master_to_nuget
-          uses: ./.github/actions/pushandpackproject/
+          uses: ./.github/actions/pushpackproject/
           with:
               Top-Level-Source-Directory: ${{ env.TOPLEVEL_BUILD_DIR }}
               Build-Configuration: 'Release'
@@ -134,7 +134,7 @@ jobs:
         - name: If pushing to master, pack a DEBUG version with 1.2.3.4 format and upload to myget under the development name
           if: github.ref == 'refs/heads/master' && github.event_name == 'push'
           id: push_master_to_myget
-          uses: ./.github/actions/pushandpackproject/
+          uses: ./.github/actions/pushpackproject/
           with:
               Top-Level-Source-Directory: ${{ env.TOPLEVEL_BUILD_DIR }}
               Build-Configuration: 'Debug'
@@ -147,7 +147,7 @@ jobs:
         - name: If pushing, but NOT master, and top git commit contains string $PUSH_PACK_NON_MASTER_STRING pack a DEBUG version using nerdbank generated metadata version under dev name and upload to myget under dev name
           if: github.ref != 'refs/heads/master' && contains(github.event.head_commit.message, env.PUSH_PACK_NON_MASTER_STRING) && github.event_name == 'push'
           id: push_to_myget_on_commit_string
-          uses: ./.github/actions/pushandpackproject/
+          uses: ./.github/actions/pushpackproject/
           with:
               Top-Level-Source-Directory: ${{ env.TOPLEVEL_BUILD_DIR }}
               Build-Configuration: 'Debug'
@@ -160,7 +160,7 @@ jobs:
         - name: If we are NOT pushing to master, or it's a pull request, pack a DEBUG version using nerdbank git metadata version under dev name (for artifact upload)
           if: github.ref != 'refs/heads/master' || github.event_name == 'pull'
           id: pack_but_dont_push
-          uses: ./.github/actions/pushandpackproject/
+          uses: ./.github/actions/pushpackproject/
           with:
               Top-Level-Source-Directory: ${{ env.TOPLEVEL_BUILD_DIR }}
               Build-Configuration: 'Debug'
