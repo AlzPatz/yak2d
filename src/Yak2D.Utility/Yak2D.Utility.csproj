@@ -1,12 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
+		<Authors>Alex Paterson</Authors>
+		<Description>A component of the Yak2D graphics framework, a C# .NET core framework for interactive 2D cross platform desktop graphics applications, built upon the Veldrid Library</Description>
+		<RequireLicenseAcceptance>False</RequireLicenseAcceptance>
+		<PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/AlzPatz/yak2d</RepositoryUrl>
+    <PackageId>Yak2D.Utility</PackageId>
+    <Version>0.0.0.0</Version>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Veldrid" Version="*" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Yak2D.Api\Yak2D.Api.csproj" />
   </ItemGroup>
+  
 </Project>
