@@ -1,0 +1,52 @@
+name: Pack and Push Action
+description: Pack and Push a name, version and nuget source configuration
+inputs:
+  Top-Level-Source-Directory:
+    description: 'Directory within which all desired project sub-directories are contained'
+    requried: true
+    default: './src/'
+  Build-Configuration:
+    description: 'Build Target'
+    required: true
+    default: 'DEBUG'
+  Package-Name-Suffix:
+    description: 'Nuget package name suffix to add to each project'
+    required: true
+    default: '-dev'
+  Use-Name-Suffix:
+    description: 'Whether to modify project names with suffix or not'
+    required: true
+    default: false
+  Version-String:
+    description: 'The version string to stamp on all projects'
+    required: true
+    default: '0.0.0.0'
+  Nuget-Source:
+    description: 'The nuget location to upload the package'
+    required: true
+    default: 'error'
+  Nuget-Api-Key:
+    description: 'The nuget api key for the package source location'
+    required: true
+    default: 'error'
+  Push-Package:
+    description: 'Whether to push the package to nuget source or not'
+    required: true
+    default: true
+runs:
+  using: "composite"
+  steps:
+    - name: Run pack and push script for requested configuration
+      run: |
+        chmod +x ${{ github.action_path }}packandpush.sh
+        ${{ github.action_path }}packandpush.sh
+      shell: bash
+      env:
+        TOP_LEVEL_SOURCE_DIR: ${{ inputs.Top-Level-Source-Directory }}
+        BUILD_CONFIGURATION: ${{ inputs.Build-Configuration }}
+        PACKAGE_NAME_SUFFIX: ${{ inputs.Package-Name-Suffix }}
+        USE_NAME_SUFFIX: ${{ inputs.Use-Name-Suffix }}
+        VERSION_STRING: ${{ inputs.Version-String }}
+        NUGET_SOURCE: ${{ inputs.Nuget-Source }}
+        NUGET_API_KEY: ${{ inputs.Nuget-Api-Key }}
+        PUSH_PACKAGE: ${{ inputs.Push-Package }}
