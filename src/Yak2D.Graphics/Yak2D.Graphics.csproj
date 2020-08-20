@@ -10,7 +10,7 @@
     <RepositoryUrl>https://github.com/AlzPatz/yak2d</RepositoryUrl>
     <PackageId>Yak2D.Graphics</PackageId>
     <Version>0.0.0.0</Version>
-  </PropertyGroup>>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="HPCsharp" Version="3.12.0" />
