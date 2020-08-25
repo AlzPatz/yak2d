@@ -94,6 +94,8 @@ namespace Yak2D.Graphics
                                                         height,
                                                         _startUpPropertiesCache.Internal.PixelFormatForRenderingSurfaces,
                                                         false,
+                                                        false,
+                                                        false,
                                                         linearSampling).Id;
         }
 
