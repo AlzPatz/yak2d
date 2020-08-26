@@ -128,4 +128,4 @@ Let me know - I will try to address any that come up!
 
 ## License
 
-MIT and Apache 2.0. If anyone knows of a fast, stable sorting algorithm (merge or Tim sort, or equivalent) under MIT license that can replace the use of HPCsharp - I would be keen to hear about it
+MIT and Apache 2.0. If anyone knows of a fast, stable sorting algorithm (merge or Tim sort, or equivalent) under MIT license that can replace the use of HPCsharp - I would be keen to hear about it (so we can drop Apache)
