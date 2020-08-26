@@ -17,8 +17,9 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
     * Create and use Textures and Render Targets (surfaces) as  inputs and outputs wherever desired in rendering pipeline
     * Arrange render stages in any order to create desired effects
     * Note all Textures must be .png files
-* 2D Draw Queues
-    * Draw custom polygons from vertices or regular shapes (quads, n-sided shapes)
+* 2D Drawing
+    * Draw custom polygons from vertices or regular shapes (quads, n-sided shapes) by creating request queues
+    * Helpers provided for generating vertices of common shapes, including a fluent interface for reusing and iterating drawing objects
     * Fill with solid colour, single or dual texturing
     * Draw / transform into world space or screen space (based on interchangable cameras), split into layers and set depths
     * Reuse queues or re-create each frame
