@@ -4,7 +4,7 @@ The yak2D framework enables the creation of interactive **cross platform** deskt
 
 It offers simple 2D polygon and ‘sprite’ drawing functions, in addition to flexible render path creation making use of shader effects (both inbuilt and user defined).
 
-Quickly create 2D games and prototypes that run on all major desktop operating systems. Graphics, Input, Windowing and Application Lifecycle are all provided for and managed by the framework (*just add sound*). Avoid the bloat of large game engines (or make life a little harder for yourself). Whatever your opinions or preferences. No GUI, **DO IT ALL IN CODE..** :)
+Quickly create 2D games and prototypes that run on all major desktop operating systems. Graphics, Input, Windowing and Application Lifecycle are all provided for and managed by the framework (*just add sound*). Avoid the bloat of large game engines (or make life a little harder for yourself - whatever your opinion). No GUI, **DO IT ALL IN CODE..** :)
 
 yak2D is structured as a collection of .NET standard 2.0 class libraries, built upon the [Veldrid](https://github.com/mellinoe/veldrid) cross-platform API agnostic rendering library. Application windowing is handled by SDL2 via [Veldrid](https://github.com/mellinoe/veldrid).
 
@@ -86,7 +86,7 @@ yak2D, like Veldrid, uses the standard .NET core tooling. [Install the tools](ht
     * **Shutdown()**
       - Runs once as application, well, shuts down ...
     
-4. In Program.cs, or whether appropriate, pass your IApplication object to the static method Launcher.Run()
+4. In Program.cs, or whether appropriate, pass your IApplication object to the static method **Launcher.Run()**
 
 5. Build and Run!
     * .NET core command line
@@ -96,7 +96,7 @@ yak2D, like Veldrid, uses the standard .NET core tooling. [Install the tools](ht
 
 ## What's next?
 
-Please see the [Documentation](https://alzpatz.github.io/yak2d-docs/) for additional information and also check out the [Demo Samples](https://github.com/AlzPatz/yak2d-samples)!
+Please see the [Documentation](https://alzpatz.github.io/yak2d-docs/) for more detailed usage information, tutorials and API description and also check out the [Demo Samples](https://github.com/AlzPatz/yak2d-samples)!
 
 ## Package Sources, Versions and CI
 
@@ -113,3 +113,19 @@ Development / DEBUG packages are avaliable from [MyGet](https://www.https://www.
 Note - all test must pass for a package to be published to any source
 
 Finally, for a push to any branch, or pull request to master, packages are uploaded as downloadable build artifacts on github.
+
+## Contribute
+
+If anyone would like to contribute, fix bugs, modify, whatever they are more than welcome to submit a pull request
+
+## Bugs and Issues
+
+I will try to address any that come up!
+
+## Credits
+
+[Veldrid](https://github.com/mellinoe/veldrid) is awesome, and Eric is a great person.
+
+## License
+
+MIT and Apache 2.0. If anyone knows of a fast, stable sorting algorithm (merge or Tim sort, or equivalent) under MIT license that can replace the use of HPCsharp - I would be keen to hear about it!
