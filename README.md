@@ -67,23 +67,23 @@ yak2D, like Veldrid, uses the standard .NET core tooling. [Install the tools](ht
 2. Add yak2D to your project via the Nuget package manager (see installation above)
 
 3. Create a class overriding the IApplication interface. Implement the interface methods: 
-    * OnStartup()
+    * **OnStartup()**
       - Runs before Configure(). Add non-yak2D related code if desired to run before other methods are called
-    * Configure()
+    * **Configure()**
       - Return an object containing the configuration properties for the framework (window resolution, update timestep type, etc)
-    * ProcessMessage()
+    * **ProcessMessage()**
       - Runs before an Update() iteration. Allows user to process important messages. Top Tip: GraphicsDeviceRecreated will require the recreation of all framework objects (surfaces, render stages, fonts, etc). Common usage is for the user to make it to call CreateResources() and SwapChainFramebufferReCreated will invalid any current references held to the framebuffer
-    * CreateResources()
+    * **CreateResources()**
       - Runs once on start up, where the user can create required framework resources (surfaces, render stages, fonts, etc). Can make sense to manually call when graphics device is lost, or any time resources are lost
-    * Update()
+    * **Update()**
       - Runs once per simulation update
-    * PreDrawing()
-      - Runs before Drawing(). A good time to set effect configurations and clear draw queues, if required  
-    * Drawing()
+    * **PreDrawing()**
+      - Runs before Drawing(). A good time to set effect configurations and clear draw queues  
+    * **Drawing()**
       - User should build DrawStage and DistortionStage draw request queues here
-    * Rending()
+    * **Rending()**
       - Build the rendering pipeline by queuing up draw stages
-    * Shutdown()
+    * **Shutdown()**
       - Runs once as application, well, shuts down ...
     
 4. In Program.cs, or whether appropriate, pass your IApplication object to the static method Launcher.Run()
