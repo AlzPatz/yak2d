@@ -27,13 +27,13 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
 
 ## Installation 
 
-Add yak2D to your project via your Nuget Package Manager 
+Add yak2D to your project via your Nuget Package Manager:
 
-Visual Studio GUI:
+* Visual Studio:
 
 ![Search via Visual Studio](.github/nuget_vs.png?raw=true)
 
-.NET core command line
+* .NET core command line
 
 ```shell
 dotnet add package yak2D --version *
@@ -43,11 +43,32 @@ yak2D, like Veldrid, uses the standard .NET core tooling. [Install the tools](ht
 
 ## Usage 
 
-After adding yak2D to your project, create your own class overriding the IApplication interface.
+1. Create a new .NET core console application
 
-Pass your IApplication object to Launcher.Run()
+* Visual Studio:
+Create a new console application using the wizard
+
+* .NET core command line
+```shell
+dotnet new console -n MyApplicationName
+```
+
+2. Add yak2D to your project via the Nuget package manager
+
+3. Create a class overriding the IApplication interface 
+Implement the interface methods:
+* Method
+* Method
+* Method
+
+4. In Program.cs, or whether appropriate, pass your IApplication object to the static method Launcher.Run()
 
 Build and Run!
+
+* .NET core command line
+```shell
+dotnet run
+```
 
 ## What's next?
 
