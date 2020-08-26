@@ -28,13 +28,9 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
 ## Installation 
 
 Add yak2D to your project via your Nuget Package Manager:
-
-    * Visual Studio:
-
+* Visual Studio:
     ![Search via Visual Studio](.github/nuget_vs.png?raw=true)
-
-    * .NET core command line
-
+* .NET core command line
     ```shell
     dotnet add package yak2D --version *
     ```
