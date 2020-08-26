@@ -10,10 +10,7 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
 
 [Veldrid](https://github.com/mellinoe/veldrid)
 
-### Supported Desktop Platforms
-* Windows 
-* Linux 
-* OSX 
+### Supported Desktop Platforms ### - Windows, Linux and OSX 
 
 ### Supported Graphics APIs
 * Direct3D 11 
