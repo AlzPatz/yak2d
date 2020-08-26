@@ -49,7 +49,7 @@ Add yak2D to your project via your Nuget Package Manager:
     ```shell
     dotnet add package yak2D --version *
     ```
-    Replace `*` with desired version number 
+    Replace `*` with desired version number or leave it as is to download the latest version
 
 yak2D, like Veldrid, uses the standard .NET core tooling. [Install the tools](https://www.microsoft.com/net/download/core) and build normally ('dotnet build')
 
