@@ -28,7 +28,7 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
 * Use of Cameras (2D and 3D) and Viewports allow easy rendering of the same draw queue or surface from different perspectives, on differet parts of a render surface
     * Simplifies split screen views
 * Shader Effects
-    * Blur, Bloom, Colourize, Grayscale, Mix Textures
+    * Blur, Bloom, Colourize, Grayscale, Negative, Add Opacity, Mix Textures, Basic Copy between surfaces
     * Pixellate, Static, Edge Detection, Old-Movie Reel, CRT monitor 
     * Height Map Distortion (such as shock waves)
     * Render surfaces to 3D meshes (Phong lighting model with up to 8 lights)
