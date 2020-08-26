@@ -39,11 +39,10 @@ yak2D, like Veldrid, uses the standard .NET core tooling. [Install the tools](ht
     dotnet new console -n MyApplicationName
     ```
 2. Add yak2D to your project via the Nuget package manager
-3. Create a class overriding the IApplication interface 
-    Implement the interface methods:
-        * Method
-        * Method
-        * Method
+3. Create a class overriding the IApplication interface. Implement the interface methods: 
+    * Method
+    * Method
+    * Method
 4. In Program.cs, or whether appropriate, pass your IApplication object to the static method Launcher.Run()
 5. Build and Run!
     * .NET core command line
