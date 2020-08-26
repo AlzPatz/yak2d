@@ -6,9 +6,7 @@ It offers simple 2D polygon and ‘sprite’ drawing functions, in addition to f
 
 Quickly create 2D games and prototypes that run on all major desktop operating systems. Graphics, Input, Windowing and Application Lifecycle are all provided for and managed by the framework (*just add sound*). Avoid the bloat of large game engines. **Do it all in code..** no GUIs.
 
-yak2D is structured as a collection of .NET standard 2.0 class libraries, built upon the Veldrid cross-platform API agnostic rendering library. Application windowing is handled by SDL2 via the Veldrid.
-
-[Veldrid](https://github.com/mellinoe/veldrid)
+yak2D is structured as a collection of .NET standard 2.0 class libraries, built upon the [Veldrid](https://github.com/mellinoe/veldrid) cross-platform API agnostic rendering library. Application windowing is handled by SDL2 via [Veldrid](https://github.com/mellinoe/veldrid).
 
 **Supported Desktop Platforms: Windows, Linux and OSX**
 
