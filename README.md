@@ -35,9 +35,9 @@ Visual Studio GUI:
 
 .NET core command line
 
-'''shell
+```shell
 dotnet add package yak2D --version *
-'''
+```
 
 yak2D, like Veldrid, uses the standard .NET core tooling. [Install the tools](https://www.microsoft.com/net/download/core) and build normally ('dotnet build')
 
