@@ -88,7 +88,7 @@ yak2D is continually released from the master branch.
 
 A github workflow / action is used to manage the ci build and publishing.
 
-When the version number (3 digit form, 1.2.3 to 1.2.4 for example) is updated in version.json, a new RELEASE package is published on NuGet.org:
+When the version number (3 digit form, i.e 1.2.3) is updated in version.json, a new RELEASE package is published on NuGet.org:
 
 [![NuGet](https://img.shields.io/nuget/v/yak2d.svg)](https://www.nuget.org/packages/Yak2D/)
 
