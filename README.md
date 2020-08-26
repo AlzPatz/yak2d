@@ -4,13 +4,37 @@ The yak2D framework enables the creation of interactive **cross platform** deskt
 
 It offers simple 2D polygon and ‘sprite’ drawing functions, in addition to flexible render path creation making use of shader effects (both inbuilt and user defined).
 
-Quickly create 2D games and prototypes that run on all major desktop operating systems. Graphics, Input, Windowing and Application Lifecycle are all provided for and managed by the framework (*just add sound*). Avoid the bloat of large game engines. **Do it all in code..** no GUIs.
+Quickly create 2D games and prototypes that run on all major desktop operating systems. Graphics, Input, Windowing and Application Lifecycle are all provided for and managed by the framework (*just add sound*). Avoid the bloat of large game engines (or make life a little harder for yourself). Whatever your opinions or preferences. No GUI, **DO IT ALL IN CODE..** :)
 
 yak2D is structured as a collection of .NET standard 2.0 class libraries, built upon the [Veldrid](https://github.com/mellinoe/veldrid) cross-platform API agnostic rendering library. Application windowing is handled by SDL2 via [Veldrid](https://github.com/mellinoe/veldrid).
 
 **Supported Desktop Platforms: Windows, Linux and OSX**
 
 **Supported Graphics APIs: Direct3D 11, Vulkan, Open GL, Metal**
+
+## Key Features
+* Customisable Rendering Pipeline
+    * Create and use Textures and Render Targets (surfaces) as  inputs and outputs wherever desired in rendering pipeline
+    * Arrange render stages in any order to create desired effects
+    * Note all Textures must be .png files
+* 2D Draw Queues
+    * Draw custom polygons from vertices or regular shapes (quads, n-sided shapes)
+    * Fill with solid colour, single or dual texturing
+    * Draw / transform into world space or screen space (based on interchangable cameras), split into layers and set depths
+    * Reuse queues or re-create each frame
+    * Queues auto-sorted and batched 
+* Bitmap Font Rendering support
+    * Will parse user .fnt files
+* Use of Cameras (2D and 3D) and Viewports allow easy rendering of the same draw queue or surface from different perspectives, on differet parts of a render surface
+    * Simplifies split screen views
+* Shader Effects
+    * Blur, Bloom, Colourize, Grayscale, Mix Textures
+    * Pixellate, Static, Edge Detection, Old-Movie Reel, CRT monitor 
+    * Height Map Distortion (such as shock waves)
+    * Render surfaces to 3D meshes (Phong lighting model with up to 8 lights)
+    * Easily Create Custom Shader stages, or stages with full exposure to Veldrid objects
+* Input
+    * Exposes keyboard, mouse and gamepad input via an abstraction over Veldrid / SDL2
 
 ## Documentation
 
