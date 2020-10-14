@@ -29,6 +29,31 @@ namespace Yak2D
             return f;
         }
 
+        public static Colour operator +(Colour c0, Colour c1)
+        {
+            return new Colour(Clamp(c0.R + c1.R), Clamp(c0.G + c1.G), Clamp(c0.B + c1.B), Clamp(c0.A + c1.A));
+        }
+
+        public static Colour operator -(Colour c0, Colour c1)
+        {
+            return new Colour(Clamp(c0.R - c1.R), Clamp(c0.G - c1.G), Clamp(c0.B - c1.B), Clamp(c0.A - c1.A));
+        }
+
+        public static Colour operator *(Colour c0, Colour c1)
+        {
+            return new Colour(Clamp(c0.R * c1.R), Clamp(c0.G * c1.G), Clamp(c0.B * c1.B), Clamp(c0.A * c1.A));
+        }
+
+        public static Colour operator *(float f, Colour c)
+        {
+            return new Colour(Clamp(f * c.R), Clamp(f * c.G), Clamp(f * c.B), Clamp(f * c.A));
+        }
+
+        public static Colour operator *(Colour c, float f)
+        {
+            return new Colour(Clamp(f * c.R), Clamp(f * c.G), Clamp(f * c.B), Clamp(f * c.A));
+        }
+
         public static Colour Clear { get { return new Colour(0.0f, 0.0f, 0.0f, 0.0f); } }
 
         //X11 Colour Names

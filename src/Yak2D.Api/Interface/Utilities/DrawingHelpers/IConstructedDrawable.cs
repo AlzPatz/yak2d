@@ -35,30 +35,30 @@ namespace Yak2D
         /// Return a drawable shape object with identical parameters except modified position
         /// </summary>
         /// <param name="position">New centre position of shape</param>
-        IConstructedDrawable ChangePosition(Vector2 position);
+        ITransformable ChangePosition(Vector2 position);
 
         /// <summary>
         /// Return a drawable shape object with identical parameters except modified position
         /// </summary>
         /// <param name="position">Amount to shift shape position by</param>
-        IConstructedDrawable ShiftPosition(Vector2 delta);
+        ITransformable ShiftPosition(Vector2 delta);
 
         /// <summary>
         /// Return a drawable shape object with identical parameters except a different colour
         /// </summary>
         /// <param name="colour">The new shape colour</param>
-        IConstructedDrawable ChangeColour(Colour colour);
+        ITransformable ChangeColour(Colour colour);
 
         /// <summary>
         /// Return a drawable shape object with identical parameters except a different primary texture reference
         /// </summary>
         /// <param name="texture">New primary Texture reference</param>
-        IConstructedDrawable ChangeTexture0(ITexture texture);
+        ITransformable ChangeTexture0(ITexture texture);
 
         /// <summary>
         /// Return a drawable shape object with identical parameters except a different secondary texture reference
         /// </summary>
         /// <param name="texture">New secopndary Texture reference</param>
-        IConstructedDrawable ChangeTexture1(ITexture texture);
+        ITransformable ChangeTexture1(ITexture texture);
     }
 }

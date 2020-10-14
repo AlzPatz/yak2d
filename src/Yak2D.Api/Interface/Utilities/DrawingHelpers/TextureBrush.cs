@@ -9,6 +9,29 @@ namespace Yak2D
     public class TextureBrush
     {
         /// <summary>
+        /// Descriptor for Texturing Brush 
+        /// </summary>
+        /// <param name="texture">Texture Reference</param>
+        /// <param name="textureMode">Wrap Texture Coordinates - Mirror or Repeat</param>
+        /// <param name="textureScaling">Is the Texture tiled or stretched across the shape</param>
+        /// <param name="tilingScale">When tiling, ratio between shape pixel and texture pixel sizes</param>
+        public TextureBrush(ITexture texture,
+                            TextureCoordinateMode textureMode,
+                            TextureScaling textureScaling,
+                            Vector2 tilingScale)
+        {
+            Texture = texture;
+            TextureMode = textureMode;
+            TextureScaling = textureScaling;
+            TilingScale = tilingScale;
+        }
+
+        /// <summary>
+        /// Descriptor for Texturing Brush 
+        /// </summary>
+        public TextureBrush() { }
+
+        /// <summary>
         /// The Texture reference
         /// </summary>
         public ITexture Texture { get; set; }
