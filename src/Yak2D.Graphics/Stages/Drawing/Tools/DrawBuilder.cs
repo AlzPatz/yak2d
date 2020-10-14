@@ -938,31 +938,31 @@ namespace Yak2D.Graphics
         }
 
         //Change Modifiers
-        public IConstructedDrawable ChangePosition(Vector2 position)
+        public ITransformable ChangePosition(Vector2 position)
         {
             _position = position;
             return this;
         }
 
-        public IConstructedDrawable ShiftPosition(Vector2 delta)
+        public ITransformable ShiftPosition(Vector2 delta)
         {
             _position += delta;
             return this;
         }
 
-        public IConstructedDrawable ChangeColour(Colour colour)
+        public ITransformable ChangeColour(Colour colour)
         {
             _colour = colour;
             return this;
         }
 
-        public IConstructedDrawable ChangeTexture0(ITexture texture)
+        public ITransformable ChangeTexture0(ITexture texture)
         {
             _texture0.Texture = texture;
             return this;
         }
 
-        public IConstructedDrawable ChangeTexture1(ITexture texture)
+        public ITransformable ChangeTexture1(ITexture texture)
         {
             _texture1.Texture = texture;
             return this;

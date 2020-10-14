@@ -32,11 +32,12 @@ namespace Yak2D
         /// <param name="height">Height of the quad</param>
         /// <param name="depth">Z depth of vertices defining ordering within a layer (0.0 [front] to 1.0 [back])</param>
         /// <param name="layer">>= 0. The layer that these vertices belong too, lower layers are drawn behind higher layers</param>
-        /// <param name="float rotation_clockwise_radians">Clockwise rotation of quad around centre point in radians</param>
+        /// <param name="rotation_clockwise_radians">Clockwise rotation of quad around centre point in radians</param>
         /// <param name="texcoord_min_x">Texture coordinate of left edge of quad</param>
         /// <param name="texcoord_min_y">Texture coordinate of top edge of quad</param>
         /// <param name="texcoord_max_x">Texture coordinate of right edge of quad</param>
-        /// <param name="texcoord_max_y">TExture coordinate of bottom edge of quad</param>
+        /// <param name="texcoord_max_y">Texture coordinate of bottom edge of quad</param>
+        /// <param name="textureMode">Texture Coordinate Wrap Type (mirrored or repeated)</param>
         void DrawTexturedQuad(IDrawStage drawStage,
                                 CoordinateSpace space,
                                 ITexture texture,
@@ -65,11 +66,12 @@ namespace Yak2D
         /// <param name="height">Height of the quad</param>
         /// <param name="depth">Z depth of vertices defining ordering within a layer (0.0 [front] to 1.0 [back])</param>
         /// <param name="layer">>= 0. The layer that these vertices belong too, lower layers are drawn behind higher layers</param>
-        /// <param name="float rotation_clockwise_radians">Clockwise rotation of quad around centre point in radians</param>
+        /// <param name="rotation_clockwise_radians">Clockwise rotation of quad around centre point in radians</param>
         /// <param name="texcoord_min_x">Texture coordinate of left edge of quad</param>
         /// <param name="texcoord_min_y">Texture coordinate of top edge of quad</param>
         /// <param name="texcoord_max_x">Texture coordinate of right edge of quad</param>
-        /// <param name="texcoord_max_y">TExture coordinate of bottom edge of quad</param>
+        /// <param name="texcoord_max_y">Texture coordinate of bottom edge of quad</param>
+        /// <param name="textureMode">Texture Coordinate Wrap Type (mirrored or repeated)</param>
         void DrawTexturedQuad(ulong drawStage,
                                 CoordinateSpace space,
                                 ulong texture,
@@ -97,7 +99,7 @@ namespace Yak2D
         /// <param name="height">Height of the quad</param>
         /// <param name="depth">Z depth of vertices defining ordering within a layer (0.0 [front] to 1.0 [back])</param>
         /// <param name="layer">>= 0. The layer that these vertices belong too, lower layers are drawn behind higher layers</param>
-        /// <param name="float rotation_clockwise_radians">Clockwise rotation of quad around centre point in radians</param>
+        /// <param name="rotation_clockwise_radians">Clockwise rotation of quad around centre point in radians</param>
         void DrawColouredQuad(IDrawStage drawStage,
                                 CoordinateSpace space,
                                 Colour colour,
@@ -119,7 +121,7 @@ namespace Yak2D
         /// <param name="height">Height of the quad</param>
         /// <param name="depth">Z depth of vertices defining ordering within a layer (0.0 [front] to 1.0 [back])</param>
         /// <param name="layer">>= 0. The layer that these vertices belong too, lower layers are drawn behind higher layers</param>
-        /// <param name="float rotation_clockwise_radians">Clockwise rotation of quad around centre point in radians</param>
+        /// <param name="rotation_clockwise_radians">Clockwise rotation of quad around centre point in radians</param>
         void DrawColouredQuad(ulong drawStage,
                                 CoordinateSpace space,
                                 Colour colour,
@@ -144,7 +146,7 @@ namespace Yak2D
         /// <param name="layer">>= 0. The layer that these vertices belong too, lower layers are drawn behind higher layers</param>
         /// <param name="xScaling">Scalar of polygon's x-dimensions (before rotation)</param>
         /// <param name="yScaling">Scalar of polygon's y-dimensions (before rotation)</param>
-        /// <param name="float rotation_clockwise_radians">Clockwise rotation of final scaled polygon around centre point in radians</param>
+        /// <param name="rotation_clockwise_radians">Clockwise rotation of final scaled polygon around centre point in radians</param>
         void DrawColouredPoly(IDrawStage drawStage,
                                 CoordinateSpace space,
                                 Colour colour,
@@ -171,7 +173,7 @@ namespace Yak2D
         /// <param name="layer">>= 0. The layer that these vertices belong too, lower layers are drawn behind higher layers</param>
         /// <param name="xScaling">Scalar of polygon's x-dimensions (before rotation)</param>
         /// <param name="yScaling">Scalar of polygon's y-dimensions (before rotation)</param>
-        /// <param name="float rotation_clockwise_radians">Clockwise rotation of final scaled polygon around centre point in radians</param>
+        /// <param name="rotation_clockwise_radians">Clockwise rotation of final scaled polygon around centre point in radians</param>
         void DrawColouredPoly(ulong drawStage,
                                 CoordinateSpace space,
                                 Colour colour,
@@ -256,7 +258,7 @@ namespace Yak2D
                         bool rounded = false);
 
         /// <summary>
-        // Draw Coloured Arrow
+        /// Draw Coloured Arrow
         /// </summary>
         /// <param name="drawStage">DrawStage id</param>
         /// <param name="space">The coordinate space (world or screen) that the vertices should be transformed by</param>

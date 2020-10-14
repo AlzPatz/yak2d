@@ -180,8 +180,11 @@ namespace Yak2D.Graphics
 
             for (var n = 0; n < NUMBER_OF_LIGHTS; n++)
             {
-                _previousLights[n] = _currentLights[n];
-                _targetLights[n] = lightConfigurations[n];
+                if (n < lightConfigurations.Length)
+                {
+                    _previousLights[n] = _currentLights[n];
+                    _targetLights[n] = lightConfigurations[n];
+                }
             }
             _transitionTotalTimeLights = transitionSeconds;
             _transitionCurrentTimeLights = 0.0f;

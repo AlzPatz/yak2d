@@ -97,7 +97,7 @@ namespace Yak2D.Graphics
             {
                 Pixellate = new PixellateConfiguration
                 {
-                    Intensity = 1.0f,
+                    Intensity = 0.0f,
                     NumXDivisions = 120,
                     NumYDivisions = 67,
                 },

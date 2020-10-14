@@ -89,6 +89,8 @@ namespace Yak2D.Graphics
                                                         height,
                                                         pixelFormat,
                                                         false,
+                                                        false,
+                                                        false,
                                                         linearSampling).Id;
         }
 

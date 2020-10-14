@@ -72,7 +72,7 @@ namespace Yak2D
         public float TimeSpeed { get; set; }
 
         /// <summary>
-        /// If false, transparent pixels will not be drawn over
+        /// If false (0), transparent pixels will not be drawn over
         /// </summary>
         public int IgnoreTransparent { get; set; }
 
@@ -88,6 +88,40 @@ namespace Yak2D
     /// </summary>
     public struct OldMovieConfiguration
     {
+        /// <summary>
+        /// Generate a Default Configurations for the Old Movie Effect
+        /// </summary>
+        /// <returns></returns>
+        public static OldMovieConfiguration GenerateDefault()
+        {
+            return new OldMovieConfiguration
+            {
+                Intensity = 1.0f,
+                Scratch = 0.02f,
+                Noise = 0.1f,
+                RndShiftCutOff = 1.0f,
+                RndShiftScalar = 0.3f,
+                Dim = 0.3f,
+
+                ProbabilityRollStarts = 0.005f,
+                ProbabilityRollEnds = 0.08f,
+                RollSpeedMin = 1.92f,
+                RollSpeedMax = 2.62f,
+                RollAccelerationMin = 0.8f,
+                RollAccelerationMax = 2.8f,
+                RollShakeFactor = 0.20f,
+                RollOverallScale = 0.4f,
+
+                OverExposureProbabilityStart = 0.007f,
+                OverExposureFlickerTimeMin = 9.4f,
+                OverExposureFlickerTimeMax = 24.0f,
+                OverExposureIntensityMin = 2.7f,
+                OverExposureIntensityMax = 3.4f,
+                OverExposureOscillationsMin = 2,
+                OverExposureOscillationsMax = 4
+            };
+        }
+
         /// <summary>
         /// Used for twice:
         /// 1. An interpolation between unmodified texture coordinates and modified. 1.0 resulting in max pixellation
