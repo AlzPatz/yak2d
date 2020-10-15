@@ -1,69 +1,28 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Yak2D
 {
     /// <summary>
-    /// A four component colour, with RGBA values each within 0 to 1 range
+    /// Methods to generate COLOURS but using the american spelling
+    /// Time will tell if this generates confusion. Perhaps I should stick with the americanised spelling
     /// </summary>
-    public readonly struct Colour : IEquatable<Colour>
+    public static class Color
     {
         /// <summary>
-        /// A four component colour, with RGBA values each within 0 to 1 range
+        /// Create a four component colour, with RGBA values each within 0 to 1 range
         /// </summary>
         /// <param name="r">Colour Component 0 to 1</param>
         /// <param name="g">Colour Component 0 to 1</param>
         /// <param name="b">Colour Component 0 to 1</param>
         /// <param name="a">Colour Component 0 to 1</param>
-        public Colour(float r, float g, float b, float a)
+        public static Colour New(float r, float g, float b, float a)
         {
-            R = Clamp(r);
-            G = Clamp(g);
-            B = Clamp(b);
-            A = Clamp(a);
+            return new Colour(r, g, b, a);
         }
 
-        public float R { get; }
-        public float G { get; }
-        public float B { get; }
-        public float A { get; }
-
-        private static float Clamp(float f)
-        {
-            if (f < 0.0f)
-                return 0.0f;
-            if (f > 1.0f)
-                return 1.0f;
-            return f;
-        }
-
-        public static Colour operator +(Colour c0, Colour c1)
-        {
-            return new Colour(Clamp(c0.R + c1.R), Clamp(c0.G + c1.G), Clamp(c0.B + c1.B), Clamp(c0.A + c1.A));
-        }
-
-        public static Colour operator -(Colour c0, Colour c1)
-        {
-            return new Colour(Clamp(c0.R - c1.R), Clamp(c0.G - c1.G), Clamp(c0.B - c1.B), Clamp(c0.A - c1.A));
-        }
-
-        public static Colour operator *(Colour c0, Colour c1)
-        {
-            return new Colour(Clamp(c0.R * c1.R), Clamp(c0.G * c1.G), Clamp(c0.B * c1.B), Clamp(c0.A * c1.A));
-        }
-
-        public static Colour operator *(float f, Colour c)
-        {
-            return new Colour(Clamp(f * c.R), Clamp(f * c.G), Clamp(f * c.B), Clamp(f * c.A));
-        }
-
-        public static Colour operator *(Colour c, float f)
-        {
-            return new Colour(Clamp(f * c.R), Clamp(f * c.G), Clamp(f * c.B), Clamp(f * c.A));
-        }
-
-        public static Colour Clear { get { return new Colour(0.0f, 0.0f, 0.0f, 0.0f); } }
-
-        //X11 Colour Names
+        //X11 Colour Names (direct copy from Colour.cs)
         public static Colour AliceBlue { get { return new Colour(0.94f, 0.97f, 1.00f, 1.00f); } }
         public static Colour AntiqueWhite { get { return new Colour(0.98f, 0.92f, 0.84f, 1.00f); } }
         public static Colour Aqua { get { return new Colour(0.00f, 1.00f, 1.00f, 1.00f); } }
@@ -209,38 +168,5 @@ namespace Yak2D
         public static Colour WhiteSmoke { get { return new Colour(0.96f, 0.96f, 0.96f, 1.00f); } }
         public static Colour Yellow { get { return new Colour(1.00f, 1.00f, 0.00f, 1.00f); } }
         public static Colour YellowGreen { get { return new Colour(0.60f, 0.80f, 0.20f, 1.00f); } }
-
-        //CA1815 Recommendations - Only useful for structs that are compared or hashed
-        //May remove as these are not common uses of this struct
-
-        public override bool Equals(object obj)
-        {
-            if (!(obj is Colour))
-            {
-                return false;
-            }
-
-            var other = (Colour)obj;
-
-            return R == other.R && G == other.G && B == other.B && A == other.A;
-        }
-
-        public bool Equals(Colour other)
-        {
-            return R == other.R && G == other.G && B == other.B && A == other.A;
-        }
-
-        public static bool operator ==(Colour left, Colour right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(Colour left, Colour right)
-        {
-            return !(left == right);
-        }
-
-        public override int GetHashCode() =>
-                    HashCode.Combine(R, G, B, A); //Or (R, G, B, A).GetHashCode();     
     }
 }
