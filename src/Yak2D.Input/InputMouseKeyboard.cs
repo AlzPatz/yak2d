@@ -134,7 +134,7 @@ namespace Yak2D.Internal
         }
 
         private void ProcessMouse(InputSnapshot snapshot, float timeSinceLastUpdateSeconds)
-        {
+        { 
             _mousePositionLastFrame = MousePosition;
             MousePosition = snapshot.MousePosition;
 

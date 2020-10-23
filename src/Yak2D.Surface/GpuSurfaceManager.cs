@@ -133,6 +133,18 @@ namespace Yak2D.Surface
             return texturePath.Replace('/', '.');
         }
 
+        public TextureDataRgba LoadTextureColourDataFromEmbeddedPngResourceInUserApplication(string texturePathWithoutExtension)
+        {
+            if (string.IsNullOrEmpty(texturePathWithoutExtension))
+            {
+                throw new Yak2DException("Load Embedded User Texture Data passed null or empty string for texture path", new ArgumentNullException("texturePathWithoutExtension"));
+            }
+
+            var fullPathWithinAssemblyWithoutFileExtension = string.Concat(_startUpProperties.TextureFolderRootName, ".", texturePathWithoutExtension);
+            var pathWithSlashesChangedToDots = ReplaceForwardSlashesWithDots(fullPathWithinAssemblyWithoutFileExtension);
+            return LoadTextureDataFromEmbeddedPngResource(pathWithSlashesChangedToDots);
+        }
+
         public ITexture LoadFontTextureFromEmbeddedPngResource(bool isFrameworkInternal, string texturePathWithoutExtension)
         {
             if (string.IsNullOrEmpty(texturePathWithoutExtension))
@@ -184,6 +196,29 @@ namespace Yak2D.Surface
             return _surfaceCollection.Add(id, surface) ? new TextureReference(id) : null;
         }
 
+        private TextureDataRgba LoadTextureDataFromEmbeddedPngResource(string assetPathWithoutExtension)
+        {
+            var fullAssemblyName = string.Concat(_applicationAssembly.Name, ".", assetPathWithoutExtension, ".png");
+
+            var stream = _applicationAssembly.GetManifestResourceStream(fullAssemblyName);
+            if (stream == null)
+            {
+                var names = _applicationAssembly.GetManifestResourceNames();
+
+                if (names.Contains(fullAssemblyName))
+                {
+                    _frameworkMessenger.Report("Unable to load texture data. Unknown Error. Asset stream was found by name in manifest: " + fullAssemblyName);
+                }
+                else
+                {
+                    _frameworkMessenger.Report("Unable to load texture colour data. The provided texture name was not found in assembly: " + fullAssemblyName + " | Expect location format as ASSEMBLYNAME.PATHTOTEXTURES.NAMEPROVIDED.PNG");
+                }
+                return default(TextureDataRgba);
+            }
+
+            return _imageSharpLoader.GenerateTextureDataFromStream(stream);
+        }
+
         public ITexture LoadFontTextureFromPngFile(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -219,6 +254,33 @@ namespace Yak2D.Surface
             {
                 _frameworkMessenger.Report(string.Concat("Error: Unable to find Texture file from path: ", path));
                 return null;
+            }
+        }
+
+        public TextureDataRgba LoadTextureColourDataFromPngFile(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                throw new Yak2DException("Load Texture Colour Data from File passed null or empty string for texture path", new ArgumentNullException("path"));
+            }
+
+            var filePath = Path.Combine(_startUpProperties.TextureFolderRootName, string.Concat(path, ".png"));
+            return LoadTextureDataFromPng(filePath);
+        }
+
+        private TextureDataRgba LoadTextureDataFromPng(string path)
+        {
+            if (_fileSystem.Exists(path))
+            {
+                using (var stream = _fileSystem.OpenRead(path))
+                {
+                    return _imageSharpLoader.GenerateTextureDataFromStream(stream);
+                }
+            }
+            else
+            {
+                _frameworkMessenger.Report(string.Concat("Error: Unable to find Texture file from path: ", path));
+                return default(TextureDataRgba);
             }
         }
 

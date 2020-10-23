@@ -1,6 +1,7 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
+using System.Numerics;
 using Veldrid;
 using Veldrid.ImageSharp;
 using Yak2D.Internal;
@@ -22,6 +23,37 @@ namespace Yak2D.Surface
         {
             var imageSharpTexture = ProcessStream(stream, mipMap);
             return imageSharpTexture.CreateDeviceTexture(_systemComponents.Device.RawVeldridDevice, _systemComponents.Factory.RawFactory);
+        }
+
+        public TextureDataRgba GenerateTextureDataFromStream(Stream stream)
+        {
+            var data = Image.Load<Rgba32>(stream);
+
+            Image<Rgba32> image = MirrorOverXAxisIfGraphicsApiRequires(data);
+
+            var width = image.Width;
+            var height = image.Height;
+
+            var pixels = new Vector4[width * height];
+
+            for (var y = 0; y < height; y++)
+            {
+                for (var x = 0; x < width; x++)
+                {
+                    var index = (y * width) + x;
+
+                    var b = image[x, y];
+
+                    pixels[index] = b.ToScaledVector4();
+                }
+            }
+
+            return new TextureDataRgba
+            {
+                Width = (uint)width,
+                Height = (uint)height,
+                Pixels = pixels
+            };
         }
 
         private ImageSharpTexture ProcessStream(Stream stream, bool mipMap)

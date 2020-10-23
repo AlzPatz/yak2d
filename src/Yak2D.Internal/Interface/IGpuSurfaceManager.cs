@@ -27,6 +27,8 @@ namespace Yak2D.Internal
         ITexture LoadTextureFromPngFile(string path);
         ITexture LoadFontTextureFromPngFile(string texturePathWithoutExtension);
         IRenderTarget CreateRenderSurface(bool isInternal, uint width, uint height, PixelFormat pixelFormat, bool hasDepthBuffer, bool autoClearColour = false, bool autoClearDepth = false, bool userLinearFilter = false);
+        TextureDataRgba LoadTextureColourDataFromPngFile(string path);
+        TextureDataRgba LoadTextureColourDataFromEmbeddedPngResourceInUserApplication(string path);
         void RegisterSwapChainOutput(Framebuffer swapChainFrameBuffer, bool removeExisting);
         GpuSurface RetrieveSurface(ulong id, GpuSurfaceType[] disallowedTypes = null);
         Size GetSurfaceDimensions(ulong id);

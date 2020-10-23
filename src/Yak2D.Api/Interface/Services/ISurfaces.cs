@@ -51,6 +51,14 @@ namespace Yak2D
                              AssetSourceEnum assetType);
 
         /// <summary>
+        /// Loads texture colour data from a .png image asset
+        /// </summary>
+        /// <param name="path">Image (.png) asset name including path (no file extension)"</param>
+        /// <param name="assetType">Embedded in the binary or a file location"</param>
+        TextureDataRgba LoadTextureColourData(string path,
+                                              AssetSourceEnum assetType);
+
+        /// <summary>
         /// Geneate a texture of floats (used in distortion stages) directly from an array
         /// </summary>
         /// <param name="textureWidth">Width in pixels</param>

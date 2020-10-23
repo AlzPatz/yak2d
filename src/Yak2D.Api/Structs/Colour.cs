@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 
 namespace Yak2D
 {
@@ -26,6 +27,16 @@ namespace Yak2D
         public float G { get; }
         public float B { get; }
         public float A { get; }
+
+        /// <summary>
+        /// Return R, G, B components as Vector3 (A ignored)
+        /// </summary>
+        public Vector3 ToVector3() => new Vector3(R, G, B); 
+
+        /// <summary>
+        /// Return R, G, B, A as Vector4
+        /// </summary>
+        public Vector4 ToVector4() => new Vector4(R, G, B, A); 
 
         private static float Clamp(float f)
         {

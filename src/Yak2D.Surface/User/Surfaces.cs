@@ -1,7 +1,7 @@
-using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Drawing;
 using System.Numerics;
+using SixLabors.ImageSharp.PixelFormats;
 using Yak2D.Internal;
 using Yak2D.Utility;
 
@@ -50,6 +50,19 @@ namespace Yak2D.Surface
             }
 
             return null;
+        }
+
+        public TextureDataRgba LoadTextureColourData(string path, AssetSourceEnum assetType)
+        {
+            switch (assetType)
+            {
+                case AssetSourceEnum.File:
+                    return _surfaceManager.LoadTextureColourDataFromPngFile(path);
+                case AssetSourceEnum.Embedded:
+                    return _surfaceManager.LoadTextureColourDataFromEmbeddedPngResourceInUserApplication(path);
+            }
+
+            return default(TextureDataRgba);
         }
 
         public IRenderTarget ReturnMainWindowRenderTarget()

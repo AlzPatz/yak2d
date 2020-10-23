@@ -27,9 +27,9 @@ struct FragmentIn
 float4 main(FragmentIn fIn) : SV_Target
 {
 	float4 mixing = TextureMix.Sample(SamplerMix, fIn.FTex);
-	
-	return   		(Amount.r * mixing.r * Texture0.Sample(Sampler0, fIn.FTex)) + 
-				(Amount.g * mixing.g * Texture1.Sample(Sampler1, fIn.FTex)) + 
-    				(Amount.b * mixing.b * Texture2.Sample(Sampler2, fIn.FTex)) + 
-    				(Amount.a * mixing.a * Texture3.Sample(Sampler3, fIn.FTex));
+
+	return   		(Amount.r * mixing.r * Texture0.Sample(Sampler0, fIn.FTex)) +
+					(Amount.g * mixing.g * Texture1.Sample(Sampler1, fIn.FTex)) +
+					(Amount.b * mixing.b * Texture2.Sample(Sampler2, fIn.FTex)) +
+					(Amount.a * mixing.a * Texture3.Sample(Sampler3, fIn.FTex));
 }
