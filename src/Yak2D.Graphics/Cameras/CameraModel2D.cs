@@ -119,7 +119,7 @@ namespace Yak2D.Graphics
 
         private void SetRotationUsingAngle(float angle)
         {
-            _worldCameraRotationRads = (1.0f / 180.0f) * (float)System.Math.PI * angle;
+            _worldCameraRotationRads = -(1.0f / 180.0f) * (float)System.Math.PI * angle;
         }
 
         public float GetWorldZoom()
