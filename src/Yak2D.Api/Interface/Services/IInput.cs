@@ -14,7 +14,7 @@ namespace Yak2D
         /// Am object of frame input data provided by the veldrid library
         /// </summary>
         InputSnapshot RawVeldridInputSnapshot { get; }
-        
+
         /// <summary>
         /// Get mouse position over window (origin top-left)
         /// </summary>
@@ -24,7 +24,7 @@ namespace Yak2D
         /// How far the mouse has moved over the desktop since the last update
         /// </summary>
         Vector2 MousePositionDeltaSinceLastFrame { get; }
-        
+
         /// <summary>
         /// The velocity in pixels per second, the mouse cursor moved over the window 
         /// </summary>
@@ -37,13 +37,13 @@ namespace Yak2D
         bool IsMouseCurrentlyPressed(MouseButton button);
 
         /// <summary>
-        /// Returns true if this is the first update since the button was pressed
+        /// Returns true if this is the first UPDATE since the button was pressed. . Do NOT use in DRAW calls
         /// </summary>
         /// <param name="button">The button to query</param>
-        bool IsMousePressedThisFrame(MouseButton button);
+        bool WasMousePressedThisFrame(MouseButton button);
 
         /// <summary>
-        /// Returns true if this is the first update since the button was released
+        /// Returns true if this is the first UPDATE since the button was released. . Do NOT use in DRAW calls
         /// </summary>
         /// <param name="button">The button to query</param>
         bool WasMouseReleasedThisFrame(MouseButton button);
@@ -54,7 +54,7 @@ namespace Yak2D
         /// <param name="button">The button to query</param>
         /// <param name="countIfUpThisFrame">If true, a time will be returned even if this is the first update since the button was released</param>
         float HowLongHasMouseBeenHeldDown(MouseButton button, bool countIfUpThisFrame = false);
-        
+
         /// <summary>
         /// Returns list of buttons pressed since the last update
         /// </summary>
@@ -77,13 +77,13 @@ namespace Yak2D
         bool IsKeyCurrentlyPressed(KeyCode key);
 
         /// <summary>
-        /// Returns true if this is the first update since the key was pressed
+        /// Returns true if this is the first UPDATE since the key was pressed. Do NOT use in DRAW calls
         /// </summary>
         /// <param name="key">The key to query</param>
-        bool IsKeyPressedThisFrame(KeyCode key);
+        bool WasKeyPressedThisFrame(KeyCode key);
 
         /// <summary>
-        /// Returns true if this is the first update since the key was released
+        /// Returns true if this is the first UPDATE since the key was released. . Do NOT use in DRAW calls
         /// </summary>
         /// <param name="key">The key to query</param>
         bool WasKeyReleasedThisFrame(KeyCode key);
@@ -94,7 +94,7 @@ namespace Yak2D
         /// <param name="key">The key to query</param>
         /// <param name="countIfUpThisFrame">If true, a time will be returned even if this is the first update since the key was released</param>
         float HowLongHasKeyBeenHeldDown(KeyCode key, bool countIfUpThisFrame = false);
-        
+
         /// <summary>
         /// Returns list of keys pressed since the last update
         /// </summary>
@@ -129,14 +129,14 @@ namespace Yak2D
         bool IsGamepadButtonCurrentlyPressed(int id, GamepadButton button);
 
         /// <summary>
-        /// Returns true if this is the first update since the button was pressed
+        /// Returns true if this is the first UPDATE since the button was pressed. Do NOT use in DRAW calls
         /// </summary>
         /// <param name="id">Positive id reference for gamepad</param>
         /// <param name="button">The button to query</param>        
-        bool IsGamepadButtonPressedThisFrame(int id, GamepadButton button);
+        bool WasGamepadButtonPressedThisFrame(int id, GamepadButton button);
 
         /// <summary>
-        /// Returns true if this is the first update since the button was released
+        /// Returns true if this is the first UPDATE since the button was released. Do NOT use in DRAW calls
         /// </summary>
         /// <param name="id">Positive id reference for gamepad</param>
         /// <param name="button">The button to query</param>                
@@ -149,7 +149,7 @@ namespace Yak2D
         /// <param name="button">The button to query</param>
         /// <param name="countIfUpThisFrame">If true, a time will be returned even if this is the first update since the button was released</param>
         float HowLongHasGamepadButtonBeenHeldDown(int id, GamepadButton button, bool countIfUpThisFrame = false);
-        
+
         /// <summary>
         /// Returns list of buttons pressed since the last update
         /// </summary>

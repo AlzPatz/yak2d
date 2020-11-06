@@ -6,7 +6,7 @@ namespace Yak2D.Graphics
 {
     public class Drawing : IDrawing
     {
-        public IDrawingHelpers DrawingHelpers
+        public IDrawingHelpers Helpers
         {
             get
             {

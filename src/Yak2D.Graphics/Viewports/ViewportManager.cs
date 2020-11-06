@@ -24,6 +24,8 @@ namespace Yak2D.Graphics
             _viewportCollection = collectionFactory.Create<IViewportModel>(48);
         }
 
+        public IViewportModel RetrieveViewportModel(ulong key) => _viewportCollection.Retrieve(key);
+
         public void DestroyViewport(ulong viewport)
         {
             var model = RetrieveViewport(viewport);

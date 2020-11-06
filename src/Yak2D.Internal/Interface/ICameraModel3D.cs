@@ -1,7 +1,7 @@
 using System.Numerics;
 using Veldrid;
 
-namespace Yak2D.Graphics
+namespace Yak2D.Internal
 {
     public interface ICameraModel3D
     {

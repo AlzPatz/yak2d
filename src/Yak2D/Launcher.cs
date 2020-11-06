@@ -124,6 +124,7 @@ namespace Yak2D
             container.Register<ISdl2EventProcessor, Sdl2EventProcessor>(Lifestyle.Singleton);
             container.Register<IInputMouseKeyboard, InputMouseKeyboard>(Lifestyle.Singleton);
             container.Register<IInputGameController, InputGameController>(Lifestyle.Singleton);
+            container.Register<ICoordinateTransforms, CoordinateTransforms>(Lifestyle.Singleton);
             container.Register<IServices, Services>(Lifestyle.Singleton);
             container.Register<IBackend, Backend>(Lifestyle.Singleton);
             container.Register<IDrawing, Drawing>(Lifestyle.Singleton);

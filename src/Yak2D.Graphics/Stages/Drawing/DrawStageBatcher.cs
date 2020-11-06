@@ -33,7 +33,7 @@ namespace Yak2D.Graphics
             var activeQueues = new bool[numQueues];
             for (var n = 0; n < numQueues; n++)
             {
-                activeQueues[n] = true;
+                activeQueues[n] = queues[n].Queue.Data.NumRequests > 0;
             }
 
             var nextRequestToConsume = new int[numQueues];

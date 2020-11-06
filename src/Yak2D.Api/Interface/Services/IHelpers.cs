@@ -6,6 +6,11 @@ namespace Yak2D
     public interface IHelpers
     {
         /// <summary>
+        /// Provides functions to transform positions between World, Screen and Window coordinates
+        /// </summary>
+        ICoordinateTransforms CoordinateTransforms { get; }
+
+        /// <summary>
         /// Provides functions to generate the Vertex3D arrays for a selection of mesh types for the MeshRender stage
         /// </summary>
         ICommonMeshBuilder CommonMeshBuilder { get; }

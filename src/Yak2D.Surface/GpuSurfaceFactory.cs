@@ -14,36 +14,46 @@ namespace Yak2D.Surface
         private readonly ISystemComponents _components;
 
         private ResourceLayout _cachedTextureResourceLayout;
-        private Sampler _defaultTextureSamplerWrap;
-        private Sampler _defaultTextureSamplerMirror;
-        private Sampler _linearFilterTextureSamplerWrap;
-        private Sampler _linearFilterTextureSamplerMirror;
+
+        private Sampler _anisotropicSamplerWrap;
+        private Sampler _anisotropicSamplerMirror;
+        private Sampler _linearSamplerWrap;
+        private Sampler _linearSamplerMirror;
+        private Sampler _pointSamplerWrap;
+        private Sampler _pointSamplerMirror;
 
         public GpuSurfaceFactory(IFrameworkMessenger frameworkMessenger, ISystemComponents components)
         {
             _frameworkMessenger = frameworkMessenger;
             _components = components;
 
-            GenerateDefaultTextureSamplers();
+            GenerateAnisotropicTextureSamplers();
             GenerateLinearTextureSamplers();
+            GeneratePointTextureSamplers();
             GenerateCachedTextureLayout();
         }
 
-        private void GenerateDefaultTextureSamplers()
+        private void GenerateAnisotropicTextureSamplers()
         {
-            _defaultTextureSamplerWrap = GenerateDefaultTextureSampler(TextureCoordinateMode.Wrap);
-            _defaultTextureSamplerMirror = GenerateDefaultTextureSampler(TextureCoordinateMode.Mirror);
+            _anisotropicSamplerWrap = GenerateAnisotropicTextureSampler(TextureCoordinateMode.Wrap);
+            _anisotropicSamplerMirror = GenerateAnisotropicTextureSampler(TextureCoordinateMode.Mirror);
         }
 
         private void GenerateLinearTextureSamplers()
         {
-            _linearFilterTextureSamplerWrap = GenerateLinearTextureSampler(TextureCoordinateMode.Wrap);
-            _linearFilterTextureSamplerMirror = GenerateLinearTextureSampler(TextureCoordinateMode.Mirror);
+            _linearSamplerWrap = GenerateLinearTextureSampler(TextureCoordinateMode.Wrap);
+            _linearSamplerMirror = GenerateLinearTextureSampler(TextureCoordinateMode.Mirror);
         }
 
-        private Sampler GenerateDefaultTextureSampler(TextureCoordinateMode texCoordMode)
+        private void GeneratePointTextureSamplers()
         {
-            //Default, anistropic where possible
+            _pointSamplerWrap = GeneratePointTextureSampler(TextureCoordinateMode.Wrap);
+            _pointSamplerMirror = GeneratePointTextureSampler(TextureCoordinateMode.Mirror);
+        }
+
+        private Sampler GenerateAnisotropicTextureSampler(TextureCoordinateMode texCoordMode)
+        {
+            //Default to linear if not supported
             var samplerFilter = _components.Device.SamplerAnisotropy ? SamplerFilter.Anisotropic : SamplerFilter.MinLinear_MagLinear_MipLinear;
 
             SamplerAddressMode samplerAddressMode = SamplerAddressMode.Wrap;
@@ -96,6 +106,35 @@ namespace Yak2D.Surface
             ));
         }
 
+
+        private Sampler GeneratePointTextureSampler(TextureCoordinateMode texCoordMode)
+        {
+            var samplerFilter = SamplerFilter.MinPoint_MagPoint_MipPoint;
+
+            SamplerAddressMode samplerAddressMode = SamplerAddressMode.Wrap;
+            switch (texCoordMode)
+            {
+                case TextureCoordinateMode.Mirror:
+                    samplerAddressMode = SamplerAddressMode.Mirror;
+                    break;
+                case TextureCoordinateMode.Wrap:
+                    samplerAddressMode = SamplerAddressMode.Wrap;
+                    break;
+            }
+
+            return _components.Factory.CreateSampler(new SamplerDescription(
+                samplerAddressMode,
+                samplerAddressMode,
+                samplerAddressMode,
+                samplerFilter,
+                null,
+                _maximumAnistrophy,
+                0, 0, 0,
+                SamplerBorderColor.TransparentBlack
+            ));
+
+        }
+
         private void GenerateCachedTextureLayout()
         {
             _cachedTextureResourceLayout = _components.Factory.CreateResourceLayout(
@@ -106,7 +145,7 @@ namespace Yak2D.Surface
             );
         }
 
-        public GpuSurface CreateGpuSurfaceFromTexture(Texture texture, bool isFrameworkInternal)
+        public GpuSurface CreateGpuSurfaceFromTexture(Texture texture, bool isFrameworkInternal, SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (texture == null)
             {
@@ -115,16 +154,35 @@ namespace Yak2D.Surface
 
             var view = _components.Factory.CreateTextureView(texture);
 
+            Sampler wrap = null;
+            Sampler mirror = null;
+
+            switch (samplerType)
+            {
+                case SamplerType.Anisotropic:
+                    wrap = _anisotropicSamplerWrap;
+                    mirror = _anisotropicSamplerMirror;
+                    break;
+                case SamplerType.Linear:
+                    wrap = _linearSamplerWrap;
+                    mirror = _linearSamplerMirror;
+                    break;
+                case SamplerType.Point:
+                    wrap = _pointSamplerWrap;
+                    mirror = _pointSamplerMirror;
+                    break;
+            }
+
             var resourceSet_Wrap = _components.Factory.CreateResourceSet(new ResourceSetDescription(
                _cachedTextureResourceLayout,
                view,
-               _defaultTextureSamplerWrap
+               wrap
             ));
 
             var resourceSet_Mirror = _components.Factory.CreateResourceSet(new ResourceSetDescription(
                 _cachedTextureResourceLayout,
                 view,
-                _defaultTextureSamplerMirror
+                mirror
             ));
 
             return new GpuSurface
@@ -143,7 +201,7 @@ namespace Yak2D.Surface
                                                                             uint height,
                                                                             PixelFormat pixelFormat,
                                                                             bool hasDepthBuffer,
-                                                                            bool useLinearFilter)
+                                                                            SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (width == 0 || height == 0)
             {
@@ -169,30 +227,35 @@ namespace Yak2D.Surface
 
             var buffer = _components.Factory.CreateFramebuffer(new FramebufferDescription(hasDepthBuffer ? depthStencil : null, texture));
 
-            Sampler sampler_wrap;
-            Sampler sampler_mirror;
+            Sampler wrap = null;
+            Sampler mirror = null;
 
-            if (useLinearFilter)
+            switch (samplerType)
             {
-                sampler_wrap = _linearFilterTextureSamplerWrap;
-                sampler_mirror = _linearFilterTextureSamplerMirror;
-            }
-            else
-            {
-                sampler_wrap = _defaultTextureSamplerWrap;
-                sampler_mirror = _defaultTextureSamplerMirror;
+                case SamplerType.Anisotropic:
+                    wrap = _anisotropicSamplerWrap;
+                    mirror = _anisotropicSamplerMirror;
+                    break;
+                case SamplerType.Linear:
+                    wrap = _linearSamplerWrap;
+                    mirror = _linearSamplerMirror;
+                    break;
+                case SamplerType.Point:
+                    wrap = _pointSamplerWrap;
+                    mirror = _pointSamplerMirror;
+                    break;
             }
 
             var resourceSet_wrap = _components.Factory.CreateResourceSet(new ResourceSetDescription(
                 _cachedTextureResourceLayout,
                 view,
-                sampler_wrap
+                wrap
              ));
 
             var resourceSet_mirror = _components.Factory.CreateResourceSet(new ResourceSetDescription(
                 _cachedTextureResourceLayout,
                 view,
-                sampler_mirror
+                mirror
             ));
 
             return new GpuSurface
@@ -226,7 +289,7 @@ namespace Yak2D.Surface
 
         public void ReCreateCachedObjects()
         {
-            GenerateDefaultTextureSamplers();
+            GenerateAnisotropicTextureSamplers();
             GenerateLinearTextureSamplers();
             GenerateCachedTextureLayout();
         }

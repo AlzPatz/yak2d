@@ -30,7 +30,7 @@ namespace Yak2D.Input
         public InputSnapshot RawVeldridInputSnapshot => _windowUpdater.LatestWindowInputSnapshot;
 
         public bool IsKeyCurrentlyPressed(KeyCode key) => _inputMouseKeyboard.IsKeyCurrentlyPressed(key);
-        public bool IsKeyPressedThisFrame(KeyCode key) => _inputMouseKeyboard.IsKeyPressedThisFrame(key);
+        public bool WasKeyPressedThisFrame(KeyCode key) => _inputMouseKeyboard.IsKeyPressedThisFrame(key);
         public bool WasKeyReleasedThisFrame(KeyCode key) => _inputMouseKeyboard.WasKeyReleasedThisFrame(key);
         public float HowLongHasKeyBeenHeldDown(KeyCode key, bool countIfUpThisFrame = false) => _inputMouseKeyboard.HowLongHasKeyBeenHeldDown(key, countIfUpThisFrame);
         public List<KeyCode> KeysPressedThisFrame() => _inputMouseKeyboard.KeyPressedThisFrame();
@@ -38,7 +38,7 @@ namespace Yak2D.Input
         public List<KeyCode> KeysReleasedThisFrame() => _inputMouseKeyboard.KeysReleasedThisFrame();
 
         public bool IsMouseCurrentlyPressed(MouseButton button) => _inputMouseKeyboard.IsMouseCurrentlyPressed(button);
-        public bool IsMousePressedThisFrame(MouseButton button) => _inputMouseKeyboard.IsMousePressedThisFrame(button);
+        public bool WasMousePressedThisFrame(MouseButton button) => _inputMouseKeyboard.IsMousePressedThisFrame(button);
         public bool WasMouseReleasedThisFrame(MouseButton button) => _inputMouseKeyboard.WasMouseReleasedThisFrame(button);
         public float HowLongHasMouseBeenHeldDown(MouseButton button, bool countIfUpThisFrame = false) => _inputMouseKeyboard.HowLongHasMouseBeenHeldDown(button, countIfUpThisFrame);
         public List<MouseButton> MouseButtonsPressedThisFrame() => _inputMouseKeyboard.MouseButtonsPressedThisFrame();
@@ -48,7 +48,7 @@ namespace Yak2D.Input
         public bool IsGamepadIdValid(int id) => _inputGameController.IsGamepadIdValid(id);
         public List<int> ConnectedGamepadIds() => _inputGameController.ConnectedGamepadIds();
         public bool IsGamepadButtonCurrentlyPressed(int id, GamepadButton button) => _inputGameController.IsGamepadButtonCurrentlyPressed(id, button);
-        public bool IsGamepadButtonPressedThisFrame(int id, GamepadButton button) => _inputGameController.IsGamepadButtonPressedThisFrame(id, button);
+        public bool WasGamepadButtonPressedThisFrame(int id, GamepadButton button) => _inputGameController.IsGamepadButtonPressedThisFrame(id, button);
         public bool WasGamepadButtonReleasedThisFrame(int id, GamepadButton button) => _inputGameController.WasGamepadButtonReleasedThisFrame(id, button);
         public float HowLongHasGamepadButtonBeenHeldDown(int id, GamepadButton button, bool countIfUpThisFrame = false) => _inputGameController.HowLongHasGamepadButtonBeenHeldDown(id, button);
         public List<GamepadButton> GamepadButtonsPressedThisFrame(int id) => _inputGameController.GamepadButtonsPressedThisFrame(id);

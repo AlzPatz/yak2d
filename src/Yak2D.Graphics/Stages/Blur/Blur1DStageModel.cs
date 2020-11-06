@@ -80,14 +80,14 @@ namespace Yak2D.Graphics
 
         private void CreateSurfaces()
         {
-            _linearSurfaceId0 = CreateSurface(_sampleSurfaceWidth, _sampleSurfaceHeight, true);
-            _anistropicSurfaceId = CreateSurface(_sampleSurfaceWidth, _sampleSurfaceHeight, false);
+            _linearSurfaceId0 = CreateSurface(_sampleSurfaceWidth, _sampleSurfaceHeight, SamplerType.Linear);
+            _anistropicSurfaceId = CreateSurface(_sampleSurfaceWidth, _sampleSurfaceHeight, SamplerType.Anisotropic);
 
             LinearSampledSurface = _surfaceManager.RetrieveSurface(_linearSurfaceId0);
             AnistropicallySampledSurface = _surfaceManager.RetrieveSurface(_anistropicSurfaceId);
         }
 
-        private ulong CreateSurface(uint width, uint height, bool linearSampling)
+        private ulong CreateSurface(uint width, uint height, SamplerType samplerType)
         {
             return _surfaceManager.CreateRenderSurface(true,
                                                         width,
@@ -96,7 +96,7 @@ namespace Yak2D.Graphics
                                                         false,
                                                         false,
                                                         false,
-                                                        linearSampling).Id;
+                                                        samplerType).Id;
         }
 
         public void SetEffectTransition(ref Blur1DEffectConfiguration config, ref float transitionSeconds)

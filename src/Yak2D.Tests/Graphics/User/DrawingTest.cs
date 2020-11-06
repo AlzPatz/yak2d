@@ -23,7 +23,7 @@ namespace Yak2D.Tests
                                            fontManager,
                                            gpuSurfaceManager);
 
-            var helpers = drawing.DrawingHelpers;
+            var helpers = drawing.Helpers;
 
             Assert.NotNull(helpers);
         }

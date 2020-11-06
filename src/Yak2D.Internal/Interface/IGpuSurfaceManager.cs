@@ -20,13 +20,17 @@ namespace Yak2D.Internal
 
         List<ulong> GetAutoClearDepthSurfaceIds();
         List<ulong> GetAutoClearColourSurfaceIds();
-        ITexture LoadTextureFromEmbeddedPngResourceInUserApplication(string texturePathWithoutExtension);
-        ITexture LoadFontTextureFromEmbeddedPngResource(bool isFrameworkInternal, string texturePathWithoutExtension);
-        ITexture LoadRgbaTextureFromPixelData(uint width, uint height, Rgba32[] pixelData);
-        ITexture LoadFloat32TextureFromPixelData(uint width, uint height, float[] pixelData);
-        ITexture LoadTextureFromPngFile(string path);
-        ITexture LoadFontTextureFromPngFile(string texturePathWithoutExtension);
-        IRenderTarget CreateRenderSurface(bool isInternal, uint width, uint height, PixelFormat pixelFormat, bool hasDepthBuffer, bool autoClearColour = false, bool autoClearDepth = false, bool userLinearFilter = false);
+
+        ITexture LoadTextureFromEmbeddedPngResourceInUserApplication(string texturePathWithoutExtension, SamplerType samplerType = SamplerType.Anisotropic);
+        ITexture LoadFontTextureFromEmbeddedPngResource(bool isFrameworkInternal, string texturePathWithoutExtension, SamplerType samplerType = SamplerType.Anisotropic);
+        ITexture LoadRgbaTextureFromPixelData(uint width, uint height, Rgba32[] pixelData, SamplerType samplerType = SamplerType.Anisotropic);
+        ITexture LoadFloat32TextureFromPixelData(uint width, uint height, float[] pixelData, SamplerType samplerType = SamplerType.Anisotropic);
+        ITexture LoadTextureFromPngFile(string path, SamplerType samplerType = SamplerType.Anisotropic);
+        ITexture LoadFontTextureFromPngFile(string texturePathWithoutExtension, SamplerType samplerType = SamplerType.Anisotropic);
+        IRenderTarget CreateRenderSurface(bool isInternal, uint width, uint height, PixelFormat pixelFormat,
+                                          bool hasDepthBuffer, bool autoClearColour = false, bool autoClearDepth = false,
+                                          SamplerType samplerType = SamplerType.Anisotropic);
+
         TextureDataRgba LoadTextureColourDataFromPngFile(string path);
         TextureDataRgba LoadTextureColourDataFromEmbeddedPngResourceInUserApplication(string path);
         void RegisterSwapChainOutput(Framebuffer swapChainFrameBuffer, bool removeExisting);

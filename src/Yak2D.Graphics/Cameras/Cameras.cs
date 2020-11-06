@@ -1,4 +1,6 @@
+using System.Drawing;
 using System.Numerics;
+using Yak2D.Internal;
 
 namespace Yak2D.Graphics
 {
@@ -53,7 +55,7 @@ namespace Yak2D.Graphics
             _cameraManager.RetrieveCameraModel2D(camera)?.SetWorldFocusAndZoom(focus, zoom);
         }
 
-        public void SetCamera2DWorldRotationUsingUpVector(ICamera2D camera, Vector2 up)
+        public void SetCamera2DRotation(ICamera2D camera, Vector2 up)
         {
             if (camera == null)
             {
@@ -63,42 +65,42 @@ namespace Yak2D.Graphics
             _cameraManager.RetrieveCameraModel2D(camera.Id)?.SetWorldRotationUsingUpVector(up);
         }
 
-        public void SetCamera2DWorldRotationUsingUpVector(ulong camera, Vector2 up)
+        public void SetCamera2DRotation(ulong camera, Vector2 up)
         {
             _cameraManager.RetrieveCameraModel2D(camera)?.SetWorldRotationUsingUpVector(up);
         }
 
-        public void SetCamera2DWorldRotationDegressClockwiseFromPositiveY(ICamera2D camera, float angle)
+        public void SetCamera2DRotation(ICamera2D camera, float angle)
         {
             if (camera == null)
             {
                 return;
             }
 
-            _cameraManager.RetrieveCameraModel2D(camera.Id)?.SetWorldRotationDegressClockwiseFromPositiveY(angle);
+            _cameraManager.RetrieveCameraModel2D(camera.Id)?.SetWorldRotationRadiansClockwiseFromPositiveY(angle);
         }
 
-        public void SetCamera2DWorldRotationDegressClockwiseFromPositiveY(ulong camera, float angle)
+        public void SetCamera2DRotation(ulong camera, float angle)
         {
-            _cameraManager.RetrieveCameraModel2D(camera)?.SetWorldRotationDegressClockwiseFromPositiveY(angle);
+            _cameraManager.RetrieveCameraModel2D(camera)?.SetWorldRotationRadiansClockwiseFromPositiveY(angle);
         }
 
-        public void SetCamera2DWorldFocusZoomAndRotationAngleClockwiseFromPositiveY(ICamera2D camera, Vector2 focus, float zoom, float angle)
+        public void SetCamera2DFocusZoomAndRotation(ICamera2D camera, Vector2 focus, float zoom, float angle)
         {
             if (camera == null)
             {
                 return;
             }
 
-            _cameraManager.RetrieveCameraModel2D(camera.Id)?.SetWorldFocusZoomAndRotationAngleClockwiseFromPositiveY(focus, zoom, angle);
+            _cameraManager.RetrieveCameraModel2D(camera.Id)?.SetWorldFocusZoomAndRotationRadiansAngleClockwiseFromPositiveY(focus, zoom, angle);
         }
 
-        public void SetCamera2DWorldFocusZoomAndRotationAngleClockwiseFromPositiveY(ulong camera, Vector2 focus, float zoom, float angle)
+        public void SetCamera2DFocusZoomAndRotation(ulong camera, Vector2 focus, float zoom, float angle)
         {
-            _cameraManager.RetrieveCameraModel2D(camera)?.SetWorldFocusZoomAndRotationAngleClockwiseFromPositiveY(focus, zoom, angle);
+            _cameraManager.RetrieveCameraModel2D(camera)?.SetWorldFocusZoomAndRotationRadiansAngleClockwiseFromPositiveY(focus, zoom, angle);
         }
 
-        public void SetCamera2DWorldFocusZoomAndRotationUsingUpVector(ICamera2D camera, Vector2 focus, float zoom, Vector2 up)
+        public void SetCamera2DFocusZoomAndRotation(ICamera2D camera, Vector2 focus, float zoom, Vector2 up)
         {
             if (camera == null)
             {
@@ -108,7 +110,7 @@ namespace Yak2D.Graphics
             _cameraManager.RetrieveCameraModel2D(camera.Id)?.SetWorldFocusZoomAndRotationUsingUpVector(focus, zoom, up);
         }
 
-        public void SetCamera2DWorldFocusZoomAndRotationUsingUpVector(ulong camera, Vector2 focus, float zoom, Vector2 up)
+        public void SetCamera2DFocusZoomAndRotation(ulong camera, Vector2 focus, float zoom, Vector2 up)
         {
             _cameraManager.RetrieveCameraModel2D(camera)?.SetWorldFocusZoomAndRotationUsingUpVector(focus, zoom, up);
         }
@@ -126,6 +128,105 @@ namespace Yak2D.Graphics
         public void SetCamera2DVirtualResolution(ulong camera, uint width, uint height)
         {
             _cameraManager.RetrieveCameraModel2D(camera)?.SetVirtualResolution(width, height);
+        }
+
+        public Vector2 GetCamera2DWorldFocus(ICamera2D camera)
+        {
+            if (camera == null)
+            {
+                return Vector2.Zero;
+            }
+
+            var cameraModel = _cameraManager.RetrieveCameraModel2D(camera.Id);
+
+            return cameraModel == null ? Vector2.Zero : cameraModel.GetWorldFocus();
+        }
+
+        public Vector2 GetCamera2DWorldFocus(ulong camera)
+        {
+            var cameraModel = _cameraManager.RetrieveCameraModel2D(camera);
+
+            return cameraModel == null ? Vector2.Zero : cameraModel.GetWorldFocus();
+        }
+
+        public Size GetCamera2DVirtualResolution(ICamera2D camera)
+        {
+            if (camera == null)
+            {
+                return Size.Empty;
+            }
+
+            var cameraModel = _cameraManager.RetrieveCameraModel2D(camera.Id);
+
+            var resolution = cameraModel == null ? new Veldrid.Point(0, 0) : cameraModel.GetVirtualResolution();
+
+            return new Size(resolution.X, resolution.Y);
+        }
+
+        public Size GetCamera2DVirtualResolution(ulong camera)
+        {
+            var cameraModel = _cameraManager.RetrieveCameraModel2D(camera);
+
+            var resolution = cameraModel == null ? new Veldrid.Point(0, 0) : cameraModel.GetVirtualResolution();
+
+            return new Size(resolution.X, resolution.Y);
+        }
+
+        public float GetCamera2DZoom(ICamera2D camera)
+        {
+            if (camera == null)
+            {
+                return 1.0f; //Return 0.0f could trigger some divide by zero issues in user code
+            }
+
+            var cameraModel = _cameraManager.RetrieveCameraModel2D(camera.Id);
+
+            return cameraModel == null ? 1.0f : cameraModel.GetWorldZoom();
+        }
+
+        public float GetCamera2DZoom(ulong camera)
+        {
+            var cameraModel = _cameraManager.RetrieveCameraModel2D(camera);
+
+            return cameraModel == null ? 1.0f : cameraModel.GetWorldZoom();
+        }
+
+        public float GetCamera2DRotation(ICamera2D camera)
+        {
+            if (camera == null)
+            {
+                return 0.0f;            
+            }
+
+            var cameraModel = _cameraManager.RetrieveCameraModel2D(camera.Id);
+
+            return cameraModel == null ? 0.0f : cameraModel.GetWorldClockwiseRotationRadsFromPositiveY();
+        }
+
+        public float GetCamera2DRotation(ulong camera)
+        {
+            var cameraModel = _cameraManager.RetrieveCameraModel2D(camera);
+
+            return cameraModel == null ? 0.0f : cameraModel.GetWorldClockwiseRotationRadsFromPositiveY();
+        }
+
+        public Vector2 GetCamera2DUp(ICamera2D camera)
+        {
+            if (camera == null)
+            {
+                return Vector2.UnitY;
+            }
+
+            var cameraModel = _cameraManager.RetrieveCameraModel2D(camera.Id);
+
+            return cameraModel == null ? Vector2.UnitY : cameraModel.GetWorldUp();
+        }
+
+        public Vector2 GetCamera2DUp(ulong camera)
+        {
+            var cameraModel = _cameraManager.RetrieveCameraModel2D(camera);
+
+            return cameraModel == null ? Vector2.UnitY : cameraModel.GetWorldUp();
         }
 
         public void SetCamera3DView(ICamera3D camera, Vector3 position, Vector3 lookAt, Vector3 up)

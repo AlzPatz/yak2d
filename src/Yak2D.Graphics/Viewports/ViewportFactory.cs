@@ -1,3 +1,5 @@
+using Yak2D.Internal;
+
 namespace Yak2D.Graphics
 {
     public class ViewportFactory : IViewportFactory

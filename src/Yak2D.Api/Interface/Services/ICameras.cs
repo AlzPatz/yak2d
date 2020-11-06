@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.Numerics;
 
 namespace Yak2D
@@ -13,7 +14,7 @@ namespace Yak2D
         /// Returns the number of 2D Cameras that currently exist
         /// </summary>
         int Camera2DCount { get; }
-        
+
         /// <summary>
         /// Returns the number of 3D Cameras that currently exist
         /// </summary>        
@@ -77,30 +78,30 @@ namespace Yak2D
         void SetCamera2DFocusAndZoom(ulong camera, Vector2 focus, float zoom);
 
         /// <summary>
-        /// Set a Camera's rotation described by an 'up' vector
+        /// Set a Camera's world rotation described by an 'up' vector
         /// </summary>
         /// <param name="camera">The camera to modify</param>
         /// <param name="up">A unit vector pointing in the upwards direction of the camera</param>
-        void SetCamera2DWorldRotationUsingUpVector(ICamera2D camera, Vector2 up);
+        void SetCamera2DRotation(ICamera2D camera, Vector2 up);
         /// <summary>
-        /// Set a Camera's rotation described by an 'up' vector
+        /// Set a Camera's world rotation described by an 'up' vector
         /// </summary>
         /// <param name="camera">The id key of the camera to modify</param>
         /// <param name="up">A unit vector pointing in the upwards direction of the camera</param>
-        void SetCamera2DWorldRotationUsingUpVector(ulong camera, Vector2 up);        
-        
+        void SetCamera2DRotation(ulong camera, Vector2 up);
+
         /// <summary>
-        /// Set a Camera's rotation as clockwise rotation from the positive Y axis direction
+        /// Set a Camera's world rotation as clockwise rotation from the positive Y axis direction
         /// </summary>
         /// <param name="camera">The camera to modify</param>
-        /// <param name="angle">Angle in degress representing a clockwise rotation from the positive Y axis direction</param>
-        void SetCamera2DWorldRotationDegressClockwiseFromPositiveY(ICamera2D camera, float angle);
+        /// <param name="angle">Angle in RADIANS representing a clockwise rotation from the positive Y axis direction</param>
+        void SetCamera2DRotation(ICamera2D camera, float angle);
         /// <summary>
-        /// Set a Camera's rotation as clockwise rotation from the positive Y axis direction
+        /// Set a Camera's world rotation as clockwise rotation from the positive Y axis direction
         /// </summary>
         /// <param name="camera">The id key of the camera to modify</param>
-        /// <param name="angle">Angle in degress representing a clockwise rotation from the positive Y axis direction</param>
-        void SetCamera2DWorldRotationDegressClockwiseFromPositiveY(ulong camera, float angle);
+        /// <param name="angle">Angle in RADIANS representing a clockwise rotation from the positive Y axis direction</param>
+        void SetCamera2DRotation(ulong camera, float angle);
 
         /// <summary>
         /// Set a Camera's world focus position, zoom and rotation described as a clockwise rotation from the positive Y axis direction
@@ -108,16 +109,16 @@ namespace Yak2D
         /// <param name="camera">The camera to modify</param>
         /// <param name="focus">The world position to use as the camera's focus point</param>
         /// <param name="zoom">The camera's world zoom factor</param>
-        /// <param name="angle">Angle in degress representing a clockwise rotation from the positive Y axis direction</param>
-        void SetCamera2DWorldFocusZoomAndRotationAngleClockwiseFromPositiveY(ICamera2D camera, Vector2 focus, float zoom, float angle);
+        /// <param name="angle">Angle in RADIANS representing a clockwise rotation from the positive Y axis direction</param>
+        void SetCamera2DFocusZoomAndRotation(ICamera2D camera, Vector2 focus, float zoom, float angle);
         /// <summary>
         /// Set a Camera's world focus position, zoom and rotation described as a clockwise rotation from the positive Y axis direction
         /// </summary>
         /// <param name="camera">The id key of the camera to modify</param>
         /// <param name="focus">The world position to use as the camera's focus point</param>
         /// <param name="zoom">The camera's world zoom factor</param>
-        /// <param name="angle">Angle in degress representing a clockwise rotation from the positive Y axis direction</param>
-        void SetCamera2DWorldFocusZoomAndRotationAngleClockwiseFromPositiveY(ulong camera, Vector2 focus, float zoom, float angle);
+        /// <param name="angle">Angle in RADIANS representing a clockwise rotation from the positive Y axis direction</param>
+        void SetCamera2DFocusZoomAndRotation(ulong camera, Vector2 focus, float zoom, float angle);
 
         /// <summary>
         /// Set a Camera's world focus position, zoom and rotation described by an 'up' vector
@@ -126,7 +127,7 @@ namespace Yak2D
         /// <param name="focus">The world position to use as the camera's focus point</param>
         /// <param name="zoom">The camera's world zoom factor</param>
         /// <param name="up">A unit vector pointing in the upwards direction of the camera</param>
-        void SetCamera2DWorldFocusZoomAndRotationUsingUpVector(ICamera2D camera, Vector2 focus, float zoom, Vector2 up);
+        void SetCamera2DFocusZoomAndRotation(ICamera2D camera, Vector2 focus, float zoom, Vector2 up);
         /// <summary>
         /// Set a Camera's world focus position, zoom and rotation described by an 'up' vector
         /// </summary>
@@ -134,7 +135,62 @@ namespace Yak2D
         /// <param name="focus">The world position to use as the camera's focus point</param>
         /// <param name="zoom">The camera's world zoom factor</param>
         /// <param name="up">A unit vector pointing in the upwards direction of the camera</param>
-        void SetCamera2DWorldFocusZoomAndRotationUsingUpVector(ulong camera, Vector2 focus, float zoom, Vector2 up);
+        void SetCamera2DFocusZoomAndRotation(ulong camera, Vector2 focus, float zoom, Vector2 up);
+
+        /// <summary>
+        /// Gets a Camera's world focus point
+        /// </summary>
+        /// <param name="camera">The camera to query</param>
+        Vector2 GetCamera2DWorldFocus(ICamera2D camera);
+        /// <summary>
+        /// Gets a Camera's world focus point
+        /// </summary>
+        /// <param name="camera">The id key of the camera to query</param>
+        Vector2 GetCamera2DWorldFocus(ulong camera);
+
+        /// <summary>
+        /// Gets a Camera's Virtual Resolution
+        /// </summary>
+        /// <param name="camera">The camera to query</param>
+        Size GetCamera2DVirtualResolution(ICamera2D camera);
+        /// <summary>
+        /// Gets a Camera's Virtual Resolution
+        /// </summary>
+        /// <param name="camera">The id key of the camera to query</param>
+        Size GetCamera2DVirtualResolution(ulong camera);
+
+        /// <summary>
+        /// Gets a Camera's Zoom
+        /// </summary>
+        /// <param name="camera">The camera to query</param>
+        float GetCamera2DZoom(ICamera2D camera);
+        /// <summary>
+        /// Gets a Camera's Zoom
+        /// </summary>
+        /// <param name="camera">The id key of the camera to query</param>
+        float GetCamera2DZoom(ulong camera);
+
+        /// <summary>
+        /// Gets a Camera's Rotation in RADIANS (clockwise from positive y direction)
+        /// </summary>
+        /// <param name="camera">The camera to query</param>
+        float GetCamera2DRotation(ICamera2D camera);
+        /// <summary>
+        /// Gets a Camera's Rotation in RADIANS (clockwise from positive y direction)
+        /// </summary>
+        /// <param name="camera">The id key of the camera to query</param>
+        float GetCamera2DRotation(ulong camera);
+
+        /// <summary>
+        /// Get a unit vector pointing in the Camera's world up direction
+        /// </summary>
+        /// <param name="camera">The camera to query</param>
+        Vector2 GetCamera2DUp(ICamera2D camera);
+        /// <summary>
+        /// Get a unit vector pointing in the Camera's world up direction
+        /// </summary>
+        /// <param name="camera">The id key of the camera to query</param>
+        Vector2 GetCamera2DUp(ulong camera);
 
         /// <summary>
         /// Set a Camera's 3D view orientation
@@ -166,7 +222,7 @@ namespace Yak2D
         /// Set a Camera's 3D view projection
         /// </summary>
         /// <param name="camera">The id key of the camera to modify</param>
-        /// <param name="fovDegress">Horizontal field of view angle in degress"</param>
+        /// <param name="fovDegress">Horizontal field of view angle in DEGREES"</param>
         /// <param name="aspectRatio">Aspect ratio of camera's viewport (width / height)"</param>
         /// <param name="nearPlane">Closest distance to camera in 3D space that an object would be rendered"</param>
         /// <param name="farPlane">Furthest distance to camera in 3D space that an object would be rendered"</param>
@@ -176,7 +232,7 @@ namespace Yak2D
         /// Destroy all cameras (2D and 3D)
         /// </summary>
         void DestroyAllCameras();
-        
+
         /// <summary>
         /// Destroy all 2D cameras
         /// </summary>
@@ -196,5 +252,6 @@ namespace Yak2D
         /// Destroy an existing Camera
         /// </summary>
         /// <param name="camera">The id key of the Camera to destory"</param>
-        void DestroyCamera(ulong camera);    }
+        void DestroyCamera(ulong camera);
+    }
 }

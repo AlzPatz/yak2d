@@ -38,6 +38,34 @@ namespace Yak2D.Tests
         }
 
         [Fact]
+        public void Camera2DTest_EnsureGetVirtualResolutionWorks()
+        {
+            var components = Substitute.For<ISystemComponents>();
+
+            var camera = new CameraModel2D(components, 1920, 1080, 5.0f, Vector2.Zero);
+
+            camera.SetVirtualResolution(128, 256);
+            var resolution = camera.GetVirtualResolution();
+            Assert.Equal(128, resolution.X);
+            Assert.Equal(256, resolution.Y);
+        }
+
+        [Fact]
+        public void Camera2DTest_EnsureGetUpVectorIsCorrect()
+        {
+            var components = Substitute.For<ISystemComponents>();
+
+            var camera = new CameraModel2D(components, 1920, 1080, 5.0f, Vector2.Zero);
+
+            camera.SetWorldRotationRadiansClockwiseFromPositiveY((float)Math.PI * 0.5f);
+
+            var up = camera.GetWorldUp();
+
+            Assert.Equal(1.0f, up.X, 4);
+            Assert.Equal(0.0f, up.Y, 4);
+        }
+
+        [Fact]
         public void Camera2DTest_UpdatingCamera_EnsureCorrectNumberOfCountsToUpdatingMatrixBuffers()
         {
             var components = Substitute.For<ISystemComponents>();
@@ -49,9 +77,9 @@ namespace Yak2D.Tests
             camera.SetWorldFocus(Vector2.Zero); //x1
             camera.SetWorldZoom(2.0f); //x1
             camera.SetWorldRotationUsingUpVector(Vector2.UnitY); //x1
-            camera.SetWorldRotationDegressClockwiseFromPositiveY(45.0f); //x1
+            camera.SetWorldRotationRadiansClockwiseFromPositiveY(45.0f); //x1
             camera.SetWorldFocusAndZoom(Vector2.Zero, 2.0f); //x1
-            camera.SetWorldFocusZoomAndRotationAngleClockwiseFromPositiveY(Vector2.Zero, 2.0f, 45.0f); //x3
+            camera.SetWorldFocusZoomAndRotationRadiansAngleClockwiseFromPositiveY(Vector2.Zero, 2.0f, 45.0f); //x3
             camera.SetWorldFocusZoomAndRotationUsingUpVector(Vector2.Zero, 2.0f, Vector2.UnitX); //x3
 
             components.Device.Received(11).UpdateBuffer(Arg.Any<DeviceBuffer>(), Arg.Any<uint>(), ref Arg.Any<Matrix4x4>());

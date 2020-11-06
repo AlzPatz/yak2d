@@ -38,17 +38,21 @@ namespace Yak2D
         /// <param name="width">Width in pixels</param>
         /// <param name="height">Height in pixels</param>
         /// <param name="autoClearColourAndDepthEachFrame">Instruct the framework to clear the depth and colour pixel data of the render target before each render iteration. Helps ensure the user does not forget too</param>
+        /// <param name="samplerType">When the Render Target is sampled as a texture, which sampler filter should be used</param>
         IRenderTarget CreateRenderTarget(uint width,
                                          uint height,
-                                         bool autoClearColourAndDepthEachFrame = true);
+                                         bool autoClearColourAndDepthEachFrame = true,
+                                         SamplerType samplerType = SamplerType.Anisotropic);
 
         /// <summary>
         /// Load a texture from a .png image asset
         /// </summary>
         /// <param name="path">Image (.png) asset name including path (no file extension)"</param>
         /// <param name="assetType">Embedded in the binary or a file location"</param>
+        /// <param name="samplerType">Sampler filter to be when sampling the Texture/param>
         ITexture LoadTexture(string path,
-                             AssetSourceEnum assetType);
+                             AssetSourceEnum assetType,
+                             SamplerType samplerType = SamplerType.Anisotropic);
 
         /// <summary>
         /// Loads texture colour data from a .png image asset
@@ -64,9 +68,12 @@ namespace Yak2D
         /// <param name="textureWidth">Width in pixels</param>
         /// <param name="textureHeight">Height in pixels</param>
         /// <param name="pixels">Pixel data, one dimensional array, texture top-left pixel at 0 index, data ordered in rows</param>
+        /// <param name="samplerType">Sampler filter to be when sampling the Texture/param>
         ITexture CreateFloat32FromData(uint textureWidth,
                                        uint textureHeight,
-                                       float[] pixels);
+                                       float[] pixels,
+                                       SamplerType samplerType = SamplerType.Anisotropic);
+
 
         /// <summary>
         /// Geneate a texture of RGBA pixels directly from an array of Vector4s
@@ -74,9 +81,12 @@ namespace Yak2D
         /// <param name="textureWidth">Width in pixels</param>
         /// <param name="textureHeight">Height in pixels</param>
         /// <param name="pixels">Pixel data, one dimensional array, texture top-left pixel at 0 index, data ordered in rows</param>
+        /// <param name="samplerType">Sampler filter to be when sampling the Texture/param>
         ITexture CreateRgbaFromData(uint textureWidth,
                                     uint textureHeight,
-                                    Vector4[] pixels);
+                                    Vector4[] pixels,
+                                    SamplerType samplerType = SamplerType.Anisotropic);
+
 
         /// <summary>
         /// Return dimensions of a surface
@@ -100,7 +110,7 @@ namespace Yak2D
         /// Modify whether the framework clears the main window render target colour at the start of each draw frame
         /// Automatic clearing of colour sets pixels to RGBA 0,0,0,0 (transparent black)
         /// </summary>
-        /// <param name="autoClearDepth">To clear or not to clear</param>
+        /// <param name="autoClearColour">To clear or not to clear</param>
         void SetMainWindowRenderTargetAutoClearColour(bool autoClearColour);
 
         /// <summary>

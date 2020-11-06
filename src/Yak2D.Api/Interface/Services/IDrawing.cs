@@ -15,7 +15,7 @@ namespace Yak2D
         /// Provides access to functions to simplify common drawing operations (lines, quads, regular polygons and arrows)
         /// Includes a  fluent interface option for building flexible partial shapes and iterating / modifying 
         /// </summary>
-        IDrawingHelpers DrawingHelpers { get; }
+        IDrawingHelpers Helpers { get; }
 
         /// <summary>
         /// Create a Texture reference object from an id

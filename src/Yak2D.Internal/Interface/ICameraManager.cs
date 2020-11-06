@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Yak2D.Graphics
+namespace Yak2D.Internal
 {
     public interface ICameraManager
     {

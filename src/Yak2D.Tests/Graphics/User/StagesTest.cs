@@ -3,6 +3,7 @@ using NSubstitute.ReturnsExtensions;
 using System.Numerics;
 using Xunit;
 using Yak2D.Graphics;
+using Yak2D.Internal;
 
 namespace Yak2D.Tests
 {

@@ -14,7 +14,7 @@ namespace Yak2D.Graphics
 
         private float _zoom;
         private Vector2 _worldCameraFocus;
-        private float _worldCameraRotationRads;
+        private float _worldCameraRotationRads; //Positive is Clockwise from Positive UnitY
         private uint _virtualResolutionX;
         private uint _virtualResolutionY;
 
@@ -39,7 +39,7 @@ namespace Yak2D.Graphics
             );
 
             SetWorldFocusAndZoom(initialWorldFocusPosition, initialZoom);
-            SetWorldRotationDegressClockwiseFromPositiveY(0.0f);
+            SetWorldRotationRadiansClockwiseFromPositiveY(0.0f);
             SetResolution(initVirtualResolutionX, initVirtualResolutionY);
 
             UpdateScreenMatrix();
@@ -70,7 +70,7 @@ namespace Yak2D.Graphics
             UpdateWorldMatrix();
         }
 
-        public void SetWorldRotationDegressClockwiseFromPositiveY(float angle)
+        public void SetWorldRotationRadiansClockwiseFromPositiveY(float angle)
         {
             SetRotationUsingAngle(angle);
             UpdateWorldMatrix();
@@ -83,7 +83,7 @@ namespace Yak2D.Graphics
             UpdateWorldMatrix();
         }
 
-        public void SetWorldFocusZoomAndRotationAngleClockwiseFromPositiveY(Vector2 focus, float zoom, float angle)
+        public void SetWorldFocusZoomAndRotationRadiansAngleClockwiseFromPositiveY(Vector2 focus, float zoom, float angle)
         {
             SetFocus(focus);
             SetZoom(zoom);
@@ -114,12 +114,20 @@ namespace Yak2D.Graphics
 
         private void SetRotationUsingUp(Vector2 up)
         {
-            _worldCameraRotationRads = -((float)System.Math.Atan2(up.Y, up.X) - (0.5f * (float)System.Math.PI));
+            if (up == Vector2.Zero)
+            {
+                _worldCameraRotationRads = 0.0f;
+            }
+            else
+            {
+                up = Vector2.Normalize(up);
+                _worldCameraRotationRads = -((float)System.Math.Atan2(up.Y, up.X) - (0.5f * (float)System.Math.PI));
+            }
         }
 
         private void SetRotationUsingAngle(float angle)
         {
-            _worldCameraRotationRads = -(1.0f / 180.0f) * (float)System.Math.PI * angle;
+            _worldCameraRotationRads = angle;
         }
 
         public float GetWorldZoom()
@@ -135,6 +143,11 @@ namespace Yak2D.Graphics
         public float GetWorldClockwiseRotationRadsFromPositiveY()
         {
             return _worldCameraRotationRads;
+        }
+
+        public Vector2 GetWorldUp()
+        {
+            return Vector2.Transform(Vector2.UnitY, Matrix3x2.CreateRotation(-_worldCameraRotationRads));
         }
 
         public void SetVirtualResolution(uint width, uint height)
@@ -173,7 +186,7 @@ namespace Yak2D.Graphics
             var orthographicProjection = Matrix4x4.CreateOrthographic(viewWidth, viewHeight, nearPlane, farPlane);
 
             var translation = Matrix4x4.CreateTranslation(new Vector3(-_worldCameraFocus, 0.0f));
-            var rotation = Matrix4x4.CreateRotationZ(_worldCameraRotationRads);
+            var rotation = Matrix4x4.CreateRotationZ(_worldCameraRotationRads); //Need to think through why Vector2.Transform(Mat3x3 Rot) is anticlockwise and this mat4x4 is clockwise for positive angle
 
             var worldModelViewProjection = Matrix4x4.Multiply(Matrix4x4.Multiply(translation, rotation), orthographicProjection);
 

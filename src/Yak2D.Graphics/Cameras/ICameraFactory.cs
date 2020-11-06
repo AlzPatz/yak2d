@@ -1,4 +1,5 @@
 using System.Numerics;
+using Yak2D.Internal;
 
 namespace Yak2D.Graphics
 {

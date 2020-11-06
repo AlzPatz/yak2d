@@ -33,20 +33,19 @@ namespace Yak2D.Surface
             return _surfaceManager.GetSurfaceDimensions(texture.Id);
         }
 
-
         public Size GetSurfaceDimensions(ulong surface)
         {
             return _surfaceManager.GetSurfaceDimensions(surface);
         }
 
-        public ITexture LoadTexture(string path, AssetSourceEnum assetType)
+        public ITexture LoadTexture(string path, AssetSourceEnum assetType, SamplerType samplerType = SamplerType.Anisotropic)
         {
             switch (assetType)
             {
                 case AssetSourceEnum.File:
-                    return _surfaceManager.LoadTextureFromPngFile(path);
+                    return _surfaceManager.LoadTextureFromPngFile(path, samplerType);
                 case AssetSourceEnum.Embedded:
-                    return _surfaceManager.LoadTextureFromEmbeddedPngResourceInUserApplication(path);
+                    return _surfaceManager.LoadTextureFromEmbeddedPngResourceInUserApplication(path, samplerType);
             }
 
             return null;
@@ -70,7 +69,10 @@ namespace Yak2D.Surface
             return new RenderTargetReference(_surfaceManager.MainSwapChainFrameBufferKey);
         }
 
-        public IRenderTarget CreateRenderTarget(uint width, uint height, bool autoClearColourAndDepthEachFrame = true)
+        public IRenderTarget CreateRenderTarget(uint width,
+                                                uint height,
+                                                bool autoClearColourAndDepthEachFrame = true,
+                                                SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (width == 0 || height == 0)
             {
@@ -83,9 +85,9 @@ namespace Yak2D.Surface
                 height,
                 _startUpPropertiesCache.Internal.PixelFormatForRenderingSurfaces,
                 true,
-                true, //User created Render Targets are all given DepthBuffers just in case they have sprites drawn to them. Could leave this as optional, but would complicate use cases on user side
                 autoClearColourAndDepthEachFrame,
-                autoClearColourAndDepthEachFrame
+                autoClearColourAndDepthEachFrame,
+                samplerType
             );
         }
 
@@ -108,7 +110,7 @@ namespace Yak2D.Surface
         public void DestroyAllUserTextures() => _surfaceManager.DestroyAllUserTextures();
         public void DestoryAllUserSurfaces() => _surfaceManager.DestroyAllUserSurfaces();
 
-        public ITexture CreateFloat32FromData(uint textureWidth, uint textureHeight, float[] pixels)
+        public ITexture CreateFloat32FromData(uint textureWidth, uint textureHeight, float[] pixels, SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (pixels == null)
             {
@@ -125,10 +127,10 @@ namespace Yak2D.Surface
                 throw new Yak2DException("Surfaces -> CreateFloat32FromData(), pixel data array size does not match dimensions");
             }
 
-            return _surfaceManager.LoadFloat32TextureFromPixelData(textureWidth, textureHeight, pixels);
+            return _surfaceManager.LoadFloat32TextureFromPixelData(textureWidth, textureHeight, pixels, samplerType);
         }
 
-        public ITexture CreateRgbaFromData(uint textureWidth, uint textureHeight, Vector4[] pixels)
+        public ITexture CreateRgbaFromData(uint textureWidth, uint textureHeight, Vector4[] pixels, SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (pixels == null)
             {
@@ -157,7 +159,7 @@ namespace Yak2D.Surface
                             Clamper.Clamp(value.W, 0.0f, 1.0f)
                         );
             }
-            return _surfaceManager.LoadRgbaTextureFromPixelData(textureWidth, textureHeight, rgba);
+            return _surfaceManager.LoadRgbaTextureFromPixelData(textureWidth, textureHeight, rgba, samplerType);
         }
 
         public void SetMainWindowRenderTargetAutoClearDepth(bool autoClearDepth)

@@ -19,6 +19,7 @@ namespace Yak2D.Core
         private readonly IGraphics _graphics;
         private readonly IDrawing _drawing;
         private readonly IRenderQueue _renderQueue;
+        private readonly IGpuSurfaceManager _gpuSurfaceManager;
         private readonly IServices _services;
         private readonly IShutdownManager _shutdownManager;
         private readonly IStartupPropertiesCache _startUpPropertiesCache;
@@ -213,9 +214,21 @@ namespace Yak2D.Core
             var timeSinceLastUpdate = now - _loopProperties.TimeOfLastUpdate;
 
             _graphics.PrepareForDrawing();
-            _application.PreDrawing(_services, (float)timeSinceLastDraw, (float)timeSinceLastUpdate);
-            _application.Drawing(_drawing, _services.FPS, _services.Input, (float)timeSinceLastDraw, (float)timeSinceLastUpdate);
-            _application.Rendering(_renderQueue);
+
+            _application.PreDrawing(_services,
+                                    (float)timeSinceLastDraw,
+                                    (float)timeSinceLastUpdate);
+
+            _application.Drawing(_drawing,
+                                 _services.FPS,
+                                 _services.Input,
+                                 _services.Helpers.CoordinateTransforms,
+                                 (float)timeSinceLastDraw,
+                                 (float)timeSinceLastUpdate);
+
+            _application.Rendering(_renderQueue,
+                                   _services.Surfaces.ReturnMainWindowRenderTarget());
+
             _graphics.Render((float)timeSinceLastDraw);
 
             _framesPerSecondMonitor.RegisterDrawFrame();

@@ -75,14 +75,14 @@ namespace Yak2D.Graphics
 
         private void CreateSurfaces(uint width, uint height)
         {
-            _heightMapSurfaceId = CreateSurface(width, height, true, PixelFormat.R32_Float);
-            _gradientShiftSurfaceId = CreateSurface(width, height, true, PixelFormat.R32_G32_Float);
+            _heightMapSurfaceId = CreateSurface(width, height, SamplerType.Linear, PixelFormat.R32_Float);
+            _gradientShiftSurfaceId = CreateSurface(width, height, SamplerType.Linear, PixelFormat.R32_G32_Float);
 
             HeightMapSurface = _surfaceManager.RetrieveSurface(_heightMapSurfaceId);
             GradientShiftSurface = _surfaceManager.RetrieveSurface(_gradientShiftSurfaceId);
         }
 
-        private ulong CreateSurface(uint width, uint height, bool linearSampling, PixelFormat pixelFormat)
+        private ulong CreateSurface(uint width, uint height, SamplerType samplerType, PixelFormat pixelFormat)
         {
             return _surfaceManager.CreateRenderSurface(true,
                                                         width,
@@ -91,7 +91,7 @@ namespace Yak2D.Graphics
                                                         false,
                                                         false,
                                                         false,
-                                                        linearSampling).Id;
+                                                        samplerType).Id;
         }
 
         public void SetEffectTransition(ref DistortionEffectConfiguration config, ref float transitionSeconds)
