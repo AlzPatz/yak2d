@@ -53,5 +53,15 @@ namespace Yak2D.Font
         {
             _fontManager.DestroyAllUserFonts(false);
         }
+
+        public float MeasureStringLength(string text, float fontSize, IFont font = null)
+        {
+            return _fontManager.MeasureStringLength(text, fontSize, font);
+        }
+
+        public float MeasureStringLength(string text, float fontSize, ulong font)
+        {
+            return _fontManager.MeasureStringLength(text, fontSize, font);
+        }
     }
 }

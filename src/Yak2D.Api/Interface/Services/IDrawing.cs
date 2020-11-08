@@ -420,18 +420,9 @@ namespace Yak2D
         /// </summary>
         /// <param name="text">Text string</param>
         /// <param name="fontSize">Size of font in pixels</param>
-        /// <param name="font">Font id to use, null uses a default font</param>
+        /// <param name="font">Font id to use</param>
         float MeasureStringLength(string text,
                                   float fontSize,
                                   ulong font);
-
-        /// <summary>
-        /// Measure pixel length (width) of a string
-        /// Uses default font
-        /// </summary>
-        /// <param name="text">Text string</param>
-        /// <param name="fontSize">Size of font in pixels</param>
-        float MeasureStringLength(string text,
-                                  float fontSize);
     }
 }

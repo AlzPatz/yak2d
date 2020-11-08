@@ -410,7 +410,7 @@ namespace Yak2D.Graphics
             float strLength = 0.0f;
             if (justify == TextJustify.Centre || justify == TextJustify.Right)
             {
-                strLength = MeasureString(text, fontSize, fntFamily);
+                strLength = _fontManager.MeasureStringLength(text, fontSize, fntFamily);
             }
 
             var x_curr = position.X;
@@ -519,58 +519,12 @@ namespace Yak2D.Graphics
 
         public float MeasureStringLength(string text, float fontSize, IFont font = null)
         {
-            var fnt = font == null ? _fontManager.SystemFont : _fontManager.RetrieveFont(font.Id);
-
-            if (fnt == null)
-            {
-                return 0.0f;
-            }
-
-            return MeasureString(text, fontSize, fnt);
+            return _fontManager.MeasureStringLength(text, fontSize, font);
         }
 
         public float MeasureStringLength(string text, float fontSize, ulong font)
         {
-            var fnt = _fontManager.RetrieveFont(font);
-
-            if (fnt == null)
-            {
-                return 0.0f;
-            }
-
-            return MeasureString(text, fontSize, fnt);
-        }
-
-        public float MeasureStringLength(string text, float fontSize)
-        {
-            var fnt = _fontManager.SystemFont;
-
-            if (fnt == null)
-            {
-                return 0.0f;
-            }
-
-            return MeasureString(text, fontSize, fnt);
-        }
-
-        private float MeasureString(string text, float fontSize, IFontModel font)
-        {
-            var fnt = font.SubFontAtSize(fontSize);
-
-            var length = 0.0f;
-
-            for (var c = 0; c < text.Length; c++)
-            {
-                var ch = text[c];
-
-                if (fnt.Characters.ContainsKey(ch))
-                {
-                    length += fnt.Characters[ch].XAdvance;
-
-                }
-            }
-            length *= fontSize / fnt.Size;
-            return length;
+            return _fontManager.MeasureStringLength(text, fontSize, font);
         }
 
         public IPersistentDistortionQueue CreatePersistentDistortQueue(IDistortionStage stage,

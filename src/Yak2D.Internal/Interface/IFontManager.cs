@@ -12,5 +12,17 @@ namespace Yak2D.Internal
         void DestroyAllUserFonts(bool resourcesAlreadyDestroyed);
         void Shutdown();
         void ReInitialise();
+
+        float MeasureStringLength(string text,
+                                  float fontSize,
+                                  IFont font = null);
+
+        float MeasureStringLength(string text,
+                                  float fontSize,
+                                  ulong font);
+
+        float MeasureStringLength(string text,
+                                  float fontSize,
+                                  IFontModel fontModel);
     }
 }

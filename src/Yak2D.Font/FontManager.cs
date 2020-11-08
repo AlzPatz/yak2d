@@ -172,5 +172,49 @@ namespace Yak2D.Font
         {
             _userFontCollection.DestroyAll(resoucesDestroyedAlready);
         }
+
+             public float MeasureStringLength(string text, float fontSize, IFont font = null)
+        {
+            var fnt = font == null ? SystemFont : RetrieveFont(font.Id);
+
+            if (fnt == null)
+            {
+                return 0.0f;
+            }
+
+            return MeasureStringLength(text, fontSize, fnt);
+        }
+
+        public float MeasureStringLength(string text, float fontSize, ulong font)
+        {
+            var fnt = RetrieveFont(font);
+
+            if (fnt == null)
+            {
+                return 0.0f;
+            }
+
+            return MeasureStringLength(text, fontSize, fnt);
+        }
+
+        public float MeasureStringLength(string text, float fontSize, IFontModel font)
+        {
+            var fnt = font.SubFontAtSize(fontSize);
+
+            var length = 0.0f;
+
+            for (var c = 0; c < text.Length; c++)
+            {
+                var ch = text[c];
+
+                if (fnt.Characters.ContainsKey(ch))
+                {
+                    length += fnt.Characters[ch].XAdvance;
+
+                }
+            }
+            length *= fontSize / fnt.Size;
+            return length;
+        }
     }
 }
