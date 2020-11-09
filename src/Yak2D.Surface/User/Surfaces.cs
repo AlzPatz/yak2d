@@ -43,9 +43,9 @@ namespace Yak2D.Surface
             switch (assetType)
             {
                 case AssetSourceEnum.File:
-                    return _surfaceManager.LoadTextureFromPngFile(path, samplerType);
+                    return _surfaceManager.LoadTextureFromPngFile(path, false, samplerType);
                 case AssetSourceEnum.Embedded:
-                    return _surfaceManager.LoadTextureFromEmbeddedPngResourceInUserApplication(path, samplerType);
+                    return _surfaceManager.LoadTextureFromEmbeddedPngResourceInUserApplication(path, false, samplerType);
             }
 
             return null;

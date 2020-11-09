@@ -26,7 +26,7 @@ namespace Yak2D.Tests
             userProps.AutoClearMainWindowColourEachFrame = true;
             userProps.AutoClearMainWindowDepthEachFrame = true;
             props.User.Returns(userProps);
-  
+
             IGpuSurfaceManager manager = new GpuSurfaceManager(appassembly,
                                                                fonts,
                                                                surface,
@@ -41,7 +41,7 @@ namespace Yak2D.Tests
 
             return manager;
         }
-            
+
         [Fact]
         public void SurfaceManager_CheckSurfaceCounts_ReturnStubbedFigures()
         {
@@ -87,8 +87,8 @@ namespace Yak2D.Tests
         {
             var manager = SetUpManagerWithFakes();
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromEmbeddedPngResourceInUserApplication(null); });
-            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromEmbeddedPngResourceInUserApplication(""); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromEmbeddedPngResourceInUserApplication(null, false); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromEmbeddedPngResourceInUserApplication("", false); });
         }
 
         [Fact]
@@ -96,8 +96,8 @@ namespace Yak2D.Tests
         {
             var manager = SetUpManagerWithFakes();
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromEmbeddedPngResource(true, null); });
-            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromEmbeddedPngResource(true, ""); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromEmbeddedPngResource(true, false, null); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromEmbeddedPngResource(true, false, ""); });
         }
 
         [Fact]
@@ -105,8 +105,8 @@ namespace Yak2D.Tests
         {
             var manager = SetUpManagerWithFakes();
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromPngFile(null); });
-            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromPngFile(""); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromPngFile(null, false); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromPngFile("", false); });
         }
 
         [Fact]
@@ -114,8 +114,8 @@ namespace Yak2D.Tests
         {
             var manager = SetUpManagerWithFakes();
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromPngFile(null); });
-            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromPngFile(""); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromPngFile(null, false); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromPngFile("", false); });
         }
     }
 }

@@ -93,7 +93,7 @@ namespace Yak2D.Surface
         {
             var texture = _imageSharpLoader.GenerateSingleWhitePixel();
 
-            SingleWhitePixel = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture, true);
+            SingleWhitePixel = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture, true, false);
         }
 
         private void LoadSystemTextures()
@@ -114,10 +114,10 @@ namespace Yak2D.Surface
 
             var veldridTexture = _imageSharpLoader.GenerateVeldridTextureFromStream(stream, mipMap);
 
-            return _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(veldridTexture, true);
+            return _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(veldridTexture, true, false);
         }
 
-        public ITexture LoadTextureFromEmbeddedPngResourceInUserApplication(string texturePathWithoutExtension, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture LoadTextureFromEmbeddedPngResourceInUserApplication(string texturePathWithoutExtension, bool isFontTexture, SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (string.IsNullOrEmpty(texturePathWithoutExtension))
             {
@@ -126,7 +126,7 @@ namespace Yak2D.Surface
 
             var fullPathWithinAssemblyWithoutFileExtension = string.Concat(_startUpProperties.TextureFolderRootName, ".", texturePathWithoutExtension);
             var pathWithSlashesChangedToDots = ReplaceForwardSlashesWithDots(fullPathWithinAssemblyWithoutFileExtension);
-            return LoadTextureFromEmbeddedPngResource(false, pathWithSlashesChangedToDots, samplerType);
+            return LoadTextureFromEmbeddedPngResource(false, isFontTexture, pathWithSlashesChangedToDots, samplerType);
         }
 
         private string ReplaceForwardSlashesWithDots(string texturePath)
@@ -146,7 +146,7 @@ namespace Yak2D.Surface
             return LoadTextureDataFromEmbeddedPngResource(pathWithSlashesChangedToDots);
         }
 
-        public ITexture LoadFontTextureFromEmbeddedPngResource(bool isFrameworkInternal, string texturePathWithoutExtension, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture LoadFontTextureFromEmbeddedPngResource(bool isFrameworkInternal, bool isFontTexture, string texturePathWithoutExtension, SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (string.IsNullOrEmpty(texturePathWithoutExtension))
             {
@@ -154,16 +154,16 @@ namespace Yak2D.Surface
             }
 
             IAssembly assembly = isFrameworkInternal ? _fontsAssembly : _applicationAssembly;
-            return LoadTextureFromEmbeddedPngResource(isFrameworkInternal, assembly, texturePathWithoutExtension, samplerType);
+            return LoadTextureFromEmbeddedPngResource(isFrameworkInternal, isFontTexture, assembly, texturePathWithoutExtension, samplerType);
         }
 
-        private ITexture LoadTextureFromEmbeddedPngResource(bool isFrameworkInternal, string assetPathWithoutExtension, SamplerType samplerType)
+        private ITexture LoadTextureFromEmbeddedPngResource(bool isFrameworkInternal, bool isFontTexture, string assetPathWithoutExtension, SamplerType samplerType)
         {
             var assembly = isFrameworkInternal ? _surfaceAssembly : _applicationAssembly;
-            return LoadTextureFromEmbeddedPngResource(isFrameworkInternal, assembly, assetPathWithoutExtension, samplerType);
+            return LoadTextureFromEmbeddedPngResource(isFrameworkInternal, isFontTexture, assembly, assetPathWithoutExtension, samplerType);
         }
 
-        private ITexture LoadTextureFromEmbeddedPngResource(bool isFrameworkInternal, IAssembly assembly, string assetPathWithoutExtension, SamplerType samplerType)
+        private ITexture LoadTextureFromEmbeddedPngResource(bool isFrameworkInternal, bool isFontTexture, IAssembly assembly, string assetPathWithoutExtension, SamplerType samplerType)
         {
             var fullAssemblyName = string.Concat(assembly.Name, ".", assetPathWithoutExtension, ".png");
 
@@ -183,16 +183,16 @@ namespace Yak2D.Surface
                 return null;
             }
 
-            return GenerateTextureFromStream(stream, isFrameworkInternal, samplerType);
+            return GenerateTextureFromStream(stream, isFrameworkInternal, isFontTexture, samplerType);
         }
 
-        private ITexture GenerateTextureFromStream(Stream stream, bool isFrameworkInternal, SamplerType samplerType)
+        private ITexture GenerateTextureFromStream(Stream stream, bool isFrameworkInternal, bool isFontTexture, SamplerType samplerType)
         {
             var veldridTexture = _imageSharpLoader.GenerateVeldridTextureFromStream(stream, true);
 
             var id = _idGenerator.New();
 
-            var surface = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(veldridTexture, isFrameworkInternal, samplerType);
+            var surface = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(veldridTexture, isFrameworkInternal, isFontTexture, samplerType);
 
             return _surfaceCollection.Add(id, surface) ? new TextureReference(id) : null;
         }
@@ -220,7 +220,7 @@ namespace Yak2D.Surface
             return _imageSharpLoader.GenerateTextureDataFromStream(stream);
         }
 
-        public ITexture LoadFontTextureFromPngFile(string path, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture LoadFontTextureFromPngFile(string path, bool isFontTexture, SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -228,10 +228,10 @@ namespace Yak2D.Surface
             }
 
             var filePath = string.Concat(path, ".png");
-            return LoadTextureFromPng(filePath, samplerType);
+            return LoadTextureFromPng(filePath, isFontTexture, samplerType);
         }
 
-        public ITexture LoadTextureFromPngFile(string path, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture LoadTextureFromPngFile(string path, bool isFontTexture, SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -239,16 +239,16 @@ namespace Yak2D.Surface
             }
 
             var filePath = Path.Combine(_startUpProperties.TextureFolderRootName, string.Concat(path, ".png"));
-            return LoadTextureFromPng(filePath, samplerType);
+            return LoadTextureFromPng(filePath, isFontTexture, samplerType);
         }
 
-        private ITexture LoadTextureFromPng(string path, SamplerType samplerType)
+        private ITexture LoadTextureFromPng(string path, bool isFontTexture, SamplerType samplerType)
         {
             if (_fileSystem.Exists(path))
             {
                 using (var stream = _fileSystem.OpenRead(path))
                 {
-                    return GenerateTextureFromStream(stream, false, samplerType);
+                    return GenerateTextureFromStream(stream, false, isFontTexture, samplerType);
                 }
             }
             else
@@ -294,7 +294,7 @@ namespace Yak2D.Surface
 
             var texture = _imageSharpLoader.GenerateRgbaVeldridTextureFromPixelData(pixelData, width, height);
 
-            var surface = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture, false, samplerType);
+            var surface = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture, false, false, samplerType);
 
             _surfaceCollection.Add(id, surface);
 
@@ -310,7 +310,7 @@ namespace Yak2D.Surface
 
             var texture = _imageSharpLoader.GenerateFloat32VeldridTextureFromPixelData(pixelData, width, height);
 
-            var surface = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture, false, samplerType);
+            var surface = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture, false, false, samplerType);
 
             _surfaceCollection.Add(id, surface);
 

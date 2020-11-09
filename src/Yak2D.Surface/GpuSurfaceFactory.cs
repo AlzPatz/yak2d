@@ -145,7 +145,10 @@ namespace Yak2D.Surface
             );
         }
 
-        public GpuSurface CreateGpuSurfaceFromTexture(Texture texture, bool isFrameworkInternal, SamplerType samplerType = SamplerType.Anisotropic)
+        public GpuSurface CreateGpuSurfaceFromTexture(Texture texture,
+                                                      bool isFrameworkInternal,
+                                                      bool isFontTexture,
+                                                      SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (texture == null)
             {
@@ -187,7 +190,9 @@ namespace Yak2D.Surface
 
             return new GpuSurface
             {
-                Type = GpuSurfaceType.Texture | (isFrameworkInternal ? GpuSurfaceType.Internal : GpuSurfaceType.User),
+                //Note Surfaces related to USER FONTS are also tagged as internal. This is so their destruction is related to
+                //The FONT item and not caught up in any DestroyAllUserSurfaces type calls (that being reserved for TEXTURES and RENDERTARGETS
+                Type = GpuSurfaceType.Texture | (isFrameworkInternal ? GpuSurfaceType.Internal : isFontTexture ? GpuSurfaceType.Internal : GpuSurfaceType.User),
                 Texture = texture,
                 TextureView = view,
                 Framebuffer = null,

@@ -17,7 +17,7 @@ namespace Yak2D.Tests
 
             IGpuSurfaceFactory factory = new GpuSurfaceFactory(messenger, components);
 
-            Assert.Throws<Yak2DException>(() => { factory.CreateGpuSurfaceFromTexture(null, false); });
+            Assert.Throws<Yak2DException>(() => { factory.CreateGpuSurfaceFromTexture(null, false, false); });
 
             components.ReleaseResources();
         }
@@ -44,7 +44,7 @@ namespace Yak2D.Tests
                 Usage = Veldrid.TextureUsage.Sampled
             });
 
-            var surface = factory.CreateGpuSurfaceFromTexture(texture, false);
+            var surface = factory.CreateGpuSurfaceFromTexture(texture, false, false);
 
             Assert.Equal(texture, surface.Texture);
             Assert.NotNull(surface.TextureView);

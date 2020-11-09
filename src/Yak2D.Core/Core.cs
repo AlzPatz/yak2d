@@ -213,11 +213,11 @@ namespace Yak2D.Core
             var timeSinceLastDraw = now - _loopProperties.TimeOfLastDraw;
             var timeSinceLastUpdate = now - _loopProperties.TimeOfLastUpdate;
 
-            _graphics.PrepareForDrawing();
-
             _application.PreDrawing(_services,
                                     (float)timeSinceLastDraw,
                                     (float)timeSinceLastUpdate);
+
+            _graphics.PrepareForDrawing();
 
             _application.Drawing(_drawing,
                                  _services.FPS,

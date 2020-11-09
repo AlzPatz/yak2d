@@ -21,12 +21,33 @@ namespace Yak2D.Internal
         List<ulong> GetAutoClearDepthSurfaceIds();
         List<ulong> GetAutoClearColourSurfaceIds();
 
-        ITexture LoadTextureFromEmbeddedPngResourceInUserApplication(string texturePathWithoutExtension, SamplerType samplerType = SamplerType.Anisotropic);
-        ITexture LoadFontTextureFromEmbeddedPngResource(bool isFrameworkInternal, string texturePathWithoutExtension, SamplerType samplerType = SamplerType.Anisotropic);
-        ITexture LoadRgbaTextureFromPixelData(uint width, uint height, Rgba32[] pixelData, SamplerType samplerType = SamplerType.Anisotropic);
-        ITexture LoadFloat32TextureFromPixelData(uint width, uint height, float[] pixelData, SamplerType samplerType = SamplerType.Anisotropic);
-        ITexture LoadTextureFromPngFile(string path, SamplerType samplerType = SamplerType.Anisotropic);
-        ITexture LoadFontTextureFromPngFile(string texturePathWithoutExtension, SamplerType samplerType = SamplerType.Anisotropic);
+        ITexture LoadTextureFromEmbeddedPngResourceInUserApplication(string texturePathWithoutExtension,
+                                                                     bool isFontTexture,
+                                                                     SamplerType samplerType = SamplerType.Anisotropic);
+
+        ITexture LoadFontTextureFromEmbeddedPngResource(bool isFrameworkInternal,
+                                                        bool isFontTexture,
+                                                        string texturePathWithoutExtension,
+                                                        SamplerType samplerType = SamplerType.Anisotropic);
+
+        ITexture LoadRgbaTextureFromPixelData(uint width,
+                                              uint height,
+                                              Rgba32[] pixelData,
+                                              SamplerType samplerType = SamplerType.Anisotropic);
+
+        ITexture LoadFloat32TextureFromPixelData(uint width,
+                                                 uint height,
+                                                 float[] pixelData,
+                                                 SamplerType samplerType = SamplerType.Anisotropic);
+
+        ITexture LoadTextureFromPngFile(string path,
+                                        bool isFontTexture,
+                                        SamplerType samplerType = SamplerType.Anisotropic);
+
+        ITexture LoadFontTextureFromPngFile(string texturePathWithoutExtension,
+                                            bool isFontTexture,
+                                            SamplerType samplerType = SamplerType.Anisotropic);
+
         IRenderTarget CreateRenderSurface(bool isInternal, uint width, uint height, PixelFormat pixelFormat,
                                           bool hasDepthBuffer, bool autoClearColour = false, bool autoClearDepth = false,
                                           SamplerType samplerType = SamplerType.Anisotropic);

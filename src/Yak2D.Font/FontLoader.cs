@@ -126,10 +126,10 @@ namespace Yak2D.Font
                 switch (assetType)
                 {
                     case AssetSourceEnum.Embedded:
-                        texture = _gpuSurfaceManager.LoadFontTextureFromEmbeddedPngResource(isFrameworkInternal, texturePathWithoutExtension);
+                        texture = _gpuSurfaceManager.LoadFontTextureFromEmbeddedPngResource(isFrameworkInternal, true, texturePathWithoutExtension);
                         break;
                     case AssetSourceEnum.File:
-                        texture = _gpuSurfaceManager.LoadFontTextureFromPngFile(texturePathWithoutExtension);
+                        texture = _gpuSurfaceManager.LoadFontTextureFromPngFile(texturePathWithoutExtension, true);
                         break;
                 }
                 if (texture != null)

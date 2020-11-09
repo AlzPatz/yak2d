@@ -154,7 +154,7 @@ namespace Yak2D.Tests
 
             var gpuSurfaceManagerMock = Substitute.For<IGpuSurfaceManager>();
            
-            gpuSurfaceManagerMock.LoadFontTextureFromEmbeddedPngResource(true, Arg.Any<string>()).Returns(new TextureReference(20));
+            gpuSurfaceManagerMock.LoadFontTextureFromEmbeddedPngResource(true, true, Arg.Any<string>()).Returns(new TextureReference(20));
 
             IFontLoader loader = new FontLoader(
                                     appAssembly,
@@ -187,7 +187,7 @@ namespace Yak2D.Tests
 
             var desc = loader.TryToLoadSubFontDescription("FontFolder", true, AssetSourceEnum.Embedded, fntFile);
 
-            gpuSurfaceManagerMock.Received(3).LoadFontTextureFromEmbeddedPngResource(true, Arg.Any<string>());
+            gpuSurfaceManagerMock.Received(3).LoadFontTextureFromEmbeddedPngResource(true, true, Arg.Any<string>());
 
             Assert.Equal(fntFile, desc.DotFntLines);
             Assert.Equal(3, desc.Textures.Count);
@@ -210,7 +210,7 @@ namespace Yak2D.Tests
 
             var gpuSurfaceManagerMock = Substitute.For<IGpuSurfaceManager>();
 
-            gpuSurfaceManagerMock.LoadFontTextureFromPngFile(Arg.Any<string>()).Returns(new TextureReference(20));
+            gpuSurfaceManagerMock.LoadFontTextureFromPngFile(Arg.Any<string>(), Arg.Any<bool>()).Returns(new TextureReference(20));
 
             IFontLoader loader = new FontLoader(
                                             appAssembly,
@@ -243,7 +243,7 @@ namespace Yak2D.Tests
 
             var desc = loader.TryToLoadSubFontDescription("FontFolder", false, AssetSourceEnum.File, fntFile);
 
-            gpuSurfaceManagerMock.Received(3).LoadFontTextureFromPngFile(Arg.Any<string>());
+            gpuSurfaceManagerMock.Received(3).LoadFontTextureFromPngFile(Arg.Any<string>(), Arg.Any<bool>());
 
             Assert.Equal(fntFile, desc.DotFntLines);
             Assert.Equal(3, desc.Textures.Count);
