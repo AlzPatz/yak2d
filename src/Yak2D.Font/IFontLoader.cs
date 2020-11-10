@@ -10,7 +10,11 @@ namespace Yak2D.Font
         List<string> ReadStreamToStringList(Stream stream);
         Stream LoadEmbeddedStream(bool isFrameworkInternal, string resourcePathName);
         Stream LoadFileStream(string resourcePathName);
-        CandidateSubFontDesc TryToLoadSubFontDescription(string fontBaseFolderWithoutAssemblyDoesNotEndInDivisor, bool isFrameworkInternal, AssetSourceEnum assetType, List<string> fntFileLines);
+        CandidateSubFontDesc TryToLoadSubFontDescription(string fontBaseFolderWithoutAssemblyDoesNotEndInDivisor,
+                                                         bool isFrameworkInternal,
+                                                         AssetSourceEnum assetType,
+                                                         ImageFormat imageFormat,
+                                                         List<string> fntFileLines);
         FontModel GenerateFontFromDescriptionInfo(CandidateFontDesc fontDescription);
     }
 }

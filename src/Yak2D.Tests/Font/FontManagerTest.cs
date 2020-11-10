@@ -37,7 +37,7 @@ namespace Yak2D.Tests
 
             loader.ReadStreamToStringList(Arg.Any<Stream>()).Returns(new List<string> { "single line" });
 
-            loader.TryToLoadSubFontDescription(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<AssetSourceEnum>(), Arg.Any<List<string>>()).Returns(new CandidateSubFontDesc());
+            loader.TryToLoadSubFontDescription(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<AssetSourceEnum>(), Arg.Any<ImageFormat>(), Arg.Any<List<string>>()).Returns(new CandidateSubFontDesc());
 
             loader.GenerateFontFromDescriptionInfo(Arg.Any<CandidateFontDesc>())
                   .Returns(new Yak2D.Font.FontModel(new List<SubFont> { new SubFont(1, 1, null, null, false, null) }));
@@ -47,7 +47,7 @@ namespace Yak2D.Tests
             loader.Received(1).FindDotFntFileNamePartialMatchesFromEmbeddedResource(true, Arg.Any<string>());
             loader.Received(1).LoadEmbeddedStream(true, Arg.Any<string>());
             loader.Received(1).ReadStreamToStringList(Arg.Any<Stream>());
-            loader.Received(1).TryToLoadSubFontDescription(Arg.Any<string>(), true, AssetSourceEnum.Embedded, Arg.Any<List<string>>());
+            loader.Received(1).TryToLoadSubFontDescription(Arg.Any<string>(), true, AssetSourceEnum.Embedded, ImageFormat.PNG, Arg.Any<List<string>>());
             loader.Received(1).GenerateFontFromDescriptionInfo(Arg.Any<CandidateFontDesc>());
         }
 
@@ -78,7 +78,7 @@ namespace Yak2D.Tests
 
             loader.ReadStreamToStringList(Arg.Any<Stream>()).Returns(new List<string> { "single line" });
 
-            loader.TryToLoadSubFontDescription(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<AssetSourceEnum>(), Arg.Any<List<string>>()).Returns(new CandidateSubFontDesc());
+            loader.TryToLoadSubFontDescription(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<AssetSourceEnum>(), Arg.Any<ImageFormat>(), Arg.Any<List<string>>()).Returns(new CandidateSubFontDesc());
 
             loader.GenerateFontFromDescriptionInfo(Arg.Any<CandidateFontDesc>())
                   .Returns(new Yak2D.Font.FontModel(new List<SubFont> { new SubFont(1, 1, null, null, false, null) }));
@@ -87,7 +87,7 @@ namespace Yak2D.Tests
 
             loader.ClearReceivedCalls();
 
-            var result = manager.LoadUserFont("path", source);
+            var result = manager.LoadUserFont("path", source, ImageFormat.PNG);
 
             Assert.NotNull(result);
 
@@ -103,7 +103,7 @@ namespace Yak2D.Tests
                     break;
             }
             loader.Received(1).ReadStreamToStringList(Arg.Any<Stream>());
-            loader.Received(1).TryToLoadSubFontDescription(Arg.Any<string>(), false, source, Arg.Any<List<string>>());
+            loader.Received(1).TryToLoadSubFontDescription(Arg.Any<string>(), false, source, ImageFormat.PNG, Arg.Any<List<string>>());
             loader.Received(1).GenerateFontFromDescriptionInfo(Arg.Any<CandidateFontDesc>());
         }
 
@@ -131,14 +131,14 @@ namespace Yak2D.Tests
 
             loader.ReadStreamToStringList(Arg.Any<Stream>()).Returns(new List<string> { "single line" });
 
-            loader.TryToLoadSubFontDescription(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<AssetSourceEnum>(), Arg.Any<List<string>>()).Returns(new CandidateSubFontDesc());
+            loader.TryToLoadSubFontDescription(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<AssetSourceEnum>(), Arg.Any<ImageFormat>(), Arg.Any<List<string>>()).Returns(new CandidateSubFontDesc());
 
             loader.GenerateFontFromDescriptionInfo(Arg.Any<CandidateFontDesc>())
                   .Returns(new Yak2D.Font.FontModel(new List<SubFont> { new SubFont(1, 1, null, null, false, null) }));
 
             IFontManager manager = new FontManager(id, properties, collection, loader);
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadUserFont("has whitespace", AssetSourceEnum.Embedded); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadUserFont("has whitespace", AssetSourceEnum.Embedded, ImageFormat.PNG); });
         }
 
         [Fact]
@@ -165,14 +165,14 @@ namespace Yak2D.Tests
 
             loader.ReadStreamToStringList(Arg.Any<Stream>()).Returns(new List<string> { "single line" });
 
-            loader.TryToLoadSubFontDescription(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<AssetSourceEnum>(), Arg.Any<List<string>>()).Returns(new CandidateSubFontDesc());
+            loader.TryToLoadSubFontDescription(Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<AssetSourceEnum>(), Arg.Any<ImageFormat>(), Arg.Any<List<string>>()).Returns(new CandidateSubFontDesc());
 
             loader.GenerateFontFromDescriptionInfo(Arg.Any<CandidateFontDesc>())
                   .Returns(new Yak2D.Font.FontModel(new List<SubFont> { new SubFont(1, 1, null, null, false, null) }));
 
             IFontManager manager = new FontManager(id, properties, collection, loader);
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadUserFont(null, AssetSourceEnum.Embedded); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadUserFont(null, AssetSourceEnum.Embedded, ImageFormat.PNG); });
         }
     }
 }

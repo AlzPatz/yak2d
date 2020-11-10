@@ -11,7 +11,7 @@ namespace Yak2D.Graphics
         IMeshRenderStageModel CreateMeshRenderModel();
         IDistortionStageModel CreateDistortionEffectStageModel(uint internalSurfaceWidth, uint internalSurfaceHeight);
         IMixStageModel CreateMixStageModel();
-        ICustomShaderStageModel CreateCustomStageModel(string fragmentShaderFilename, AssetSourceEnum assetType, ShaderUniformDescription[] uniformDescriptions, BlendState blendState);
+        ICustomShaderStageModel CreateCustomStageModel(string fragmentShaderFilename, AssetSourceEnum assetType, ShaderUniformDescription[] uniformDescriptions, BlendState blendState, bool useSpirvCompile);
         ICustomVeldridStageModel CreateCustomVeldridStage(CustomVeldridBase stage);
     }
 }

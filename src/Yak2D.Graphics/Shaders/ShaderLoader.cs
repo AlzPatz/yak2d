@@ -22,6 +22,7 @@ namespace Yak2D.Graphics
               - One file should be used for each Vertex and Fragment Shader
               - Each Vertex shader code file MUST have "Vertex" in the name
               - Each Fragment shader code file MUST have "Fragment" in the name
+              - Shaders for each backend sit in their respective sub-folders (Direct3D, Metal, OpenGL and Vulkan)
 
               - All HLSL shader source files should have extension .hlsl
               - The HLSL compiling script uses the presence of Vertex/Fragment in the source file name to choose the right compiling profile
@@ -39,6 +40,13 @@ namespace Yak2D.Graphics
               Shader Code
               - The entry point for all Vertex and Pixel Shader functions across backends is main()
               - EXCEPT metal, where main() is not permitted. For metal shaders the function shader() is used
+
+              SPIR-V Additions
+              - The main framework avoids relying on SPIR-V compilation from single source due to inconsistencies that can crop up
+                either due to user error, SPIR-V issue or backend unique properties. This caution maybe unwarranted, but there was 
+                a preference to code each backend shader individually
+              - HOWEVER - for custom shaders stages, a SPIR-V .glsl can be used, enabling runtime cross platform compilation
+              - The rules for SPIR-V shaders are 1. paths are rooted in Shaders/ base directory, .glsl extension and main() entiry point
 
               Notes:
               * You may note significant padding in shader uniforms, and the avoidance of some vector types, particularly float/vec3s
@@ -68,7 +76,9 @@ namespace Yak2D.Graphics
                                                     string fragmentShaderName,
                                                     AssetSourceEnum fragmentShaderAssetType,
                                                     VertexLayoutDescription layoutDescription,
-                                                    ResourceLayoutElementDescription[][] uniformDescriptions)
+                                                    ResourceLayoutElementDescription[][] uniformDescriptions,
+                                                    bool useSpirvCompileVertexShader = false,
+                                                    bool useSpirvCompileFragmentShader = false)
         {
             if (uniformDescriptions == null)
             {
@@ -97,14 +107,14 @@ namespace Yak2D.Graphics
 
             var uniformResourceLayout = _loadFunctions.CreateUniformResourceLayouts(uniformDescriptions);
 
-            var vertexShader = _loadFunctions.LoadShader(vertexShaderName, vertexShaderAssetType, ShaderStages.Vertex);
+            var vertexShader = _loadFunctions.LoadShader(vertexShaderName, vertexShaderAssetType, ShaderStages.Vertex, useSpirvCompileVertexShader);
 
             if (vertexShader == null)
             {
                 throw new Yak2DException(string.Concat("Vertex Shader: ", vertexShaderName, " failed to Load"));
             }
 
-            var fragmentShader = _loadFunctions.LoadShader(fragmentShaderName, fragmentShaderAssetType, ShaderStages.Fragment);
+            var fragmentShader = _loadFunctions.LoadShader(fragmentShaderName, fragmentShaderAssetType, ShaderStages.Fragment, useSpirvCompileFragmentShader);
 
             if (fragmentShader == null)
             {

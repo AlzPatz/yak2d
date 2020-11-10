@@ -49,11 +49,11 @@ namespace Yak2D.Graphics
             return uniformResourceLayout;
         }
 
-        public Shader LoadShader(string name, AssetSourceEnum assetTypes, ShaderStages stage)
+        public Shader LoadShader(string name, AssetSourceEnum assetTypes, ShaderStages stage, bool useSpirvCompile = false)
         {
             //Input path should be '/' folder delimited. It is changed to '.' delimited for embedded resources
 
-            var shaderFileInfo = GetShaderFileInfo(name, _systemComponents.Device);
+            var shaderFileInfo = GetShaderFileInfo(name, _systemComponents.Device, useSpirvCompile);
 
             var shaderBytes = new byte[] { };
             switch (assetTypes)
@@ -75,35 +75,45 @@ namespace Yak2D.Graphics
                 return null;
             }
 
-            return _systemComponents.Factory.CreateShader(new ShaderDescription(stage, shaderBytes, shaderFileInfo.EntryPointMethod, true));
+            return useSpirvCompile ? 
+                      _systemComponents.Factory.CreateShaderCompileFromSpirv(new ShaderDescription(stage, shaderBytes, shaderFileInfo.EntryPointMethod, true)):
+                      _systemComponents.Factory.CreateShader(new ShaderDescription(stage, shaderBytes, shaderFileInfo.EntryPointMethod, true));
         }
 
-        public ShaderFileInfo GetShaderFileInfo(string name, IDevice device)
+        public ShaderFileInfo GetShaderFileInfo(string name, IDevice device, bool spirv)
         {
             string directory;
             string extension;
             string shaderEntryPoint = "main";
 
-            switch (device.BackendType)
+            if (spirv)
             {
-                case GraphicsApi.Vulkan:
-                    extension = "spv";
-                    directory = "Shaders/Vulkan";
-                    break;
-                case GraphicsApi.OpenGL:
-                    extension = "glsl";
-                    directory = "Shaders/OpenGL";
-                    break;
-                case GraphicsApi.Direct3D11:
-                    extension = "hlsl.bytes";
-                    directory = "Shaders/Direct3D";
-                    break;
-                case GraphicsApi.Metal:
-                    extension = "metallib";
-                    directory = "Shaders/Metal";
-                    shaderEntryPoint = "shader"; // main() not permitted in metal
-                    break;
-                default: throw new System.InvalidOperationException();
+                extension = "glsl";
+                directory = "Shaders";
+            }
+            else
+            {
+                switch (device.BackendType)
+                {
+                    case GraphicsApi.Vulkan:
+                        extension = "spv";
+                        directory = "Shaders/Vulkan";
+                        break;
+                    case GraphicsApi.OpenGL:
+                        extension = "glsl";
+                        directory = "Shaders/OpenGL";
+                        break;
+                    case GraphicsApi.Direct3D11:
+                        extension = "hlsl.bytes";
+                        directory = "Shaders/Direct3D";
+                        break;
+                    case GraphicsApi.Metal:
+                        extension = "metallib";
+                        directory = "Shaders/Metal";
+                        shaderEntryPoint = "shader"; // main() not permitted in metal
+                        break;
+                    default: throw new System.InvalidOperationException();
+                }
             }
 
             return new ShaderFileInfo

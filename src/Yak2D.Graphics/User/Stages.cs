@@ -57,9 +57,9 @@ namespace Yak2D.Graphics
             return _renderStageManager.CreateMixStage();
         }
 
-        public ICustomShaderStage CreateCustomShaderStage(string fragmentShaderPathName, AssetSourceEnum assetType, ShaderUniformDescription[] uniformDescriptions, BlendState blendState)
+        public ICustomShaderStage CreateCustomShaderStage(string fragmentShaderPathName, AssetSourceEnum assetType, ShaderUniformDescription[] uniformDescriptions, BlendState blendState, bool useSpirvCompile = false)
         {
-            return _renderStageManager.CreateCustomShaderStage(fragmentShaderPathName, assetType, uniformDescriptions, blendState);
+            return _renderStageManager.CreateCustomShaderStage(fragmentShaderPathName, assetType, uniformDescriptions, blendState, useSpirvCompile);
         }
 
         public ICustomVeldridStage CreateCustomVeldridStage(CustomVeldridBase stage)

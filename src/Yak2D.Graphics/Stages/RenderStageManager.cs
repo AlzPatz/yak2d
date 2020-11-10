@@ -197,11 +197,11 @@ namespace Yak2D.Graphics
             return _renderStageCollection.Add(id, model) ? userReference : null;
         }
 
-        public ICustomShaderStage CreateCustomShaderStage(string fragmentShaderFilename, AssetSourceEnum assetType, ShaderUniformDescription[] uniformDescriptions, BlendState blendState)
+        public ICustomShaderStage CreateCustomShaderStage(string fragmentShaderFilename, AssetSourceEnum assetType, ShaderUniformDescription[] uniformDescriptions, BlendState blendState, bool useSpirvCompile)
         {
             var id = _idGenerator.New();
 
-            var model = _renderStageModelFactory.CreateCustomStageModel(fragmentShaderFilename, assetType, uniformDescriptions, blendState);
+            var model = _renderStageModelFactory.CreateCustomStageModel(fragmentShaderFilename, assetType, uniformDescriptions, blendState, useSpirvCompile);
 
             var userReference = new CustomShaderStage(id);
 

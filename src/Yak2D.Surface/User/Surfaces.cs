@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.IO;
 using System.Numerics;
 using SixLabors.ImageSharp.PixelFormats;
 using Yak2D.Internal;
@@ -38,27 +39,35 @@ namespace Yak2D.Surface
             return _surfaceManager.GetSurfaceDimensions(surface);
         }
 
-        public ITexture LoadTexture(string path, AssetSourceEnum assetType, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture LoadTexture(string path,
+                                    AssetSourceEnum assetType,
+                                    ImageFormat imageFormat = ImageFormat.PNG,
+                                    SamplerType samplerType = SamplerType.Anisotropic)
         {
             switch (assetType)
             {
                 case AssetSourceEnum.File:
-                    return _surfaceManager.LoadTextureFromPngFile(path, false, samplerType);
+                    return _surfaceManager.LoadTextureFromFile(path, imageFormat, samplerType);
                 case AssetSourceEnum.Embedded:
-                    return _surfaceManager.LoadTextureFromEmbeddedPngResourceInUserApplication(path, false, samplerType);
+                    return _surfaceManager.LoadTextureFromEmbeddedResourceInUserApplication(path, imageFormat, samplerType);
             }
 
             return null;
         }
 
-        public TextureDataRgba LoadTextureColourData(string path, AssetSourceEnum assetType)
+        public ITexture LoadTexture(Stream stream, SamplerType samplerType = SamplerType.Anisotropic)
+        {
+            return _surfaceManager.GenerateTextureFromStream(stream, false, false, samplerType);
+        }
+
+        public TextureDataRgba LoadTextureColourData(string path, AssetSourceEnum assetType, ImageFormat imageFormat)
         {
             switch (assetType)
             {
                 case AssetSourceEnum.File:
-                    return _surfaceManager.LoadTextureColourDataFromPngFile(path);
+                    return _surfaceManager.LoadTextureColourDataFromFile(path, imageFormat);
                 case AssetSourceEnum.Embedded:
-                    return _surfaceManager.LoadTextureColourDataFromEmbeddedPngResourceInUserApplication(path);
+                    return _surfaceManager.LoadTextureColourDataFromEmbeddedResourceInUserApplication(path, imageFormat);
             }
 
             return default(TextureDataRgba);

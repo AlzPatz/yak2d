@@ -15,7 +15,8 @@ namespace Yak2D
         /// </summary>
         /// <param name="path">Font asset name including path (no file extension)"</param>
         /// <param name="assetType">Embedded in the binary or a file location"</param>
-        IFont LoadFont(string path, AssetSourceEnum assetType);
+        /// <param name="imageFormat">The image file encoding for the font textures"</param>
+        IFont LoadFont(string path, AssetSourceEnum assetType, ImageFormat imageFormat =  ImageFormat.PNG);
 
         /// <summary>
         /// Destroy a user font

@@ -1,5 +1,6 @@
 using Veldrid;
 using Veldrid.Utilities;
+using Veldrid.SPIRV;
 using Yak2D.Internal;
 
 namespace Yak2D.Tests.ManualFakes
@@ -27,6 +28,7 @@ namespace Yak2D.Tests.ManualFakes
         public ResourceSet CreateResourceSet(ResourceSetDescription resourceSetDescription) => _factory.CreateResourceSet(resourceSetDescription);
         public Sampler CreateSampler(SamplerDescription samplerDescription) => _factory.CreateSampler(samplerDescription);
         public Shader CreateShader(ShaderDescription shaderDescription) => _factory.CreateShader(shaderDescription);
+        public Shader CreateShaderCompileFromSpirv(ShaderDescription shaderDescription) => _factory.CreateFromSpirv(shaderDescription);
         public Texture CreateTexture(TextureDescription textureDescription) => _factory.CreateTexture(textureDescription);
         public TextureView CreateTextureView(Texture texture) => _factory.CreateTextureView(texture);
 
@@ -39,5 +41,6 @@ namespace Yak2D.Tests.ManualFakes
         {
             throw new System.NotImplementedException();
         }
+
     }
 }

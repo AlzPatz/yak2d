@@ -68,6 +68,7 @@ namespace Yak2D.Graphics
         private readonly AssetSourceEnum _shaderFileAssetType;
         private readonly ShaderUniformDescription[] _userUniformDescriptions;
         private readonly BlendState _blendState;
+        private readonly bool _useSpirvCompile;
 
         private UniformBuffer[] _uniformBuffers;
         private Dictionary<string, int> _uniformBufferNameLookup;
@@ -84,7 +85,8 @@ namespace Yak2D.Graphics
                                  string fragmentShaderFilename,
                                  AssetSourceEnum shaderFileAssetType,
                                  ShaderUniformDescription[] userUniformDescriptions,
-                                 BlendState blendState)
+                                 BlendState blendState, 
+                                 bool userSpirvCompile)
         {
             _frameworkMessenger = frameworkMessenger;
             _systemComponents = systemComponents;
@@ -95,6 +97,7 @@ namespace Yak2D.Graphics
             _shaderFileAssetType = shaderFileAssetType;
             _userUniformDescriptions = userUniformDescriptions;
             _blendState = blendState;
+            _useSpirvCompile = userSpirvCompile;
 
             Initialise();
         }
@@ -163,7 +166,35 @@ namespace Yak2D.Graphics
                 }
             }
 
-            _shaderPackage = _shaderLoader.CreateShaderPackage("Vertex2D", AssetSourceEnum.Embedded, _fragmentShaderFilename, _shaderFileAssetType, vertexLayout, uniformDescriptions.ToArray());
+            var vertexShaderFileName = "Vertex2D";
+
+            if (_useSpirvCompile)
+            {
+                //Different Vertex Shaders account for differences in backend (incl. Texcoord origin)
+                switch (_systemComponents.Device.BackendType)
+                {
+                    case GraphicsApi.Direct3D11:
+                    case GraphicsApi.Metal:
+                        vertexShaderFileName = "Vertex2D-TcTopLeft";
+                        break;
+                    case GraphicsApi.Vulkan:
+                    case GraphicsApi.OpenGL:
+                        vertexShaderFileName = "Vertex2D-TcBottomLeft";
+                        break;
+                    case GraphicsApi.OpenGLES:
+                    case GraphicsApi.SystemDefault:
+                        throw new Yak2DException("Type is either unsupported or erroneously stored as system default");
+                }
+            }
+
+            _shaderPackage = _shaderLoader.CreateShaderPackage(vertexShaderFileName,
+                                                               AssetSourceEnum.Embedded,
+                                                               _fragmentShaderFilename,
+                                                               _shaderFileAssetType,
+                                                               vertexLayout,
+                                                               uniformDescriptions.ToArray(),
+                                                               _useSpirvCompile,
+                                                               _useSpirvCompile);
         }
 
         private UniformBuffer CreateUniformBuffer(ResourceLayoutElementDescription[] description, ShaderUniformDescription desc)

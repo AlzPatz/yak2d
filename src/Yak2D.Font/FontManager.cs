@@ -46,10 +46,10 @@ namespace Yak2D.Font
 
         private void LoadSystemFonts()
         {
-            SystemFont = LoadFont(true, "notosans", AssetSourceEnum.Embedded);
+            SystemFont = LoadFont(true, "notosans", AssetSourceEnum.Embedded, ImageFormat.PNG);
         }
 
-        public IFont LoadUserFont(string fontPathWithoutExtension, AssetSourceEnum assetType)
+        public IFont LoadUserFont(string fontPathWithoutExtension, AssetSourceEnum assetType, ImageFormat imageFormat)
         {
             //Guards and exceptions for null or white space strings already exist at the IFont Level
             if (string.IsNullOrWhiteSpace(fontPathWithoutExtension) || fontPathWithoutExtension.Trim().Any(char.IsWhiteSpace))
@@ -59,14 +59,14 @@ namespace Yak2D.Font
 
             fontPathWithoutExtension = fontPathWithoutExtension.Trim();
 
-            var font = LoadFont(false, fontPathWithoutExtension, assetType);
+            var font = LoadFont(false, fontPathWithoutExtension, assetType, imageFormat);
 
             var id = _idGenerator.New();
 
             return _userFontCollection.Add(id, font) ? new FontReference(id) : null;
         }
 
-        private IFontModel LoadFont(bool isFrameworkInternal, string pathToFontNameNoExtension, AssetSourceEnum assetType)
+        private IFontModel LoadFont(bool isFrameworkInternal, string pathToFontNameNoExtension, AssetSourceEnum assetType, ImageFormat imageFormat)
         {
             //There is a .fnt file for each size of a font. The .fnt file contains information on spacing and importantly,
             //what the texture files are called for that font size. When loading a font, we attempt to load each font size
@@ -145,6 +145,7 @@ namespace Yak2D.Font
                 fontBaseFolderWithoutAssemblyDoesNotEndInDivisor,
                 isFrameworkInternal,
                 assetType,
+                imageFormat,
                 lines)).Where(desc => desc != null).ToList()
             };
 

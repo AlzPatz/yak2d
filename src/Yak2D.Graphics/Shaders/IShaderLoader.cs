@@ -9,6 +9,8 @@ namespace Yak2D.Graphics
                                             string fragmentShaderName,
                                             AssetSourceEnum fragmentShaderAssetType,
                                             VertexLayoutDescription layoutDescription,
-                                            ResourceLayoutElementDescription[][] uniformDescription);
+                                            ResourceLayoutElementDescription[][] uniformDescription,
+                                            bool useSpirvCompileVertexShader = false,
+                                            bool useSpirvCompileFragmentShader = false);
     }
 }

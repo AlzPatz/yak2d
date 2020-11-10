@@ -1,6 +1,7 @@
 using SixLabors.ImageSharp.PixelFormats;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using Veldrid;
 
 namespace Yak2D.Internal
@@ -21,13 +22,13 @@ namespace Yak2D.Internal
         List<ulong> GetAutoClearDepthSurfaceIds();
         List<ulong> GetAutoClearColourSurfaceIds();
 
-        ITexture LoadTextureFromEmbeddedPngResourceInUserApplication(string texturePathWithoutExtension,
-                                                                     bool isFontTexture,
+        ITexture LoadTextureFromEmbeddedResourceInUserApplication(string texturePathWithoutExtension,
+                                                                     ImageFormat imageFormat,
                                                                      SamplerType samplerType = SamplerType.Anisotropic);
 
-        ITexture LoadFontTextureFromEmbeddedPngResource(bool isFrameworkInternal,
-                                                        bool isFontTexture,
+        ITexture LoadFontTextureFromEmbeddedResource(bool isFrameworkInternal,
                                                         string texturePathWithoutExtension,
+                                                        ImageFormat imageFormat,
                                                         SamplerType samplerType = SamplerType.Anisotropic);
 
         ITexture LoadRgbaTextureFromPixelData(uint width,
@@ -40,20 +41,27 @@ namespace Yak2D.Internal
                                                  float[] pixelData,
                                                  SamplerType samplerType = SamplerType.Anisotropic);
 
-        ITexture LoadTextureFromPngFile(string path,
-                                        bool isFontTexture,
+        ITexture LoadTextureFromFile(string path,
+                                        ImageFormat imageFormat,
                                         SamplerType samplerType = SamplerType.Anisotropic);
 
-        ITexture LoadFontTextureFromPngFile(string texturePathWithoutExtension,
-                                            bool isFontTexture,
+        ITexture LoadFontTextureFromFile(string texturePathWithoutExtension,
+                                            ImageFormat imageFormat,
                                             SamplerType samplerType = SamplerType.Anisotropic);
+
+        ITexture GenerateTextureFromStream(Stream stream,
+                                           bool isFrameworkInternal,
+                                           bool isFontTexture,
+                                           SamplerType samplerType);
 
         IRenderTarget CreateRenderSurface(bool isInternal, uint width, uint height, PixelFormat pixelFormat,
                                           bool hasDepthBuffer, bool autoClearColour = false, bool autoClearDepth = false,
                                           SamplerType samplerType = SamplerType.Anisotropic);
 
-        TextureDataRgba LoadTextureColourDataFromPngFile(string path);
-        TextureDataRgba LoadTextureColourDataFromEmbeddedPngResourceInUserApplication(string path);
+        TextureDataRgba LoadTextureColourDataFromFile(string path,
+                                                         ImageFormat imageFormat);
+        TextureDataRgba LoadTextureColourDataFromEmbeddedResourceInUserApplication(string path,
+                                                                                      ImageFormat imageFormat);
         void RegisterSwapChainOutput(Framebuffer swapChainFrameBuffer, bool removeExisting);
         GpuSurface RetrieveSurface(ulong id, GpuSurfaceType[] disallowedTypes = null);
         Size GetSurfaceDimensions(ulong id);
@@ -63,6 +71,5 @@ namespace Yak2D.Internal
         void DestroyAllUserSurfaces();
         void Shutdown();
         void ReInitialise();
-
     }
 }

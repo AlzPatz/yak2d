@@ -117,7 +117,9 @@ namespace Yak2D.Surface
             return _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(veldridTexture, true, false);
         }
 
-        public ITexture LoadTextureFromEmbeddedPngResourceInUserApplication(string texturePathWithoutExtension, bool isFontTexture, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture LoadTextureFromEmbeddedResourceInUserApplication(string texturePathWithoutExtension,
+                                                                            ImageFormat imageFormat,
+                                                                            SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (string.IsNullOrEmpty(texturePathWithoutExtension))
             {
@@ -126,7 +128,7 @@ namespace Yak2D.Surface
 
             var fullPathWithinAssemblyWithoutFileExtension = string.Concat(_startUpProperties.TextureFolderRootName, ".", texturePathWithoutExtension);
             var pathWithSlashesChangedToDots = ReplaceForwardSlashesWithDots(fullPathWithinAssemblyWithoutFileExtension);
-            return LoadTextureFromEmbeddedPngResource(false, isFontTexture, pathWithSlashesChangedToDots, samplerType);
+            return LoadTextureFromEmbeddedPngResource(false, false, pathWithSlashesChangedToDots, imageFormat, samplerType);
         }
 
         private string ReplaceForwardSlashesWithDots(string texturePath)
@@ -134,7 +136,7 @@ namespace Yak2D.Surface
             return texturePath.Replace('/', '.');
         }
 
-        public TextureDataRgba LoadTextureColourDataFromEmbeddedPngResourceInUserApplication(string texturePathWithoutExtension)
+        public TextureDataRgba LoadTextureColourDataFromEmbeddedResourceInUserApplication(string texturePathWithoutExtension, ImageFormat imageFormat)
         {
             if (string.IsNullOrEmpty(texturePathWithoutExtension))
             {
@@ -143,10 +145,13 @@ namespace Yak2D.Surface
 
             var fullPathWithinAssemblyWithoutFileExtension = string.Concat(_startUpProperties.TextureFolderRootName, ".", texturePathWithoutExtension);
             var pathWithSlashesChangedToDots = ReplaceForwardSlashesWithDots(fullPathWithinAssemblyWithoutFileExtension);
-            return LoadTextureDataFromEmbeddedPngResource(pathWithSlashesChangedToDots);
+            return LoadTextureDataFromEmbeddedPngResource(pathWithSlashesChangedToDots, imageFormat);
         }
 
-        public ITexture LoadFontTextureFromEmbeddedPngResource(bool isFrameworkInternal, bool isFontTexture, string texturePathWithoutExtension, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture LoadFontTextureFromEmbeddedResource(bool isFrameworkInternal,
+                                                               string texturePathWithoutExtension,
+                                                               ImageFormat imageFormat,
+                                                               SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (string.IsNullOrEmpty(texturePathWithoutExtension))
             {
@@ -154,18 +159,29 @@ namespace Yak2D.Surface
             }
 
             IAssembly assembly = isFrameworkInternal ? _fontsAssembly : _applicationAssembly;
-            return LoadTextureFromEmbeddedPngResource(isFrameworkInternal, isFontTexture, assembly, texturePathWithoutExtension, samplerType);
+            return LoadTextureFromEmbeddedPngResource(isFrameworkInternal, true, assembly, texturePathWithoutExtension, imageFormat, samplerType);
         }
 
-        private ITexture LoadTextureFromEmbeddedPngResource(bool isFrameworkInternal, bool isFontTexture, string assetPathWithoutExtension, SamplerType samplerType)
+        private ITexture LoadTextureFromEmbeddedPngResource(bool isFrameworkInternal,
+                                                            bool isFontTexture,
+                                                            string assetPathWithoutExtension,
+                                                            ImageFormat imageFormat,
+                                                            SamplerType samplerType)
         {
             var assembly = isFrameworkInternal ? _surfaceAssembly : _applicationAssembly;
-            return LoadTextureFromEmbeddedPngResource(isFrameworkInternal, isFontTexture, assembly, assetPathWithoutExtension, samplerType);
+            return LoadTextureFromEmbeddedPngResource(isFrameworkInternal, isFontTexture, assembly, assetPathWithoutExtension, imageFormat, samplerType);
         }
 
-        private ITexture LoadTextureFromEmbeddedPngResource(bool isFrameworkInternal, bool isFontTexture, IAssembly assembly, string assetPathWithoutExtension, SamplerType samplerType)
+        private ITexture LoadTextureFromEmbeddedPngResource(bool isFrameworkInternal,
+                                                            bool isFontTexture,
+                                                            IAssembly assembly,
+                                                            string assetPathWithoutExtension,
+                                                            ImageFormat imageFormat,
+                                                            SamplerType samplerType)
         {
-            var fullAssemblyName = string.Concat(assembly.Name, ".", assetPathWithoutExtension, ".png");
+            var extension = GetFileExtensionFromImageFormat(imageFormat);
+
+            var fullAssemblyName = string.Concat(assembly.Name, ".", assetPathWithoutExtension, extension);
 
             var stream = assembly.GetManifestResourceStream(fullAssemblyName);
             if (stream == null)
@@ -186,7 +202,32 @@ namespace Yak2D.Surface
             return GenerateTextureFromStream(stream, isFrameworkInternal, isFontTexture, samplerType);
         }
 
-        private ITexture GenerateTextureFromStream(Stream stream, bool isFrameworkInternal, bool isFontTexture, SamplerType samplerType)
+        private string GetFileExtensionFromImageFormat(ImageFormat format)
+        {
+            var extension = "";
+            switch (format)
+            {
+                case ImageFormat.PNG:
+                    extension = ".png";
+                    break;
+                case ImageFormat.BMP:
+                    extension = ".bmp";
+                    break;
+                case ImageFormat.TGA:
+                    extension = ".tga";
+                    break;
+                case ImageFormat.GIF:
+                    extension = ".gif";
+                    break;
+                case ImageFormat.JPEG:
+                    extension = ".jpg";
+                    break;
+            }
+
+            return extension;
+        }
+
+        public ITexture GenerateTextureFromStream(Stream stream, bool isFrameworkInternal, bool isFontTexture, SamplerType samplerType)
         {
             var veldridTexture = _imageSharpLoader.GenerateVeldridTextureFromStream(stream, true);
 
@@ -197,9 +238,11 @@ namespace Yak2D.Surface
             return _surfaceCollection.Add(id, surface) ? new TextureReference(id) : null;
         }
 
-        private TextureDataRgba LoadTextureDataFromEmbeddedPngResource(string assetPathWithoutExtension)
+        private TextureDataRgba LoadTextureDataFromEmbeddedPngResource(string assetPathWithoutExtension, ImageFormat imageFormat)
         {
-            var fullAssemblyName = string.Concat(_applicationAssembly.Name, ".", assetPathWithoutExtension, ".png");
+            var extension = GetFileExtensionFromImageFormat(imageFormat);
+
+            var fullAssemblyName = string.Concat(_applicationAssembly.Name, ".", assetPathWithoutExtension, extension);
 
             var stream = _applicationAssembly.GetManifestResourceStream(fullAssemblyName);
             if (stream == null)
@@ -220,26 +263,30 @@ namespace Yak2D.Surface
             return _imageSharpLoader.GenerateTextureDataFromStream(stream);
         }
 
-        public ITexture LoadFontTextureFromPngFile(string path, bool isFontTexture, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture LoadFontTextureFromFile(string path, ImageFormat imageFormat, SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (string.IsNullOrEmpty(path))
             {
                 throw new Yak2DException("Load Font Texture from File passed null or empty string for texture path", new ArgumentNullException("path"));
             }
 
-            var filePath = string.Concat(path, ".png");
-            return LoadTextureFromPng(filePath, isFontTexture, samplerType);
+            var extension = GetFileExtensionFromImageFormat(imageFormat);
+
+            var filePath = string.Concat(path, extension);
+            return LoadTextureFromPng(filePath, true, samplerType);
         }
 
-        public ITexture LoadTextureFromPngFile(string path, bool isFontTexture, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture LoadTextureFromFile(string path, ImageFormat imageFormat, SamplerType samplerType = SamplerType.Anisotropic)
         {
             if (string.IsNullOrEmpty(path))
             {
                 throw new Yak2DException("Load Texture from File passed null or empty string for texture path", new ArgumentNullException("path"));
             }
 
-            var filePath = Path.Combine(_startUpProperties.TextureFolderRootName, string.Concat(path, ".png"));
-            return LoadTextureFromPng(filePath, isFontTexture, samplerType);
+            var extension = GetFileExtensionFromImageFormat(imageFormat);
+
+            var filePath = Path.Combine(_startUpProperties.TextureFolderRootName, string.Concat(path, extension));
+            return LoadTextureFromPng(filePath, false, samplerType);
         }
 
         private ITexture LoadTextureFromPng(string path, bool isFontTexture, SamplerType samplerType)
@@ -258,14 +305,16 @@ namespace Yak2D.Surface
             }
         }
 
-        public TextureDataRgba LoadTextureColourDataFromPngFile(string path)
+        public TextureDataRgba LoadTextureColourDataFromFile(string path, ImageFormat imageFormat)
         {
             if (string.IsNullOrEmpty(path))
             {
                 throw new Yak2DException("Load Texture Colour Data from File passed null or empty string for texture path", new ArgumentNullException("path"));
             }
 
-            var filePath = Path.Combine(_startUpProperties.TextureFolderRootName, string.Concat(path, ".png"));
+            var extension = GetFileExtensionFromImageFormat(imageFormat);
+
+            var filePath = Path.Combine(_startUpProperties.TextureFolderRootName, string.Concat(path, extension));
             return LoadTextureDataFromPng(filePath);
         }
 

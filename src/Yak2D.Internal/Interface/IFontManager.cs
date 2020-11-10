@@ -6,7 +6,7 @@ namespace Yak2D.Internal
         IFontModel SystemFont { get; }
         IFontModel RetrieveFont(ulong id);
 
-        IFont LoadUserFont(string fontName, AssetSourceEnum assetType);
+        IFont LoadUserFont(string fontName, AssetSourceEnum assetType, ImageFormat imageFormat);
 
         void DestroyFont(ulong id);
         void DestroyAllUserFonts(bool resourcesAlreadyDestroyed);

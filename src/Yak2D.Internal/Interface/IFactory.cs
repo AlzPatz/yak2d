@@ -8,6 +8,7 @@ namespace Yak2D.Internal
         DisposeCollectorResourceFactory RawFactory { get; }
 
         ResourceLayout CreateResourceLayout(ResourceLayoutDescription resourceLayoutDescription);
+        Shader CreateShaderCompileFromSpirv(ShaderDescription shaderDescription);
         Shader CreateShader(ShaderDescription shaderDescription);
         Sampler CreateSampler(SamplerDescription samplerDescription);
         TextureView CreateTextureView(Texture texture);

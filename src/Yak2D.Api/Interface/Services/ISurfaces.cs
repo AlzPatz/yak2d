@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.IO;
 using System.Numerics;
 
 namespace Yak2D
@@ -45,13 +46,23 @@ namespace Yak2D
                                          SamplerType samplerType = SamplerType.Anisotropic);
 
         /// <summary>
-        /// Load a texture from a .png image asset
+        /// Load a texture from an image asset
         /// </summary>
-        /// <param name="path">Image (.png) asset name including path (no file extension)"</param>
+        /// <param name="path">Image asset name including path (no file extension)"</param>
         /// <param name="assetType">Embedded in the binary or a file location"</param>
+        /// <param name="imageFormat">Image file encoding"</param>
         /// <param name="samplerType">Sampler filter to be when sampling the Texture/param>
         ITexture LoadTexture(string path,
                              AssetSourceEnum assetType,
+                             ImageFormat imageFormat = ImageFormat.PNG,
+                             SamplerType samplerType = SamplerType.Anisotropic);
+
+        /// <summary>
+        /// Load a texture from a stream
+        /// </summary>
+        /// <param name="stream">"Data stream containing image data"</param>
+        /// <param name="samplerType">Sampler filter to be when sampling the Texture/param>
+        ITexture LoadTexture(Stream stream, 
                              SamplerType samplerType = SamplerType.Anisotropic);
 
         /// <summary>
@@ -59,8 +70,10 @@ namespace Yak2D
         /// </summary>
         /// <param name="path">Image (.png) asset name including path (no file extension)"</param>
         /// <param name="assetType">Embedded in the binary or a file location"</param>
+        /// <param name="imageFormat">Image file encoding"</param>
         TextureDataRgba LoadTextureColourData(string path,
-                                              AssetSourceEnum assetType);
+                                              AssetSourceEnum assetType,
+                                              ImageFormat imageFormat = ImageFormat.PNG);
 
         /// <summary>
         /// Geneate a texture of floats (used in distortion stages) directly from an array
@@ -116,13 +129,13 @@ namespace Yak2D
         /// <summary>
         /// Remove surface object data from framework
         /// </summary>
-        /// <param name="texture">The surface (RenderTarget or Texture) reference to destroy</param>
+        /// <param name="surface">The surface (RenderTarget or Texture) reference to destroy</param>
         void DestroySurface(ITexture surface);
 
         /// <summary>
         /// Remove surface object data from framework
         /// </summary>
-        /// <param name="texture">The surface (RenderTarget or Texture) id to destroy</param>
+        /// <param name="surface">The surface (RenderTarget or Texture) id to destroy</param>
         void DestroySurface(ulong surface);
 
         /// <summary>

@@ -95,7 +95,11 @@ namespace Yak2D.Font
             return lines;
         }
 
-        public CandidateSubFontDesc TryToLoadSubFontDescription(string fontBaseFolderWithoutAssemblyDoesNotEndInDivisor, bool isFrameworkInternal, AssetSourceEnum assetType, List<string> fntFileLines)
+        public CandidateSubFontDesc TryToLoadSubFontDescription(string fontBaseFolderWithoutAssemblyDoesNotEndInDivisor,
+                                                                bool isFrameworkInternal,
+                                                                AssetSourceEnum assetType,
+                                                                ImageFormat imageFormat,
+                                                                List<string> fntFileLines)
         {
             var resourceFolder = fontBaseFolderWithoutAssemblyDoesNotEndInDivisor;
 
@@ -126,10 +130,10 @@ namespace Yak2D.Font
                 switch (assetType)
                 {
                     case AssetSourceEnum.Embedded:
-                        texture = _gpuSurfaceManager.LoadFontTextureFromEmbeddedPngResource(isFrameworkInternal, true, texturePathWithoutExtension);
+                        texture = _gpuSurfaceManager.LoadFontTextureFromEmbeddedResource(isFrameworkInternal, texturePathWithoutExtension, imageFormat);
                         break;
                     case AssetSourceEnum.File:
-                        texture = _gpuSurfaceManager.LoadFontTextureFromPngFile(texturePathWithoutExtension, true);
+                        texture = _gpuSurfaceManager.LoadFontTextureFromFile(texturePathWithoutExtension, imageFormat);
                         break;
                 }
                 if (texture != null)

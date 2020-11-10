@@ -58,7 +58,7 @@ namespace Yak2D.Tests
                                                                      UniformType = ShaderUniformType.Data
                                                                 },
                                                              },
-                                                             BlendState.Alpha);
+                                                             BlendState.Alpha, false);
             return model;
         }
 

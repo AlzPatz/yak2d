@@ -154,7 +154,7 @@ namespace Yak2D.Tests
 
             var gpuSurfaceManagerMock = Substitute.For<IGpuSurfaceManager>();
            
-            gpuSurfaceManagerMock.LoadFontTextureFromEmbeddedPngResource(true, true, Arg.Any<string>()).Returns(new TextureReference(20));
+            gpuSurfaceManagerMock.LoadFontTextureFromEmbeddedResource(true, Arg.Any<string>(), ImageFormat.PNG).Returns(new TextureReference(20));
 
             IFontLoader loader = new FontLoader(
                                     appAssembly,
@@ -185,9 +185,9 @@ namespace Yak2D.Tests
                     "kerning first=34  second=193 amount=-11"
             };
 
-            var desc = loader.TryToLoadSubFontDescription("FontFolder", true, AssetSourceEnum.Embedded, fntFile);
+            var desc = loader.TryToLoadSubFontDescription("FontFolder", true, AssetSourceEnum.Embedded, ImageFormat.PNG, fntFile);
 
-            gpuSurfaceManagerMock.Received(3).LoadFontTextureFromEmbeddedPngResource(true, true, Arg.Any<string>());
+            gpuSurfaceManagerMock.Received(3).LoadFontTextureFromEmbeddedResource(true, Arg.Any<string>(), ImageFormat.PNG);
 
             Assert.Equal(fntFile, desc.DotFntLines);
             Assert.Equal(3, desc.Textures.Count);
@@ -210,7 +210,7 @@ namespace Yak2D.Tests
 
             var gpuSurfaceManagerMock = Substitute.For<IGpuSurfaceManager>();
 
-            gpuSurfaceManagerMock.LoadFontTextureFromPngFile(Arg.Any<string>(), Arg.Any<bool>()).Returns(new TextureReference(20));
+            gpuSurfaceManagerMock.LoadFontTextureFromFile(Arg.Any<string>(), ImageFormat.PNG).Returns(new TextureReference(20));
 
             IFontLoader loader = new FontLoader(
                                             appAssembly,
@@ -241,9 +241,9 @@ namespace Yak2D.Tests
                     "kerning first=34  second=193 amount=-11"
             };
 
-            var desc = loader.TryToLoadSubFontDescription("FontFolder", false, AssetSourceEnum.File, fntFile);
+            var desc = loader.TryToLoadSubFontDescription("FontFolder", false, AssetSourceEnum.File, ImageFormat.PNG, fntFile);
 
-            gpuSurfaceManagerMock.Received(3).LoadFontTextureFromPngFile(Arg.Any<string>(), Arg.Any<bool>());
+            gpuSurfaceManagerMock.Received(3).LoadFontTextureFromFile(Arg.Any<string>(), ImageFormat.PNG);
 
             Assert.Equal(fntFile, desc.DotFntLines);
             Assert.Equal(3, desc.Textures.Count);

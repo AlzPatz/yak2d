@@ -117,9 +117,22 @@ namespace Yak2D.Graphics
             return new MixStageModel(_frameworkMessenger);
         }
 
-        public ICustomShaderStageModel CreateCustomStageModel(string fragmentShaderFilename, AssetSourceEnum assetType, ShaderUniformDescription[] uniformDescriptions, BlendState blendState)
+        public ICustomShaderStageModel CreateCustomStageModel(string fragmentShaderFilename,
+                                                              AssetSourceEnum assetType,
+                                                              ShaderUniformDescription[] uniformDescriptions,
+                                                              BlendState blendState,
+                                                              bool useSpirvCompile)
         {
-            return new CustomShaderStageModel(_frameworkMessenger, _systemComponents, _shaderTools, _pipelineFactory, _blendStateConverter, fragmentShaderFilename, assetType, uniformDescriptions, blendState);
+            return new CustomShaderStageModel(_frameworkMessenger,
+                                              _systemComponents,
+                                              _shaderTools,
+                                              _pipelineFactory,
+                                              _blendStateConverter,
+                                              fragmentShaderFilename,
+                                              assetType,
+                                              uniformDescriptions,
+                                              blendState,
+                                              useSpirvCompile);
         }
 
         public ICustomVeldridStageModel CreateCustomVeldridStage(CustomVeldridBase stage)

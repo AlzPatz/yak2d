@@ -19,7 +19,7 @@ namespace Yak2D.Font
             _fontManager = fontManager;
         }
 
-        public IFont LoadFont(string path, AssetSourceEnum assetType)
+        public IFont LoadFont(string path, AssetSourceEnum assetType, ImageFormat imageFormat = ImageFormat.PNG)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -33,7 +33,7 @@ namespace Yak2D.Font
                 throw new Yak2DException("Fonts -> Asset path name cannot contain any whitespace", new ArgumentNullException("path"));
             }
 
-            return _fontManager.LoadUserFont(trimmedPath, assetType);
+            return _fontManager.LoadUserFont(trimmedPath, assetType, imageFormat);
         }
 
         public void DestroyFont(IFont font)

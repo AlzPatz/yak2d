@@ -87,8 +87,8 @@ namespace Yak2D.Tests
         {
             var manager = SetUpManagerWithFakes();
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromEmbeddedPngResourceInUserApplication(null, false); });
-            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromEmbeddedPngResourceInUserApplication("", false); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromEmbeddedResourceInUserApplication(null, ImageFormat.PNG); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromEmbeddedResourceInUserApplication("", ImageFormat.PNG); });
         }
 
         [Fact]
@@ -96,8 +96,8 @@ namespace Yak2D.Tests
         {
             var manager = SetUpManagerWithFakes();
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromEmbeddedPngResource(true, false, null); });
-            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromEmbeddedPngResource(true, false, ""); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromEmbeddedResource(true, null, ImageFormat.PNG); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromEmbeddedResource(true, "", ImageFormat.PNG); });
         }
 
         [Fact]
@@ -105,8 +105,8 @@ namespace Yak2D.Tests
         {
             var manager = SetUpManagerWithFakes();
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromPngFile(null, false); });
-            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromPngFile("", false); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromFile(null, ImageFormat.PNG); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromFile("", ImageFormat.PNG); });
         }
 
         [Fact]
@@ -114,8 +114,8 @@ namespace Yak2D.Tests
         {
             var manager = SetUpManagerWithFakes();
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromPngFile(null, false); });
-            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromPngFile("", false); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromFile(null, ImageFormat.PNG); });
+            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromFile("", ImageFormat.PNG); });
         }
     }
 }

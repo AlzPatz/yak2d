@@ -139,10 +139,12 @@ namespace Yak2D
         /// <param name="assetType">Embedded in the binary or a file location"</param>
         /// <param name="uniformDescriptions">Description of shader uniforms (textures or data structs)</param>
         /// <param name="blendState">How source pixels are mixed with destination pixels on surfaces</param>
+        /// <param name="useSpirvCompile">Compile shader code at runtime from .glsl SPIRV shader</param>
         ICustomShaderStage CreateCustomShaderStage(string fragmentShaderPathName,
                                                    AssetSourceEnum assetType,
                                                    ShaderUniformDescription[] uniformDescriptions,
-                                                   BlendState blendState);
+                                                   BlendState blendState,
+                                                   bool useSpirvCompile = false);
 
         /// <summary>
         /// Destroy a render stage
