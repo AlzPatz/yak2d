@@ -7,7 +7,7 @@
     {
         PNG,
         BMP,
-        JPEG,
+        JPG,
         GIF,
         TGA
     }

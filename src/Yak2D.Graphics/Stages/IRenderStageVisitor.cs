@@ -15,6 +15,7 @@ namespace Yak2D.Graphics
         IStyleEffectsStageModel CachedStyleEffectStageModel { get; }
         ICustomShaderStageModel CachedCustomShaderModel { get; }
         ICustomVeldridStageModel CachedCustomVeldridModel { get; }
+        ISurfaceCopyStageModel CachedSurfaceCopyStageModel { get; }
 
         void DispatchToRenderStage(IDrawStageModel model, CommandList cl, RenderCommandQueueItem command);
         void DispatchToRenderStage(IBloomStageModel model, CommandList cl, RenderCommandQueueItem command);
@@ -27,6 +28,7 @@ namespace Yak2D.Graphics
         void DispatchToRenderStage(IStyleEffectsStageModel model, CommandList cl, RenderCommandQueueItem command);
         void DispatchToRenderStage(ICustomShaderStageModel model, CommandList cl, RenderCommandQueueItem command);
         void DispatchToRenderStage(ICustomVeldridStageModel model, CommandList cl, RenderCommandQueueItem command);
+        void DispatchToRenderStage(ISurfaceCopyStageModel model, CommandList cl, RenderCommandQueueItem command);
 
         void CacheStageModel(IDrawStageModel model);
         void CacheStageModel(IBloomStageModel model);
@@ -37,8 +39,9 @@ namespace Yak2D.Graphics
         void CacheStageModel(IMeshRenderStageModel model);
         void CacheStageModel(IMixStageModel model);
         void CacheStageModel(IStyleEffectsStageModel model);
-        void ClearCachedDrawingModels();
         void CacheStageModel(ICustomShaderStageModel model);
         void CacheStageModel(ICustomVeldridStageModel model);
+        void CacheStageModel(ISurfaceCopyStageModel model);
+        void ClearCachedDrawingModels();
     }
 }

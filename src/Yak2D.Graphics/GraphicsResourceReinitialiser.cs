@@ -24,6 +24,7 @@ namespace Yak2D.Graphics
         private readonly IMixStageRenderer _mixStageRenderer;
         private readonly ISinglePassGaussianBlurRenderer _singlePassGaussianBlurRenderer;
         private readonly IStyleEffectsStageRenderer _styleEffectStageRenderer;
+        private readonly ISurfaceCopyStageRenderer _surfaceCopyStageRenderer;
 
         public GraphicsResourceReinitialiser(
             IGraphics graphics,
@@ -45,7 +46,8 @@ namespace Yak2D.Graphics
             IMeshRenderStageRenderer meshStageRenderer,
             IMixStageRenderer mixStageRenderer,
             ISinglePassGaussianBlurRenderer singlePassGaussianBlurRenderer,
-            IStyleEffectsStageRenderer styleEffectStageRenderer
+            IStyleEffectsStageRenderer styleEffectStageRenderer,
+            ISurfaceCopyStageRenderer surfaceCopyStageRenderer
         )
         {
             _graphics = graphics;
@@ -70,6 +72,7 @@ namespace Yak2D.Graphics
             _mixStageRenderer = mixStageRenderer;
             _singlePassGaussianBlurRenderer = singlePassGaussianBlurRenderer;
             _styleEffectStageRenderer = styleEffectStageRenderer;
+            _surfaceCopyStageRenderer = surfaceCopyStageRenderer;
         }
 
         public void ReInitialise()

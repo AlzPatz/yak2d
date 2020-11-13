@@ -71,7 +71,7 @@ namespace Yak2D
         /// <param name="path">Image (.png) asset name including path (no file extension)"</param>
         /// <param name="assetType">Embedded in the binary or a file location"</param>
         /// <param name="imageFormat">Image file encoding"</param>
-        TextureDataRgba LoadTextureColourData(string path,
+        TextureData LoadTextureColourData(string path,
                                               AssetSourceEnum assetType,
                                               ImageFormat imageFormat = ImageFormat.PNG);
 

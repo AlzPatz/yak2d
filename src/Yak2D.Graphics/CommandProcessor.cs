@@ -57,6 +57,7 @@ namespace Yak2D.Graphics
                 case RenderCommandType.MixStage:
                 case RenderCommandType.CustomShader:
                 case RenderCommandType.CustomVeldrid:
+                case RenderCommandType.GpuToCpuSurfaceCopy:
                     ProcessRenderStage(cl, command);
                     break;
                 case RenderCommandType.CopyStage:

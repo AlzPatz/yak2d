@@ -58,9 +58,13 @@ namespace Yak2D.Internal
                                           bool hasDepthBuffer, bool autoClearColour = false, bool autoClearDepth = false,
                                           SamplerType samplerType = SamplerType.Anisotropic);
 
-        TextureDataRgba LoadTextureColourDataFromFile(string path,
-                                                         ImageFormat imageFormat);
-        TextureDataRgba LoadTextureColourDataFromEmbeddedResourceInUserApplication(string path,
+        ITexture CreateGpuCpuStagingSurface(uint width, uint height, PixelFormat pixelFormat);
+
+
+        TextureData LoadTextureColourDataFromFile(string path,
+                                                  ImageFormat imageFormat);
+
+        TextureData LoadTextureColourDataFromEmbeddedResourceInUserApplication(string path,
                                                                                       ImageFormat imageFormat);
         void RegisterSwapChainOutput(Framebuffer swapChainFrameBuffer, bool removeExisting);
         GpuSurface RetrieveSurface(ulong id, GpuSurfaceType[] disallowedTypes = null);

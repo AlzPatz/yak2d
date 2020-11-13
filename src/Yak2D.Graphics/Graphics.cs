@@ -127,7 +127,7 @@ namespace Yak2D.Graphics
 
             _cl.Begin();
 
-            if (_renderCommandQueue.Size == 0)
+            if (_renderCommandQueue.CommandQueueSize == 0)
             {
                 ClearWindowWhenNoRenderCommandsQueued(_startUpPropertiesCache.Internal.DefaultWindowClearColourOnNoRenderCommandsQueued);
             }
@@ -151,8 +151,25 @@ namespace Yak2D.Graphics
             {
                 _systemComponents.Device.WaitForIdle();
                 _systemComponents.Device.SwapBuffers();
+                //Back on the main thread we can now safely pass data back to the user
+
+                InvokePostRenderingSurfaceCopyCallbacks();
+
                 RenderingComplete = true;
             });
+        }
+
+        private void InvokePostRenderingSurfaceCopyCallbacks()
+        {
+            foreach (var id in _renderCommandQueue.FlushCallbackStageIds())
+            {
+                var stage = _renderStageManager.RetrieveStageModel(id) as ISurfaceCopyStageModel;
+
+                if (stage != null)
+                {
+                    stage.CopyDataFromStagingTextureAndPassToUser();
+                }
+            }
         }
 
         private void ProcessRenderStageUpdates(float timeSinceLastDraw)
@@ -169,7 +186,7 @@ namespace Yak2D.Graphics
 
         private void ProcessRenderCommandQueue()
         {
-            foreach (var command in _renderCommandQueue.Flush())
+            foreach (var command in _renderCommandQueue.FlushCommands())
             {
                 _commandProcessor.Process(_cl, command);
             }

@@ -27,7 +27,7 @@ namespace Yak2D.Tests
             }
 
             var index = 4;
-            foreach (var item in queue.Flush())
+            foreach (var item in queue.FlushCommands())
             {
                 Assert.Equal(RenderCommandType.CopyStage, item.Type);
                 Assert.Equal((ulong)index, item.Stage);
@@ -62,7 +62,7 @@ namespace Yak2D.Tests
             }
 
             var index = 4;
-            foreach (var item in queue.Flush())
+            foreach (var item in queue.FlushCommands())
             {
                 Assert.Equal(RenderCommandType.CopyStage, item.Type);
                 Assert.Equal((ulong)index, item.Stage);

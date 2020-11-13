@@ -108,6 +108,7 @@ namespace Yak2D
             container.Register<IMixStageRenderer, MixStageRenderer>(Lifestyle.Singleton);
             container.Register<ICustomShaderStageRenderer, CustomShaderStageRenderer>(Lifestyle.Singleton);
             container.Register<ICustomVeldridStageRenderer, CustomVeldridStageRenderer>(Lifestyle.Singleton);
+            container.Register<ISurfaceCopyStageRenderer, SurfaceCopyStageRenderer>(Lifestyle.Singleton);
             container.Register<IImageSharpLoader, ImageSharpLoader>(Lifestyle.Singleton);
             container.Register<IFloatTextureBuilder, FloatTextureBuilder>(Lifestyle.Singleton);
             container.Register<IGpuSurfaceFactory, GpuSurfaceFactory>(Lifestyle.Singleton);

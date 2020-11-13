@@ -202,11 +202,12 @@ namespace Yak2D.Surface
         }
 
         public GpuSurface CreateGpuSurface(bool isFrameworkInternal,
-                                                                            uint width,
-                                                                            uint height,
-                                                                            PixelFormat pixelFormat,
-                                                                            bool hasDepthBuffer,
-                                                                            SamplerType samplerType = SamplerType.Anisotropic)
+                                           uint width,
+                                           uint height,
+                                           PixelFormat pixelFormat,
+                                           bool hasDepthBuffer,
+                                           SamplerType samplerType = SamplerType.Anisotropic,
+                                           bool isGpuToCpuStagingTexture = false)
         {
             if (width == 0 || height == 0)
             {
@@ -219,18 +220,18 @@ namespace Yak2D.Surface
                         _numberOfMipLevels,
                         1,
                         pixelFormat,
-                        TextureUsage.RenderTarget | TextureUsage.Sampled,
+                        isGpuToCpuStagingTexture ? TextureUsage.Staging : TextureUsage.RenderTarget | TextureUsage.Sampled,
                         _sampleCount
                         ));
 
-            var view = _components.Factory.CreateTextureView(texture);
+            var view = isGpuToCpuStagingTexture ? null :_components.Factory.CreateTextureView(texture);
 
             var depthStencil = hasDepthBuffer ?
                             _components.Factory.CreateTexture(TextureDescription.Texture2D(
                                 width, height, 1, 1, PixelFormat.R16_UNorm, TextureUsage.DepthStencil
                             )) : null;
 
-            var buffer = _components.Factory.CreateFramebuffer(new FramebufferDescription(hasDepthBuffer ? depthStencil : null, texture));
+            var buffer = isGpuToCpuStagingTexture ? null : _components.Factory.CreateFramebuffer(new FramebufferDescription(hasDepthBuffer ? depthStencil : null, texture));
 
             Sampler wrap = null;
             Sampler mirror = null;
@@ -251,13 +252,13 @@ namespace Yak2D.Surface
                     break;
             }
 
-            var resourceSet_wrap = _components.Factory.CreateResourceSet(new ResourceSetDescription(
+            var resourceSet_wrap = isGpuToCpuStagingTexture ? null : _components.Factory.CreateResourceSet(new ResourceSetDescription(
                 _cachedTextureResourceLayout,
                 view,
                 wrap
              ));
 
-            var resourceSet_mirror = _components.Factory.CreateResourceSet(new ResourceSetDescription(
+            var resourceSet_mirror = isGpuToCpuStagingTexture ? null : _components.Factory.CreateResourceSet(new ResourceSetDescription(
                 _cachedTextureResourceLayout,
                 view,
                 mirror

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Yak2D.Internal;
 
@@ -197,7 +198,11 @@ namespace Yak2D.Graphics
             return _renderStageCollection.Add(id, model) ? userReference : null;
         }
 
-        public ICustomShaderStage CreateCustomShaderStage(string fragmentShaderFilename, AssetSourceEnum assetType, ShaderUniformDescription[] uniformDescriptions, BlendState blendState, bool useSpirvCompile)
+        public ICustomShaderStage CreateCustomShaderStage(string fragmentShaderFilename,
+                                                          AssetSourceEnum assetType,
+                                                          ShaderUniformDescription[] uniformDescriptions,
+                                                          BlendState blendState,
+                                                          bool useSpirvCompile)
         {
             var id = _idGenerator.New();
 
@@ -215,6 +220,23 @@ namespace Yak2D.Graphics
             var model = _renderStageModelFactory.CreateCustomVeldridStage(stage);
 
             var userReference = new CustomVeldridStage(id);
+
+            return _renderStageCollection.Add(id, model) ? userReference : null;
+        }
+
+        public ISurfaceCopyStage CreateSurfaceCopyDataStage(uint stagingTextureWidth,
+                                                            uint stagingTextureHeight,
+                                                            Action<uint, TextureData> callback,
+                                                            bool useFloat32PixelFormat)
+        {
+            var id = _idGenerator.New();
+
+            var model = _renderStageModelFactory.CreateSurfaceCopyDataStage(stagingTextureWidth,
+                                                                            stagingTextureHeight,
+                                                                            callback,
+                                                                            useFloat32PixelFormat);
+
+            var userReference = new SurfaceCopyStage(id);
 
             return _renderStageCollection.Add(id, model) ? userReference : null;
         }

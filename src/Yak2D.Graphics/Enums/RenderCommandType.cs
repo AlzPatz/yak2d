@@ -17,6 +17,7 @@ namespace Yak2D.Graphics
         SetViewport,
         ClearViewport,
         CustomShader,
-        CustomVeldrid
+        CustomVeldrid,
+        GpuToCpuSurfaceCopy
     }
 }

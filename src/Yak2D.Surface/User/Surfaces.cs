@@ -60,7 +60,7 @@ namespace Yak2D.Surface
             return _surfaceManager.GenerateTextureFromStream(stream, false, false, samplerType);
         }
 
-        public TextureDataRgba LoadTextureColourData(string path, AssetSourceEnum assetType, ImageFormat imageFormat)
+        public TextureData LoadTextureColourData(string path, AssetSourceEnum assetType, ImageFormat imageFormat)
         {
             switch (assetType)
             {
@@ -70,7 +70,7 @@ namespace Yak2D.Surface
                     return _surfaceManager.LoadTextureColourDataFromEmbeddedResourceInUserApplication(path, imageFormat);
             }
 
-            return default(TextureDataRgba);
+            return default(TextureData);
         }
 
         public IRenderTarget ReturnMainWindowRenderTarget()

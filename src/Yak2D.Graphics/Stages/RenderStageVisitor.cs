@@ -1,3 +1,4 @@
+using System;
 using Veldrid;
 using Yak2D.Internal;
 
@@ -16,6 +17,7 @@ namespace Yak2D.Graphics
         public IStyleEffectsStageModel CachedStyleEffectStageModel { get; private set; }
         public ICustomShaderStageModel CachedCustomShaderModel { get; private set; }
         public ICustomVeldridStageModel CachedCustomVeldridModel { get; private set; }
+        public ISurfaceCopyStageModel CachedSurfaceCopyStageModel { get; private set; }
 
         public void CacheStageModel(IDrawStageModel model) => CachedDrawStageModel = model;
         public void CacheStageModel(IBloomStageModel model) => CachedBloomEffectStageModel = model;
@@ -28,6 +30,7 @@ namespace Yak2D.Graphics
         public void CacheStageModel(IStyleEffectsStageModel model) => CachedStyleEffectStageModel = model;
         public void CacheStageModel(ICustomShaderStageModel model) => CachedCustomShaderModel = model;
         public void CacheStageModel(ICustomVeldridStageModel model) => CachedCustomVeldridModel = model;
+        public void CacheStageModel(ISurfaceCopyStageModel model) => CachedSurfaceCopyStageModel = model;
 
         private readonly IGpuSurfaceManager _surfaceManager;
         private readonly ICameraManager _cameraManager;
@@ -42,6 +45,7 @@ namespace Yak2D.Graphics
         private readonly IMixStageRenderer _mixRenderer;
         private readonly ICustomShaderStageRenderer _customShaderRenderer;
         private readonly ICustomVeldridStageRenderer _customVeldridRenderer;
+        private readonly ISurfaceCopyStageRenderer _surfaceCopyStageRenderer;
 
         public RenderStageVisitor(
                                                         IGpuSurfaceManager surfaceManager,
@@ -56,7 +60,8 @@ namespace Yak2D.Graphics
                                                         IDistortionStageRenderer distortionEffectStageRenderer,
                                                         IMixStageRenderer mixRenderer,
                                                         ICustomShaderStageRenderer customShaderRenderer,
-                                                        ICustomVeldridStageRenderer customVeldridRenderer)
+                                                        ICustomVeldridStageRenderer customVeldridRenderer,
+                                                        ISurfaceCopyStageRenderer surfaceCopyStageRenderer)
         {
             _surfaceManager = surfaceManager;
             _cameraManager = cameraManager;
@@ -71,6 +76,7 @@ namespace Yak2D.Graphics
             _mixRenderer = mixRenderer;
             _customShaderRenderer = customShaderRenderer;
             _customVeldridRenderer = customVeldridRenderer;
+            _surfaceCopyStageRenderer = surfaceCopyStageRenderer;
         }
 
         public void DispatchToRenderStage(IDrawStageModel stage, CommandList cl, RenderCommandQueueItem command)
@@ -162,6 +168,12 @@ namespace Yak2D.Graphics
             var t2 = command.Texture1 == 0UL ? null : _surfaceManager.RetrieveSurface(command.Texture1, new GpuSurfaceType[] { GpuSurfaceType.SwapChainOutput, GpuSurfaceType.Internal });
             var t3 = command.SpareId0 == 0UL ? null : _surfaceManager.RetrieveSurface(command.SpareId0, new GpuSurfaceType[] { GpuSurfaceType.SwapChainOutput, GpuSurfaceType.Internal });
             _customVeldridRenderer.Render(cl, stage, t0, t1, t2, t3, surface);
+        }
+
+        public void DispatchToRenderStage(ISurfaceCopyStageModel stage, CommandList cl, RenderCommandQueueItem command)
+        {
+            var source = command.Surface == 0UL ? null : _surfaceManager.RetrieveSurface(command.Surface, new GpuSurfaceType[] { GpuSurfaceType.Texture, GpuSurfaceType.Internal });
+            _surfaceCopyStageRenderer.Render(cl, stage, source);
         }
 
         public void ClearCachedDrawingModels()

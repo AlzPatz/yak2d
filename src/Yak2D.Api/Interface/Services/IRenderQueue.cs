@@ -354,6 +354,25 @@ namespace Yak2D
                            ulong tex2,
                            ulong tex3,
                            ulong target);
+
+        /// <summary>
+        /// Transfer surface (Texture or RenderTarget) pixel data from GPU to CPU
+        /// The Main window swapchain backbuffer target cannot be copied
+        /// A single copy stage must only be used once per render queue (as allowing a second use would either require overwriting data or more temporary possible heap allocation)
+        /// </summary>
+        /// <param name="stage">Stage Reference. Holds callback delegates used to pass pixel data back to user</param>
+        /// <param name="source">Surface Reference. The surface (RenderTarget or Texture) to copy pixel data from</param>
+        void CopySurfaceData(ISurfaceCopyStage stage, ITexture source);
+
+        /// <summary>
+        /// Transfer surface (Texture or RenderTarget) pixel data from GPU to CPU
+        /// The Main window swapchain backbuffer target cannot be copied
+        /// A single copy stage must only be used once per render queue (as allowing a second use would either require overwriting data or more temporary possible heap allocation)
+        /// </summary>
+        /// <param name="stage">Stage id. Holds callback delegates used to pass pixel data back to user</param>
+        /// <param name="source">Surface id. The surface (RenderTarget or Texture) to copy pixel data from</param>
+        void CopySurfaceData(ulong stage, ulong source);
+
         /// <summary>
         /// Sets the portion of the render surfaces that subsequent redner operations will draw too
         /// The user must clear the viewport if subsequent rendering operations wish to draw to entire surfaces

@@ -25,7 +25,7 @@ namespace Yak2D.Surface
             return imageSharpTexture.CreateDeviceTexture(_systemComponents.Device.RawVeldridDevice, _systemComponents.Factory.RawFactory);
         }
 
-        public TextureDataRgba GenerateTextureDataFromStream(Stream stream)
+        public TextureData GenerateTextureDataFromStream(Stream stream)
         {
             var data = Image.Load<Rgba32>(stream);
 
@@ -48,7 +48,7 @@ namespace Yak2D.Surface
                 }
             }
 
-            return new TextureDataRgba
+            return new TextureData
             {
                 Width = (uint)width,
                 Height = (uint)height,

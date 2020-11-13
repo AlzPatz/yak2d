@@ -1,3 +1,4 @@
+using System;
 using Yak2D.Internal;
 
 namespace Yak2D.Graphics
@@ -138,6 +139,20 @@ namespace Yak2D.Graphics
         public ICustomVeldridStageModel CreateCustomVeldridStage(CustomVeldridBase stage)
         {
             return new CustomVeldridStageModel(_frameworkMessenger, _systemComponents, _windowUpdater, stage);
+        }
+
+        public ISurfaceCopyStageModel CreateSurfaceCopyDataStage(uint stagingTextureWidth,
+                                                                 uint stagingTextureHeight,
+                                                                 Action<uint, TextureData> callback,
+                                                                 bool useFloat32PixelFormat)
+        {
+            return new SurfaceCopyStageModel(_frameworkMessenger,
+                                             _systemComponents,
+                                             _gpuSurfaceManager,
+                                             stagingTextureWidth,
+                                             stagingTextureHeight,
+                                             useFloat32PixelFormat ? Veldrid.PixelFormat.R32_Float : _startUpPropertiesCache.Internal.PixelFormatForRenderingSurfaces,
+                                             callback);
         }
     }
 }

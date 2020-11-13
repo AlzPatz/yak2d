@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Yak2D.Internal;
 
@@ -57,14 +58,39 @@ namespace Yak2D.Graphics
             return _renderStageManager.CreateMixStage();
         }
 
-        public ICustomShaderStage CreateCustomShaderStage(string fragmentShaderPathName, AssetSourceEnum assetType, ShaderUniformDescription[] uniformDescriptions, BlendState blendState, bool useSpirvCompile = false)
+        public ICustomShaderStage CreateCustomShaderStage(string fragmentShaderPathName,
+                                                          AssetSourceEnum assetType,
+                                                          ShaderUniformDescription[] uniformDescriptions,
+                                                          BlendState blendState,
+                                                          bool useSpirvCompile = false)
         {
-            return _renderStageManager.CreateCustomShaderStage(fragmentShaderPathName, assetType, uniformDescriptions, blendState, useSpirvCompile);
+            return _renderStageManager.CreateCustomShaderStage(fragmentShaderPathName,
+                                                               assetType,
+                                                               uniformDescriptions,
+                                                               blendState,
+                                                               useSpirvCompile);
         }
 
         public ICustomVeldridStage CreateCustomVeldridStage(CustomVeldridBase stage)
         {
             return _renderStageManager.CreateCustomVeldridStage(stage);
+        }
+
+        public ISurfaceCopyStage CreateSurfaceCopyDataStage(uint initialStagingTextureWidth,
+                                                            uint initialStagingTextureHeight,
+                                                            Action<uint, TextureData> callback,
+                                                            bool useFloat32PixelFormat = false)
+        {
+
+            if (callback == null)
+            {
+                throw new Yak2DException("Null callback passed when creating a Gpu to Cpu surface copy stage. Data cannot be retrieved without a callback");
+            }
+
+            return _renderStageManager.CreateSurfaceCopyDataStage(initialStagingTextureWidth,
+                                                                  initialStagingTextureHeight,
+                                                                  callback,
+                                                                  useFloat32PixelFormat);
         }
 
         public void DestroyStage(IRenderStage renderStage)
@@ -418,6 +444,27 @@ namespace Yak2D.Graphics
         {
             CacheRenderStageModelInVisitor(stage);
             _renderStageVisitor.CachedCustomShaderModel?.SetUniformValue<T>(uniformName, dataArray);
+        }
+
+        public void SetSurfaceCopyDataStageCallback(ISurfaceCopyStage stage, Action<uint, TextureData> callback)
+        {
+            if (stage == null)
+            {
+                throw new Yak2DException("Unable to set GPU to CPU surface pixel data copy callback as stage passed is null");
+            }
+
+            SetSurfaceCopyDataStageCallback(stage.Id, callback);
+        }
+
+        public void SetSurfaceCopyDataStageCallback(ulong stage, Action<uint, TextureData> callback)
+        {
+            if (callback == null)
+            {
+                throw new Yak2DException("Unable to set GPU to CPU surface pixel data copy callback as callback passed is null");
+            }
+
+            CacheRenderStageModelInVisitor(stage);
+            _renderStageVisitor.CachedSurfaceCopyStageModel?.SetCallback(callback);
         }
     }
 }

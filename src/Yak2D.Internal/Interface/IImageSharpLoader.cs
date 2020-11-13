@@ -7,7 +7,7 @@ namespace Yak2D.Internal
     public interface IImageSharpLoader
     {
         Texture GenerateVeldridTextureFromStream(Stream stream, bool mipMap);
-        TextureDataRgba GenerateTextureDataFromStream(Stream stream);
+        TextureData GenerateTextureDataFromStream(Stream stream);
         Texture GenerateRgbaVeldridTextureFromPixelData(Rgba32[] data, uint width, uint height);
         Texture GenerateFloat32VeldridTextureFromPixelData(float[] data, uint width, uint height);
         Texture GenerateSingleWhitePixel();

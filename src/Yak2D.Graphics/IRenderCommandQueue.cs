@@ -5,7 +5,9 @@ namespace Yak2D.Graphics
 {
     public interface IRenderCommandQueue
     {
-        int Size { get; }
+        int CommandQueueSize { get; }
+        int CallbackQueueSize { get; }
+
         void Add(RenderCommandType type,
                     ulong Stage,
                     ulong Surface,
@@ -16,6 +18,7 @@ namespace Yak2D.Graphics
                     ulong SpareId1,
                     RgbaFloat Colour);
         void Reset();
-        IEnumerable<RenderCommandQueueItem> Flush();
+        IEnumerable<RenderCommandQueueItem> FlushCommands();
+        IEnumerable<ulong> FlushCallbackStageIds();
     }
 }

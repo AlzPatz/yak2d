@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 
 namespace Yak2D
@@ -145,6 +146,19 @@ namespace Yak2D
                                                    ShaderUniformDescription[] uniformDescriptions,
                                                    BlendState blendState,
                                                    bool useSpirvCompile = false);
+
+        /// <summary>
+        /// Creates a stage enabling copying of surface pixel data to cpu array
+        /// </summary>
+        /// <param name="initialStagingTextureWidth">Initial width of staging texture created. If a texture of a difference size is copied from this is recreated at rendertime (slower)</param>
+        /// <param name="initialStagingTextureHeight">Initial width of staging texture created. If a texture of a difference size is copied from this is recreated at rendertime (slower)<</param>
+        /// <param name="callback">User delegate called once rendering complete to provide user the results data. Rendering may happen asynchronously hence the use of callbacks to avoid multithreaded issues</param>
+        /// <param name="useFloat32PixelFormat">Set True if surface copying data from has pixel type of single floats. False, default, is four component RGBA</param>
+        /// <returns></returns>
+        ISurfaceCopyStage CreateSurfaceCopyDataStage(uint initialStagingTextureWidth,
+                                                     uint initialStagingTextureHeight,
+                                                     Action<uint, TextureData> callback,
+                                                     bool useFloat32PixelFormat = false);
 
         /// <summary>
         /// Destroy a render stage
@@ -380,7 +394,7 @@ namespace Yak2D
         /// <param name="config">The target stage configuration</param>
         /// <param name="transitionSeconds">Time in seconds over which to interpolate the current configuration to the target configuration</param>        
         void SetMeshRenderLightingProperties(ulong stage,
-                                             MeshRenderLightingPropertiesConfiguration configuration,
+                                             MeshRenderLightingPropertiesConfiguration config,
                                              float transitionSeconds = 0.0f);
 
         /// <summary>
@@ -502,5 +516,20 @@ namespace Yak2D
         void SetCustomShaderUniformValues<T>(ulong stage,
                                              string uniformName,
                                              T[] dataArray) where T : struct;
+
+        /// <summary>
+        /// Update user defined callback for GPU to CPU surface pixel data transfer on rendering completion
+        /// </summary>
+        /// <param name="stage">The stage reference</param>
+        /// <param name="callback">User delegate called once rendering complete to provide user the results data. Rendering may happen asynchronously hence the use of callbacks to avoid multithreaded issues</param>
+        void SetSurfaceCopyDataStageCallback(ISurfaceCopyStage stage, Action<uint, TextureData> callback);
+
+        /// <summary>
+        /// Update user defined callback for GPU to CPU surface pixel data transfer on rendering completion
+        /// </summary>
+        /// <param name="stage">The stage id</param>
+        /// <param name="callback">User delegate called once rendering complete to provide user the results data. Rendering may happen asynchronously hence the use of callbacks to avoid multithreaded issues</param>
+        void SetSurfaceCopyDataStageCallback(ulong stage, Action<uint, TextureData> callback);
+
     }
 }

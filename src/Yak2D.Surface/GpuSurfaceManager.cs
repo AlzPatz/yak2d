@@ -136,7 +136,7 @@ namespace Yak2D.Surface
             return texturePath.Replace('/', '.');
         }
 
-        public TextureDataRgba LoadTextureColourDataFromEmbeddedResourceInUserApplication(string texturePathWithoutExtension, ImageFormat imageFormat)
+        public TextureData LoadTextureColourDataFromEmbeddedResourceInUserApplication(string texturePathWithoutExtension, ImageFormat imageFormat)
         {
             if (string.IsNullOrEmpty(texturePathWithoutExtension))
             {
@@ -219,7 +219,7 @@ namespace Yak2D.Surface
                 case ImageFormat.GIF:
                     extension = ".gif";
                     break;
-                case ImageFormat.JPEG:
+                case ImageFormat.JPG:
                     extension = ".jpg";
                     break;
             }
@@ -238,7 +238,7 @@ namespace Yak2D.Surface
             return _surfaceCollection.Add(id, surface) ? new TextureReference(id) : null;
         }
 
-        private TextureDataRgba LoadTextureDataFromEmbeddedPngResource(string assetPathWithoutExtension, ImageFormat imageFormat)
+        private TextureData LoadTextureDataFromEmbeddedPngResource(string assetPathWithoutExtension, ImageFormat imageFormat)
         {
             var extension = GetFileExtensionFromImageFormat(imageFormat);
 
@@ -257,7 +257,7 @@ namespace Yak2D.Surface
                 {
                     _frameworkMessenger.Report("Unable to load texture colour data. The provided texture name was not found in assembly: " + fullAssemblyName + " | Expect location format as ASSEMBLYNAME.PATHTOTEXTURES.NAMEPROVIDED.PNG");
                 }
-                return default(TextureDataRgba);
+                return default(TextureData);
             }
 
             return _imageSharpLoader.GenerateTextureDataFromStream(stream);
@@ -305,7 +305,7 @@ namespace Yak2D.Surface
             }
         }
 
-        public TextureDataRgba LoadTextureColourDataFromFile(string path, ImageFormat imageFormat)
+        public TextureData LoadTextureColourDataFromFile(string path, ImageFormat imageFormat)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -318,7 +318,7 @@ namespace Yak2D.Surface
             return LoadTextureDataFromPng(filePath);
         }
 
-        private TextureDataRgba LoadTextureDataFromPng(string path)
+        private TextureData LoadTextureDataFromPng(string path)
         {
             if (_fileSystem.Exists(path))
             {
@@ -330,7 +330,7 @@ namespace Yak2D.Surface
             else
             {
                 _frameworkMessenger.Report(string.Concat("Error: Unable to find Texture file from path: ", path));
-                return default(TextureDataRgba);
+                return default(TextureData);
             }
         }
 
@@ -395,6 +395,15 @@ namespace Yak2D.Surface
             }
 
             return _surfaceCollection.Add(id, surface) ? new RenderTargetReference(id) : null;
+        }
+
+        public ITexture CreateGpuCpuStagingSurface(uint width, uint height, PixelFormat pixelFormat)
+        {
+            var id = _idGenerator.New();
+
+            var surface = _gpuSurfaceFactory.CreateGpuSurface(true, width, height, pixelFormat, false, SamplerType.Anisotropic, true);
+
+            return _surfaceCollection.Add(id, surface) ? new TextureReference(id) : null;
         }
 
         public void RegisterSwapChainOutput(Framebuffer swapChainFrameBuffer, bool removeExisting)

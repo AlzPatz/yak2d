@@ -578,6 +578,44 @@ namespace Yak2D.Graphics
                         );
         }
 
+        public void CopySurfaceData(ISurfaceCopyStage stage, ITexture source)
+        {
+            if (stage == null)
+            {
+                throw new Yak2DException("Unable to queue CopySurfaceData. Stage is null", new ArgumentNullException());
+            }
+
+            if (source == null)
+            {
+                throw new Yak2DException("Unable to queue CopySurfaceData. Source is null", new ArgumentNullException());
+            }
+
+            _commandQueue.Add(RenderCommandType.GpuToCpuSurfaceCopy,
+                       stage.Id,
+                       source.Id,
+                       0UL, //Highjacked the camera slot for a user integer
+                       0UL,
+                       0UL,
+                       0UL,
+                       0UL,
+                       RgbaFloat.Clear
+                       );
+        }
+
+        public void CopySurfaceData(ulong stage, ulong source)
+        {
+            _commandQueue.Add(RenderCommandType.GpuToCpuSurfaceCopy,
+                    stage,
+                    source,
+                    0UL,
+                    0UL,
+                    0UL,
+                    0UL,
+                    0UL,
+                    RgbaFloat.Clear
+                    );
+        }
+
         public void SetViewport(IViewport viewport)
         {
             if (viewport == null)

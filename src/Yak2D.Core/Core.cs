@@ -19,7 +19,6 @@ namespace Yak2D.Core
         private readonly IGraphics _graphics;
         private readonly IDrawing _drawing;
         private readonly IRenderQueue _renderQueue;
-        private readonly IGpuSurfaceManager _gpuSurfaceManager;
         private readonly IServices _services;
         private readonly IShutdownManager _shutdownManager;
         private readonly IStartupPropertiesCache _startUpPropertiesCache;
