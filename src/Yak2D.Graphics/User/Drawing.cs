@@ -257,6 +257,38 @@ namespace Yak2D.Graphics
                 }
             }
 
+            //Having invalid texture wrappings can appear to cause a batching issue  
+            //Whilst the (sorter?) or batcher should perhaps be more robust, for now fixing at this level
+
+            if (request.FillType == FillType.Textured)
+            {
+                if (request.TextureWrap0 == TextureCoordinateMode.None)
+                {
+                    request.TextureWrap0 = TextureCoordinateMode.Wrap;
+                }
+
+                request.TextureWrap1 = TextureCoordinateMode.None;
+            }
+
+            if(request.FillType == FillType.DualTextured)
+            {
+                if (request.TextureWrap0 == TextureCoordinateMode.None)
+                {
+                    request.TextureWrap0 = TextureCoordinateMode.Wrap;
+                }
+
+                if (request.TextureWrap1 == TextureCoordinateMode.None)
+                {
+                    request.TextureWrap1= TextureCoordinateMode.Wrap;
+                }
+            }
+
+            if(request.FillType == FillType.Coloured)
+            {
+                request.TextureWrap0 = TextureCoordinateMode.None;
+                request.TextureWrap1 = TextureCoordinateMode.None;
+            }
+
             if (request.Vertices == null)
             {
                 throw new Yak2DException("Draw request failed. Null Vertex data");

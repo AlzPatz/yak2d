@@ -588,5 +588,67 @@ namespace Yak2D.Tests
             Assert.Equal(12, batch.StartIndex);
             Assert.Equal(6, batch.NumIndices);
         }
+
+        [Fact]
+        public void DrawBatcher_TestBatchCreation_ReplicatingTextureModeIssues_HappensWhenModeNoneProvidedToEarlyTexCall()
+        {
+            var messenger = Substitute.For<IFrameworkMessenger>();
+            var tools = new DrawStageBatcherTools();
+
+            IDrawStageBatcher batcher = new DrawStageBatcher(12, tools);
+
+            var properties = Substitute.For<IStartupPropertiesCache>();
+            properties.Internal.Returns(new InternalStartUpProperties
+            {
+                DrawQueueInitialSizeNumberOfRequests = 32,
+                DrawQueueInitialSizeElementsPerRequestScalar = 4
+            });
+
+            var queues = new DrawQueueGroup(new IdGenerator(Substitute.For<IFrameworkMessenger>()),
+                                            new DrawQueueFactory(messenger, properties, new ComparerCollection()),
+                                            Substitute.For<IDrawStageBuffers>(),
+                                            Substitute.For<IQueueToBufferBlitter>(),
+                                            false);
+
+            Add(queues.DynamicQueue.Queue, FillType.Coloured, 0UL, 0UL, TextureCoordinateMode.None, TextureCoordinateMode.None, 0, 1.0f);
+            Add(queues.DynamicQueue.Queue, FillType.Coloured, 0UL, 0UL, TextureCoordinateMode.None, TextureCoordinateMode.None, 0, 1.0f);
+            Add(queues.DynamicQueue.Queue, FillType.Textured, 5UL, 0UL, TextureCoordinateMode.Wrap, TextureCoordinateMode.None, 1, 0.5f);
+            Add(queues.DynamicQueue.Queue, FillType.Textured, 5UL, 0UL, TextureCoordinateMode.Wrap, TextureCoordinateMode.None, 1, 0.5f);
+            Add(queues.DynamicQueue.Queue, FillType.Textured, 6UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.None, 1, 0.3f);
+            Add(queues.DynamicQueue.Queue, FillType.Textured, 7UL, 8UL, TextureCoordinateMode.Wrap, TextureCoordinateMode.Mirror, 1, 0.3f);
+
+            queues.ProcessDynamicQueue();
+
+            batcher.Process(queues.DynamicQueue, queues.PersistentQueues);
+
+            Assert.Equal(4, batcher.NumberOfBatches);
+
+            var batch = batcher.Pool[0];
+
+            Assert.Equal(0UL, batch.Texture0);
+            Assert.Equal(0UL, batch.Texture1);
+            Assert.Equal(TextureCoordinateMode.None, batch.TextureMode0);
+            Assert.Equal(TextureCoordinateMode.None, batch.TextureMode1);
+            batch = batcher.Pool[1];
+
+            Assert.Equal(5UL, batch.Texture0);
+            Assert.Equal(0UL, batch.Texture1);
+            Assert.Equal(TextureCoordinateMode.Wrap, batch.TextureMode0);
+            Assert.Equal(TextureCoordinateMode.None, batch.TextureMode1);
+
+            batch = batcher.Pool[2];
+
+            Assert.Equal(6UL, batch.Texture0);
+            Assert.Equal(0UL, batch.Texture1);
+            Assert.Equal(TextureCoordinateMode.Mirror, batch.TextureMode0);
+            Assert.Equal(TextureCoordinateMode.None, batch.TextureMode1);
+
+            batch = batcher.Pool[3];
+
+            Assert.Equal(7UL, batch.Texture0);
+            Assert.Equal(8UL, batch.Texture1);
+            Assert.Equal(TextureCoordinateMode.Wrap, batch.TextureMode0);
+            Assert.Equal(TextureCoordinateMode.Mirror, batch.TextureMode1);
+        }
     }
 }

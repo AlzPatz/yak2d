@@ -150,8 +150,8 @@ namespace Yak2D.Graphics
             var hasTexBeenSet0 = tex0 != 0UL;
             var tMode0 = rawQs[queue].Data.TextureMode0[nextQueueIndex];
             var tex1 = rawQs[queue].Data.Texture1[nextQueueIndex];
-            var tMode1 = rawQs[queue].Data.TextureMode1[nextQueueIndex];
             var hasTexBeenSet1 = tex1 != 0UL;
+            var tMode1 = rawQs[queue].Data.TextureMode1[nextQueueIndex];
 
             ConsumeNextRequest(queue,
                                rawQs,
