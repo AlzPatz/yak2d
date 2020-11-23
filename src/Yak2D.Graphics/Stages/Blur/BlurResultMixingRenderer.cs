@@ -101,7 +101,7 @@ namespace Yak2D.Graphics
                                                                                 _systemComponents.Device.SwapchainFramebuffer.OutputDescription);
         }
 
-        public void Render(CommandList cl, float mixAmount, GpuSurface original, GpuSurface bloom, GpuSurface target)
+        public void Render(CommandList cl, float mixAmount, GpuSurface original, GpuSurface blur, GpuSurface target)
         {
             if (mixAmount != _currentMixAmount)
             {
@@ -123,8 +123,8 @@ namespace Yak2D.Graphics
             cl.SetVertexBuffer(0, _ndcQuadVertexBuffer.Buffer);
             cl.SetPipeline(_pipeline);
             cl.SetGraphicsResourceSet(0, _uniformBlockResourceSet);
-            cl.SetGraphicsResourceSet(1, original.ResourceSet_TexWrap);
-            cl.SetGraphicsResourceSet(2, bloom.ResourceSet_TexWrap);
+            cl.SetGraphicsResourceSet(1, original.ResourceSet_TexMirror);
+            cl.SetGraphicsResourceSet(2, blur.ResourceSet_TexMirror);
             cl.Draw(6);
         }
     }

@@ -140,7 +140,7 @@ namespace Yak2D.Graphics
             _viewportManager.ConfigureViewportForActiveFramebuffer(cl);
             cl.SetVertexBuffer(0, _ndcQuadVertexBuffer.Buffer);
             cl.SetPipeline(_pipeline);
-            cl.SetGraphicsResourceSet(0, source.ResourceSet_TexWrap);
+            cl.SetGraphicsResourceSet(0, source.ResourceSet_TexMirror);
             cl.SetGraphicsResourceSet(1, _gpuSurfaceManager.Noise.ResourceSet_TexWrap);
             cl.SetGraphicsResourceSet(2, _gpuSurfaceManager.CrtShadowMask.ResourceSet_TexWrap);
             cl.SetGraphicsResourceSet(3, stage.PixellateResourceSet);

@@ -6,9 +6,9 @@ namespace Yak2D.Surface
 {
     public class GpuSurfaceFactory : IGpuSurfaceFactory
     {
-        private const uint _numberOfMipLevels = 1;
-        private const TextureSampleCount _sampleCount = TextureSampleCount.Count1;
-        private const int _maximumAnistrophy = 8;
+        private const uint NUMBER_OF_MIP_LEVELS = 1;
+        private const TextureSampleCount SAMPLE_COUNT = TextureSampleCount.Count1;
+        private const int MAXIMUM_ANISTROPHY = 8;
 
         private readonly IFrameworkMessenger _frameworkMessenger;
         private readonly ISystemComponents _components;
@@ -73,7 +73,7 @@ namespace Yak2D.Surface
                 samplerAddressMode,
                 samplerFilter,
                 null,
-                _maximumAnistrophy,
+                MAXIMUM_ANISTROPHY,
                 0, 0, 0,
                 SamplerBorderColor.TransparentBlack
             ));
@@ -100,7 +100,7 @@ namespace Yak2D.Surface
                 samplerAddressMode,
                 samplerFilter,
                 null,
-                _maximumAnistrophy,
+                MAXIMUM_ANISTROPHY,
                 0, 0, 0,
                 SamplerBorderColor.TransparentBlack
             ));
@@ -128,7 +128,7 @@ namespace Yak2D.Surface
                 samplerAddressMode,
                 samplerFilter,
                 null,
-                _maximumAnistrophy,
+                MAXIMUM_ANISTROPHY,
                 0, 0, 0,
                 SamplerBorderColor.TransparentBlack
             ));
@@ -217,11 +217,11 @@ namespace Yak2D.Surface
             var texture = _components.Factory.CreateTexture(TextureDescription.Texture2D(
                         width,
                         height,
-                        _numberOfMipLevels,
+                        NUMBER_OF_MIP_LEVELS,
                         1,
                         pixelFormat,
                         isGpuToCpuStagingTexture ? TextureUsage.Staging : TextureUsage.RenderTarget | TextureUsage.Sampled,
-                        _sampleCount
+                        SAMPLE_COUNT
                         ));
 
             var view = isGpuToCpuStagingTexture ? null :_components.Factory.CreateTextureView(texture);

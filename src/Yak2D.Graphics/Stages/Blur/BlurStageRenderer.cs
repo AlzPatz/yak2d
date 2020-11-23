@@ -37,10 +37,10 @@ namespace Yak2D.Graphics
             _blurSamplingRenderer.Render(cl, source, stage.LinearSampledSurface0, stage.SampleType);
 
             //Blur Horizontally
-            _singlePassGaussianBlurRenderer.Render(cl, new Vector2(stage.TexelShiftSize.X, 0.0f), stage.NumberSamples, Vector2.UnitX, stage.LinearSampledSurface0, stage.LinearSampledSurface1);
+            _singlePassGaussianBlurRenderer.Render(cl, new Vector2(stage.TexelShiftSize.X, 0.0f), stage.NumberSamples, stage.LinearSampledSurface0, stage.LinearSampledSurface1);
 
             //Blur Vertically
-            _singlePassGaussianBlurRenderer.Render(cl, new Vector2(0.0f, stage.TexelShiftSize.Y), stage.NumberSamples, Vector2.UnitY, stage.LinearSampledSurface1, stage.AnistropicallySampledSurface);
+            _singlePassGaussianBlurRenderer.Render(cl, new Vector2(0.0f, stage.TexelShiftSize.Y), stage.NumberSamples, stage.LinearSampledSurface1, stage.AnistropicallySampledSurface);
 
             //Mix
             _blur2DResultMixingRenderer.Render(cl, stage.MixAmount, source, stage.AnistropicallySampledSurface, target);

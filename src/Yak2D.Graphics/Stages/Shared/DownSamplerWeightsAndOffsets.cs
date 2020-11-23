@@ -65,7 +65,7 @@ namespace Yak2D.Graphics
                 for (var x = 0; x < 4; x++)
                 {
                     var index = (y * 4) + x;
-                    var position = new Vector2(x, y) - corner;
+                    var position = new Vector2(x, y) + corner;
                     _average4x4[index] = new DownSampleArrayComponent
                     {
                         Offset = position,

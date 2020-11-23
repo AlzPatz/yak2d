@@ -18,7 +18,6 @@ namespace Yak2D.Graphics
         private ResourceSet _weightsAndOffsetsResourceSet;
         private Pipeline _pipeline;
 
-        private Vector2 _currentBlurDirection;
         private int _currentNumSamplesIncludingCentre;
 
         public SinglePassGaussianBlurRenderer(ISystemComponents systemComponents,
@@ -41,7 +40,6 @@ namespace Yak2D.Graphics
             CreateShadersAndFactorsUniform();
             CreatePipeline();
 
-            _currentBlurDirection = Vector2.UnitX;
             _currentNumSamplesIncludingCentre = -1;
         }
 
@@ -146,14 +144,13 @@ namespace Yak2D.Graphics
                                                                             new OutputDescription(null, new OutputAttachmentDescription(PixelFormat.B8_G8_R8_A8_UNorm)));
         }
 
-        public void Render(CommandList cl, Vector2 texelShiftSize, int numberSamplesPerSideNotIncludingCentre, Vector2 blurDirectionUnit, GpuSurface source, GpuSurface target)
+        public void Render(CommandList cl, Vector2 texelShiftSize, int numberSamplesPerSideNotIncludingCentre, GpuSurface source, GpuSurface target)
         {
             var num = numberSamplesPerSideNotIncludingCentre + 1;
 
             if (num != _currentNumSamplesIncludingCentre)
             {
                 _currentNumSamplesIncludingCentre = num;
-                _currentBlurDirection = blurDirectionUnit;
                 UpdateWeightsAndOffsetsBuffer(cl);
             }
 
@@ -163,7 +160,7 @@ namespace Yak2D.Graphics
             cl.ClearColorTarget(0, RgbaFloat.Clear);
             cl.SetVertexBuffer(0, _ndcQuadVertexBuffer.Buffer);
             cl.SetPipeline(_pipeline);
-            cl.SetGraphicsResourceSet(0, source.ResourceSet_TexWrap);
+            cl.SetGraphicsResourceSet(0, source.ResourceSet_TexMirror);
             cl.SetGraphicsResourceSet(1, _gaussianFactorsUniformBlockResourceSet);
             cl.SetGraphicsResourceSet(2, _weightsAndOffsetsResourceSet);
             cl.Draw(6);

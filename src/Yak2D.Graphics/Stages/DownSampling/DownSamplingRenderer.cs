@@ -132,7 +132,7 @@ namespace Yak2D.Graphics
             cl.SetFramebuffer(target.Framebuffer);
             cl.SetVertexBuffer(0, _ndcQuadVertexBuffer.Buffer);
             cl.SetPipeline(_pipeline);
-            cl.SetGraphicsResourceSet(0, source.ResourceSet_TexWrap);
+            cl.SetGraphicsResourceSet(0, source.ResourceSet_TexMirror);
             cl.SetGraphicsResourceSet(1, _samplerFactorsUniformBlockResourceSet);
             cl.SetGraphicsResourceSet(2, _weightsAndOffsetsResourceSet);
             cl.Draw(6);
