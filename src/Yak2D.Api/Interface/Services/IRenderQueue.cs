@@ -324,7 +324,6 @@ namespace Yak2D
         /// <summary>
         /// Applies a user defined custom piece of veldrid logic, enabling operations or integrations that require complete access to veldrid library functions
         /// </summary>
-        /// </summary>
         /// <param name="stage">The CustomVeldrid stage reference</param>
         /// <param name="tex0">An input Texture reference</param>
         /// <param name="tex1">An input Texture reference</param>
@@ -340,7 +339,6 @@ namespace Yak2D
 
         /// <summary>
         /// Applies a user defined custom piece of veldrid logic, enabling operations or integrations that require complete access to veldrid library functions
-        /// </summary>
         /// </summary>
         /// <param name="stage">The CustomVeldrid stage id</param>
         /// <param name="tex0">An input Texture id</param>
@@ -377,14 +375,14 @@ namespace Yak2D
         /// Sets the portion of the render surfaces that subsequent redner operations will draw too
         /// The user must clear the viewport if subsequent rendering operations wish to draw to entire surfaces
         /// </summary>
-        /// <param name="viewport">The Viewport reference to apply to subsequent rendering operations</summary>
+        /// <param name="viewport">The Viewport reference to apply to subsequent rendering operations</param>
         void SetViewport(IViewport viewport);
 
         /// <summary>
         /// Sets the portion of the render surfaces that subsequent redner operations will draw too
         /// The user must clear the viewport if subsequent rendering operations wish to draw to entire surfaces
         /// </summary>
-        /// <param name="viewport">The Viewport id to apply to subsequent rendering operations</summary>
+        /// <param name="viewport">The Viewport id to apply to subsequent rendering operations</param>
         void SetViewport(ulong viewport);
 
         /// <summary>
