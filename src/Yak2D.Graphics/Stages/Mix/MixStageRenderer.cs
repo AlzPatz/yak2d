@@ -19,6 +19,8 @@ namespace Yak2D.Graphics
         private ResourceSet _mixFactorsResource;
         private DeviceBuffer _mixFactorsBuffer;
 
+        private GpuSurface[] _whiteTextures;
+
         public MixStageRenderer(IFrameworkMessenger frameworkMessenger,
                                     ISystemComponents systemComponents,
                                     IShaderLoader shaderLoader,
@@ -40,6 +42,7 @@ namespace Yak2D.Graphics
 
         private void Initialise()
         {
+            CreatePlaceholderTextures();
             CreateShadersAndBuffer();
             CreatePipeline();
         }
@@ -121,6 +124,16 @@ namespace Yak2D.Graphics
                                                                                 _systemComponents.Device.SwapchainFramebuffer.OutputDescription);
         }
 
+        private void CreatePlaceholderTextures()
+        {
+            _whiteTextures = new GpuSurface[4];
+            for(var t = 0; t < 4; t++)
+            {
+                var tex = _gpuSurfaceManager.LoadRgbaTextureFromPixelData(1, 1, new SixLabors.ImageSharp.PixelFormats.Rgba32[] { new SixLabors.ImageSharp.PixelFormats.Rgba32(1.0f, 1.0f, 1.0f, 1.0f) }, SamplerType.Point);
+                _whiteTextures[t] = _gpuSurfaceManager.RetrieveSurface(tex.Id);
+            }
+        }
+
         public void Render(CommandList cl, IMixStageModel stage, GpuSurface mix, GpuSurface t0, GpuSurface t1, GpuSurface t2, GpuSurface t3, GpuSurface target)
         {
             if (cl == null || stage == null || target == null)
@@ -144,22 +157,10 @@ namespace Yak2D.Graphics
 
             cl.SetGraphicsResourceSet(1, mix == null ? _gpuSurfaceManager.SingleWhitePixel.ResourceSet_TexWrap : mix.ResourceSet_TexWrap);
 
-            if (t0 != null)
-            {
-                cl.SetGraphicsResourceSet(2, t0.ResourceSet_TexWrap);
-            }
-            if (t1 != null)
-            {
-                cl.SetGraphicsResourceSet(3, t1.ResourceSet_TexWrap);
-            }
-            if (t2 != null)
-            {
-                cl.SetGraphicsResourceSet(4, t2.ResourceSet_TexWrap);
-            }
-            if (t3 != null)
-            {
-                cl.SetGraphicsResourceSet(5, t3.ResourceSet_TexWrap);
-            }
+            cl.SetGraphicsResourceSet(2, t0 == null ? _whiteTextures[0].ResourceSet_TexWrap : t0.ResourceSet_TexWrap);
+            cl.SetGraphicsResourceSet(3, t1 == null ? _whiteTextures[1].ResourceSet_TexWrap : t1.ResourceSet_TexWrap);
+            cl.SetGraphicsResourceSet(4, t2 == null ? _whiteTextures[2].ResourceSet_TexWrap : t2.ResourceSet_TexWrap);
+            cl.SetGraphicsResourceSet(5, t3 == null ? _whiteTextures[3].ResourceSet_TexWrap : t3.ResourceSet_TexWrap);
 
             cl.Draw(6);
         }
