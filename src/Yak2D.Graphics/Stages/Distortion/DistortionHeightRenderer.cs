@@ -5,17 +5,20 @@ namespace Yak2D.Graphics
 {
     public class DistortionHeightRenderer : IDistortionHeightRenderer
     {
+        private readonly IFrameworkMessenger _frameworkMessenger;
         private readonly IShaderLoader _shaderLoader;
         private readonly IPipelineFactory _pipelineFactory;
         private readonly IGpuSurfaceManager _surfaceManager;
 
         private ShaderPackage _shaderPackage;
-        private Pipeline _pipeline; 
+        private Pipeline _pipeline;
 
-        public DistortionHeightRenderer(IShaderLoader shaderLoader,
+        public DistortionHeightRenderer(IFrameworkMessenger frameworkMessenger,
+                                        IShaderLoader shaderLoader,
                                         IPipelineFactory pipelineFactory,
                                         IGpuSurfaceManager surfaceManager)
         {
+            _frameworkMessenger = frameworkMessenger;
             _shaderLoader = shaderLoader;
             _pipelineFactory = pipelineFactory;
             _surfaceManager = surfaceManager;
@@ -103,7 +106,13 @@ namespace Yak2D.Graphics
                 }
                 else
                 {
-                    var retrieved = _surfaceManager.RetrieveSurface(batch.Texture0,new GpuSurfaceType[] { GpuSurfaceType.SwapChainOutput, GpuSurfaceType.Internal });
+                    var retrieved = _surfaceManager.RetrieveSurface(batch.Texture0, new GpuSurfaceType[] { GpuSurfaceType.SwapChainOutput, GpuSurfaceType.Internal });
+
+                    if (retrieved == target)
+                    {
+                        _frameworkMessenger.Report("Warning: A distortion stage is attempting to draw a surface onto itself. Aborting");
+                        return;
+                    }
 
                     t0 = retrieved == null ? _surfaceManager.SingleWhitePixel.ResourceSet_TexWrap :
                                             batch.TextureMode0 == TextureCoordinateMode.Mirror ?
@@ -118,7 +127,13 @@ namespace Yak2D.Graphics
                 }
                 else
                 {
-                    var retrieved = _surfaceManager.RetrieveSurface(batch.Texture1,new GpuSurfaceType[] { GpuSurfaceType.SwapChainOutput, GpuSurfaceType.Internal });
+                    var retrieved = _surfaceManager.RetrieveSurface(batch.Texture1, new GpuSurfaceType[] { GpuSurfaceType.SwapChainOutput, GpuSurfaceType.Internal });
+
+                    if (retrieved == target)
+                    {
+                        _frameworkMessenger.Report("Warning: A distortion stage is attempting to draw a surface onto itself. Aborting");
+                        return;
+                    }
 
                     t1 = retrieved == null ? _surfaceManager.SingleWhitePixel.ResourceSet_TexWrap :
                                             batch.TextureMode1 == TextureCoordinateMode.Mirror ?

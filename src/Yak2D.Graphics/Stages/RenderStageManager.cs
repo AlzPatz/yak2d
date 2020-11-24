@@ -226,7 +226,7 @@ namespace Yak2D.Graphics
 
         public ISurfaceCopyStage CreateSurfaceCopyDataStage(uint stagingTextureWidth,
                                                             uint stagingTextureHeight,
-                                                            Action<uint, TextureData> callback,
+                                                            Action<TextureData> callback,
                                                             bool useFloat32PixelFormat)
         {
             var id = _idGenerator.New();

@@ -124,6 +124,12 @@ namespace Yak2D.Graphics
                 {
                     var retrieved = _surfaceManager.RetrieveSurface(batch.Texture0,new GpuSurfaceType[] { GpuSurfaceType.SwapChainOutput, GpuSurfaceType.Internal });
 
+                    if(retrieved == surface)
+                    {
+                        _frameworkMessenger.Report("Warning: A draw stage is attempting to draw a surface onto itself. Aborting");
+                        return;
+                    }
+
                     t0 = retrieved == null ? _surfaceManager.SingleWhitePixel.ResourceSet_TexWrap :
                                             batch.TextureMode0 == TextureCoordinateMode.Mirror ?
                                             retrieved.ResourceSet_TexMirror : retrieved.ResourceSet_TexWrap;
@@ -142,6 +148,12 @@ namespace Yak2D.Graphics
                     t1 = retrieved == null ? _surfaceManager.SingleWhitePixel.ResourceSet_TexWrap :
                                             batch.TextureMode1 == TextureCoordinateMode.Mirror ?
                                             retrieved.ResourceSet_TexMirror : retrieved.ResourceSet_TexWrap;
+
+                    if (retrieved == surface)
+                    {
+                        _frameworkMessenger.Report("Warning: A draw stage is attempting to draw a surface onto itself. Aborting");
+                        return;
+                    }
                 }
                 cl.SetGraphicsResourceSet(2, t1);
 

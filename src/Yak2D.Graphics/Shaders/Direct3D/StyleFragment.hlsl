@@ -278,7 +278,8 @@ float4 main(FragmentIn fIn) : SV_Target
 
 	if (ScanLineAmount > 0.0)
 	{
-		sample = lerp(sample, sample*fmod(tex.y, TexelSize.y*2.)*(1. / TexelSize.y), ScanLineAmount);
+		float ty = 2.0 * TexelSize.y; //Hard coded simple scaline sizing
+		sample = sample * (fmod(tex.y, ty * 2.0) * (1.0 / ty));
 	}
 
 	return sample;

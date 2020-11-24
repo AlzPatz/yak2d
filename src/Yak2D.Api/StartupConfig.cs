@@ -6,9 +6,48 @@ namespace Yak2D
     public class StartupConfig
     {
         /// <summary>
+        /// Provides some default configuration settings
+        /// Texture and Font folders are set to "Textures" and "Fonts" respectively
+        /// </summary>
+        /// <param name="windowWidth">Horizontal Window Resolution</param>
+        /// <param name="windowHeight">Vertical Window Resolution</param>
+        /// <param name="windowTitle">Window Title</param>
+        /// <param name="fullScreen">Start the application in fullscreen</param>
+        /// <returns></returns>
+        public static StartupConfig Default(uint windowWidth, uint windowHeight, string windowTitle, bool fullScreen)
+        {
+            return new StartupConfig
+            {
+                PreferredGraphicsApi = GraphicsApi.SystemDefault,
+                AvoidVulkanWherePossible = true,
+                WindowState = fullScreen ? DisplayState.FullScreen : DisplayState.Normal,
+                WindowPositionX = 100,
+                WindowPositionY = 100,
+                WindowWidth = (int)windowWidth,
+                WindowHeight = (int)windowHeight,
+                WindowTitle = windowTitle,
+                SyncToVerticalBlank = true,
+                UpdatePeriodType = UpdatePeriod.Fixed,
+                ProcessFractionalUpdatesBeforeDraw = true,
+                FixedOrSmallestUpdateTimeStepInSeconds = 1.0f / 120.0f,
+                RequireAtleastOneUpdatePerDraw = true,
+                FpsCalculationUpdatePeriod = 1.0f,
+                TextureFolderRootName = "Textures",
+                FontFolder = "Fonts",
+                AutoClearMainWindowColourEachFrame = false,
+                AutoClearMainWindowDepthEachFrame = false
+            };
+        }
+
+        /// <summary>
         /// Sets preferred graphics API. Unsupported APIs for the runtime system will be ignored and a system default will be chosen
         /// </summary>
         public GraphicsApi PreferredGraphicsApi { get; set; }
+
+        /// <summary>
+        /// If SystemDefault is selected, this toggle can be used to avoid Vulkan unless it is the only system option
+        /// </summary>
+        public bool AvoidVulkanWherePossible { get; set; }
 
         /// <summary>
         ///  Sets start up window state

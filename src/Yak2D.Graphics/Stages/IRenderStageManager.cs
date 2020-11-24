@@ -18,7 +18,7 @@ namespace Yak2D.Graphics
         IMixStage CreateMixStage();
         ICustomShaderStage CreateCustomShaderStage(string fragmentShaderFilename, AssetSourceEnum assetType, ShaderUniformDescription[] uniformDescriptions, BlendState blendState, bool useSpirvCompile);
         ICustomVeldridStage CreateCustomVeldridStage(CustomVeldridBase stage);
-        ISurfaceCopyStage CreateSurfaceCopyDataStage(uint stagingTextureWidth, uint stagingTextureHeight, Action<uint, TextureData> callback, bool useFloat32PixelFormat);
+        ISurfaceCopyStage CreateSurfaceCopyDataStage(uint stagingTextureWidth, uint stagingTextureHeight, Action<TextureData> callback, bool useFloat32PixelFormat);
 
         IRenderStageModel RetrieveStageModel(ulong id);
 

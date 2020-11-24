@@ -275,7 +275,8 @@ void main()
 	
 	if(ScanLineAmount > 0.0)
 	{
-		csample=mix(csample,csample*mod(tex.y,TexelSize.y*2.)*(1./TexelSize.y),ScanLineAmount);
+		float ty = 2.0 * TexelSize.y; //Hard coded simple scaline sizing
+		csample=mix(csample,csample*mod(tex.y, ty*2.)*(1./ty),ScanLineAmount);
 	}
 	
 	fragColor=csample;

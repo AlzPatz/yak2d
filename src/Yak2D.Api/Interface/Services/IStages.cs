@@ -157,7 +157,7 @@ namespace Yak2D
         /// <returns></returns>
         ISurfaceCopyStage CreateSurfaceCopyDataStage(uint initialStagingTextureWidth,
                                                      uint initialStagingTextureHeight,
-                                                     Action<uint, TextureData> callback,
+                                                     Action<TextureData> callback,
                                                      bool useFloat32PixelFormat = false);
 
         /// <summary>
@@ -522,14 +522,14 @@ namespace Yak2D
         /// </summary>
         /// <param name="stage">The stage reference</param>
         /// <param name="callback">User delegate called once rendering complete to provide user the results data. Rendering may happen asynchronously hence the use of callbacks to avoid multithreaded issues</param>
-        void SetSurfaceCopyDataStageCallback(ISurfaceCopyStage stage, Action<uint, TextureData> callback);
+        void SetSurfaceCopyDataStageCallback(ISurfaceCopyStage stage, Action<TextureData> callback);
 
         /// <summary>
         /// Update user defined callback for GPU to CPU surface pixel data transfer on rendering completion
         /// </summary>
         /// <param name="stage">The stage id</param>
         /// <param name="callback">User delegate called once rendering complete to provide user the results data. Rendering may happen asynchronously hence the use of callbacks to avoid multithreaded issues</param>
-        void SetSurfaceCopyDataStageCallback(ulong stage, Action<uint, TextureData> callback);
+        void SetSurfaceCopyDataStageCallback(ulong stage, Action<TextureData> callback);
 
     }
 }

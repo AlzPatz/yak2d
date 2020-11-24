@@ -142,6 +142,11 @@ namespace Yak2D.Graphics
                 throw new Yak2DException("Unable to queue DistortionStage. Target is null", new ArgumentNullException());
             }
 
+            if(source.Id == target.Id)
+            {
+                throw new Yak2DException("Unable to queue DistortionStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.DistortionStage,
                                 stage.Id,
                                 target.Id,
@@ -155,7 +160,10 @@ namespace Yak2D.Graphics
 
         public void Distortion(ulong stage, ulong camera, ulong source, ulong target)
         {
-
+            if (source == target)
+            {
+                throw new Yak2DException("Unable to queue DistortionStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
 
             _commandQueue.Add(RenderCommandType.DistortionStage,
                                 stage,
@@ -185,6 +193,11 @@ namespace Yak2D.Graphics
                 throw new Yak2DException("Unable to queue ColourEffectStage. Target is null", new ArgumentNullException());
             }
 
+            if (source.Id == target.Id)
+            {
+                throw new Yak2DException("Unable to queue ColourEffectStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.ColourEffectStage,
                                 stage.Id,
                                 target.Id,
@@ -198,6 +211,11 @@ namespace Yak2D.Graphics
 
         public void ColourEffects(ulong stage, ulong source, ulong target)
         {
+            if (source== target)
+            {
+                throw new Yak2DException("Unable to queue ColourEffectStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.ColourEffectStage,
                                 stage,
                                 target,
@@ -226,6 +244,11 @@ namespace Yak2D.Graphics
                 throw new Yak2DException("Unable to queue BloomEffectStage. Target is null", new ArgumentNullException());
             }
 
+            if (source.Id == target.Id)
+            {
+                throw new Yak2DException("Unable to queue BloomEffectStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.BloomEffectStage,
                                 stage.Id,
                                 target.Id,
@@ -239,6 +262,11 @@ namespace Yak2D.Graphics
 
         public void Bloom(ulong stage, ulong source, ulong target)
         {
+            if (source == target)
+            {
+                throw new Yak2DException("Unable to queue BloomEffectStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.BloomEffectStage,
                                 stage,
                                 target,
@@ -267,6 +295,11 @@ namespace Yak2D.Graphics
                 throw new Yak2DException("Unable to queue Blur2DEffectStage. Target is null", new ArgumentNullException());
             }
 
+            if (source.Id == target.Id)
+            {
+                throw new Yak2DException("Unable to queue Blur2DEffectStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.Blur2DEffectStage,
                                 stage.Id,
                                 target.Id,
@@ -280,6 +313,11 @@ namespace Yak2D.Graphics
 
         public void Blur(ulong stage, ulong source, ulong target)
         {
+            if (source == target)
+            {
+                throw new Yak2DException("Unable to queue Blur2DEffectStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.Blur2DEffectStage,
                                  stage,
                                  target,
@@ -308,6 +346,11 @@ namespace Yak2D.Graphics
                 throw new Yak2DException("Unable to queue Blur1DEffectStage. Target is null", new ArgumentNullException());
             }
 
+            if (source.Id == target.Id)
+            {
+                throw new Yak2DException("Unable to queue Blur1DEffectStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.Blur1DEffectStage,
                                 stage.Id,
                                 target.Id,
@@ -322,6 +365,11 @@ namespace Yak2D.Graphics
 
         public void Blur1D(ulong stage, ulong source, ulong target)
         {
+            if (source == target)
+            {
+                throw new Yak2DException("Unable to queue Blur1DEffectStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.Blur1DEffectStage,
                                 stage,
                                 target,
@@ -345,6 +393,11 @@ namespace Yak2D.Graphics
                 throw new Yak2DException("Unable to queue CopyStage. Target is null", new ArgumentNullException());
             }
 
+            if (source.Id == target.Id)
+            {
+                throw new Yak2DException("Unable to queue CopyStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.CopyStage,
                                 0UL,
                                 target.Id,
@@ -358,6 +411,11 @@ namespace Yak2D.Graphics
 
         public void Copy(ulong source, ulong target)
         {
+            if (source == target)
+            {
+                throw new Yak2DException("Unable to queue CopyStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.CopyStage,
                                 0UL,
                                 target,
@@ -386,6 +444,11 @@ namespace Yak2D.Graphics
                 throw new Yak2DException("Unable to queue StyleEffectStage. Target is null", new ArgumentNullException());
             }
 
+            if (source.Id == target.Id)
+            {
+                throw new Yak2DException("Unable to queue StyleEffectStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.StyleEffect,
                             stage.Id,
                             target.Id,
@@ -399,6 +462,11 @@ namespace Yak2D.Graphics
 
         public void StyleEffects(ulong stage, ulong source, ulong target)
         {
+            if (source== target)
+            {
+                throw new Yak2DException("Unable to queue StyleEffectStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.StyleEffect,
                             stage,
                             target,
@@ -432,6 +500,11 @@ namespace Yak2D.Graphics
                 throw new Yak2DException("Unable to queue MeshRenderStage. Target is null", new ArgumentNullException());
             }
 
+            if (source.Id == target.Id)
+            {
+                throw new Yak2DException("Unable to queue MeshRenderStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.MeshRender,
                             stage.Id,
                             target.Id,
@@ -445,6 +518,11 @@ namespace Yak2D.Graphics
 
         public void MeshRender(ulong stage, ulong camera, ulong source, ulong target)
         {
+            if (source == target)
+            {
+                throw new Yak2DException("Unable to queue MeshRenderStage. Source and Target Surfaces cannot be the same", new ArgumentNullException());
+            }
+
             _commandQueue.Add(RenderCommandType.MeshRender,
                             stage,
                             target,
@@ -474,6 +552,13 @@ namespace Yak2D.Graphics
                 throw new Yak2DException("Unable to queue MixStage. Target is null", new ArgumentNullException());
             }
 
+            if (IsDuplicated(texMix.Id, tex0.Id, tex1.Id, tex2.Id, tex3.Id, target.Id)) { throw new Yak2DException("Unable to queue MixStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex0.Id, texMix.Id, tex1.Id, tex2.Id, tex3.Id, target.Id)) { throw new Yak2DException("Unable to queue MixStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex1.Id, texMix.Id, tex0.Id, tex2.Id, tex3.Id, target.Id)) { throw new Yak2DException("Unable to queue MixStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex2.Id, texMix.Id, tex0.Id, tex1.Id, tex3.Id, target.Id)) { throw new Yak2DException("Unable to queue MixStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex3.Id, texMix.Id, tex0.Id, tex1.Id, tex2.Id, target.Id)) { throw new Yak2DException("Unable to queue MixStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(target.Id, texMix.Id, tex0.Id, tex1.Id, tex2.Id, tex3.Id)) { throw new Yak2DException("Unable to queue MixStage. The same surface has been passed more than once", new ArgumentNullException()); }
+
             //We are hijacking the Queue command
             _commandQueue.Add(RenderCommandType.MixStage,
                        stage.Id,
@@ -487,8 +572,28 @@ namespace Yak2D.Graphics
                        );
         }
 
+        private bool IsDuplicated(ulong id, params ulong[] ids)
+        {
+            var len = ids.Length;
+            for (var n = 0; n < len; n++)
+            {
+                if (id == ids[n])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void Mix(ulong stage, ulong texMix, ulong tex0, ulong tex1, ulong tex2, ulong tex3, ulong target)
         {
+            if (IsDuplicated(texMix, tex0, tex1, tex2, tex3, target)) { throw new Yak2DException("Unable to queue MixStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex0, texMix, tex1, tex2, tex3, target)) { throw new Yak2DException("Unable to queue MixStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex1, texMix, tex0, tex2, tex3, target)) { throw new Yak2DException("Unable to queue MixStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex2, texMix, tex0, tex1, tex3, target)) { throw new Yak2DException("Unable to queue MixStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex3, texMix, tex0, tex1, tex2, target)) { throw new Yak2DException("Unable to queue MixStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(target, texMix, tex0, tex1, tex2, tex3)) { throw new Yak2DException("Unable to queue MixStage. The same surface has been passed more than once", new ArgumentNullException()); }
+
             //We are hijacking the Queue command
             _commandQueue.Add(RenderCommandType.MixStage,
                        stage,
@@ -514,6 +619,12 @@ namespace Yak2D.Graphics
                 throw new Yak2DException("Unable to queue CustomShaderStage. Target is null", new ArgumentNullException());
             }
 
+            if (IsDuplicated(tex0.Id, tex1.Id, tex2.Id, tex3.Id, target.Id)) { throw new Yak2DException("Unable to queue CustomShaderStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex1.Id, tex0.Id, tex2.Id, tex3.Id, target.Id)) { throw new Yak2DException("Unable to queue CustomShaderStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex2.Id, tex1.Id, tex0.Id, tex3.Id, target.Id)) { throw new Yak2DException("Unable to queue CustomShaderStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex3.Id, tex1.Id, tex2.Id, tex0.Id, target.Id)) { throw new Yak2DException("Unable to queue CustomShaderStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(target.Id, tex1.Id, tex2.Id, tex3.Id, tex0.Id)) { throw new Yak2DException("Unable to queue CustomShaderStage. The same surface has been passed more than once", new ArgumentNullException()); }
+
             _commandQueue.Add(RenderCommandType.CustomShader,
                        stage.Id,
                        target.Id,
@@ -528,6 +639,12 @@ namespace Yak2D.Graphics
 
         public void CustomShader(ulong stage, ulong tex0, ulong tex1, ulong tex2, ulong tex3, ulong target)
         {
+            if (IsDuplicated(tex0, tex1, tex2, tex3, target)) { throw new Yak2DException("Unable to queue CustomShaderStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex1, tex0, tex2, tex3, target)) { throw new Yak2DException("Unable to queue CustomShaderStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex2, tex1, tex0, tex3, target)) { throw new Yak2DException("Unable to queue CustomShaderStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex3, tex1, tex2, tex0, target)) { throw new Yak2DException("Unable to queue CustomShaderStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(target, tex1, tex2, tex3, tex0)) { throw new Yak2DException("Unable to queue CustomShaderStage. The same surface has been passed more than once", new ArgumentNullException()); }
+
             _commandQueue.Add(RenderCommandType.CustomShader,
                        stage,
                        target,
@@ -544,13 +661,19 @@ namespace Yak2D.Graphics
         {
             if (stage == null)
             {
-                throw new Yak2DException("Unable to queue CustomShaderStage. Stage is null", new ArgumentNullException());
+                throw new Yak2DException("Unable to queue CustomVeldridStage. Stage is null", new ArgumentNullException());
             }
 
             if (target == null)
             {
-                throw new Yak2DException("Unable to queue CustomShaderStage. Target is null", new ArgumentNullException());
+                throw new Yak2DException("Unable to queue CustomVeldridStage. Target is null", new ArgumentNullException());
             }
+
+            if (IsDuplicated(tex0.Id, tex1.Id, tex2.Id, tex3.Id, target.Id)) { throw new Yak2DException("Unable to queue CustomVeldridStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex1.Id, tex0.Id, tex2.Id, tex3.Id, target.Id)) { throw new Yak2DException("Unable to queue CustomVeldridStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex2.Id, tex1.Id, tex0.Id, tex3.Id, target.Id)) { throw new Yak2DException("Unable to queue CustomVeldridStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex3.Id, tex1.Id, tex2.Id, tex0.Id, target.Id)) { throw new Yak2DException("Unable to queue CustomVeldridStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(target.Id, tex1.Id, tex2.Id, tex3.Id, tex0.Id)) { throw new Yak2DException("Unable to queue CustomVeldridStage. The same surface has been passed more than once", new ArgumentNullException()); }
 
             _commandQueue.Add(RenderCommandType.CustomVeldrid,
                         stage.Id,
@@ -566,6 +689,12 @@ namespace Yak2D.Graphics
 
         public void CustomVeldrid(ulong stage, ulong tex0, ulong tex1, ulong tex2, ulong tex3, ulong target)
         {
+            if (IsDuplicated(tex0, tex1, tex2, tex3, target)) { throw new Yak2DException("Unable to queue CustomVeldridStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex1, tex0, tex2, tex3, target)) { throw new Yak2DException("Unable to queue CustomVeldridStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex2, tex1, tex0, tex3, target)) { throw new Yak2DException("Unable to queue CustomVeldridStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(tex3, tex1, tex2, tex0, target)) { throw new Yak2DException("Unable to queue CustomVeldridStage. The same surface has been passed more than once", new ArgumentNullException()); }
+            if (IsDuplicated(target, tex1, tex2, tex3, tex0)) { throw new Yak2DException("Unable to queue CustomVeldridStage. The same surface has been passed more than once", new ArgumentNullException()); }
+
             _commandQueue.Add(RenderCommandType.CustomVeldrid,
                         stage,
                         target,

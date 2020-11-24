@@ -76,6 +76,14 @@ namespace Yak2D.Graphics
             var internalRequests = new InternalDrawRequest[requests.Length];
             for (var r = 0; r < requests.Length; r++)
             {
+                if(requests[r].FillType == FillType.DualTextured)
+                {
+                    if(requests[r].Texture0 == requests[r].Texture1)
+                    {
+                        throw new Yak2DException("Unable to create persistent draw queue, Dual Texturing must use two unique textures");
+                    }
+                }
+
                 internalRequests[r] = new InternalDrawRequest
                 {
                     CoordinateSpace = requests[r].CoordinateSpace,

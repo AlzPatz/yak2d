@@ -78,7 +78,7 @@ namespace Yak2D.Graphics
 
         public ISurfaceCopyStage CreateSurfaceCopyDataStage(uint initialStagingTextureWidth,
                                                             uint initialStagingTextureHeight,
-                                                            Action<uint, TextureData> callback,
+                                                            Action<TextureData> callback,
                                                             bool useFloat32PixelFormat = false)
         {
 
@@ -446,7 +446,7 @@ namespace Yak2D.Graphics
             _renderStageVisitor.CachedCustomShaderModel?.SetUniformValue<T>(uniformName, dataArray);
         }
 
-        public void SetSurfaceCopyDataStageCallback(ISurfaceCopyStage stage, Action<uint, TextureData> callback)
+        public void SetSurfaceCopyDataStageCallback(ISurfaceCopyStage stage, Action<TextureData> callback)
         {
             if (stage == null)
             {
@@ -456,7 +456,7 @@ namespace Yak2D.Graphics
             SetSurfaceCopyDataStageCallback(stage.Id, callback);
         }
 
-        public void SetSurfaceCopyDataStageCallback(ulong stage, Action<uint, TextureData> callback)
+        public void SetSurfaceCopyDataStageCallback(ulong stage, Action<TextureData> callback)
         {
             if (callback == null)
             {

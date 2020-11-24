@@ -35,14 +35,15 @@ namespace Yak2D.Core
 
             _vsync = _userStartupProperties.SyncToVerticalBlank;
 
-            if (!AttemptToCreateGraphicsDevice(_userStartupProperties.PreferredGraphicsApi))
+            if (!AttemptToCreateGraphicsDevice(_userStartupProperties.PreferredGraphicsApi, _userStartupProperties.AvoidVulkanWherePossible))
             {
                 throw new Yak2DException("Error -> Unable to create suitable graphics device for system. None of the framework backeneds are supported on this platform");
             }
         }
 
-        private bool AttemptToCreateGraphicsDevice(GraphicsApi preferredGraphicsApi)
+        private bool AttemptToCreateGraphicsDevice(GraphicsApi preferredGraphicsApi, bool avoidVulkanWherePossible)
         {
+            //If Vulkan is specifically requested, it is not avoided even if the flag is set
             if (preferredGraphicsApi != GraphicsApi.SystemDefault)
             {
                 var preferred = GraphicsApiConverter.ConvertApiToVeldridGraphicsBackend(preferredGraphicsApi);
@@ -62,22 +63,51 @@ namespace Yak2D.Core
 
             var defaultPlatformApi = VeldridStartup.GetPlatformDefaultBackend();
 
-            if (GraphicsApiConverter.AllCurrentlySupportedFrameworkBackends.Contains(defaultPlatformApi) && GraphicsDevice.IsBackendSupported(defaultPlatformApi))
+            if (avoidVulkanWherePossible && defaultPlatformApi == GraphicsBackend.Vulkan)
             {
-                CreateGraphicsDevice(defaultPlatformApi);
-                return true;
+                _frameworkMessenger.Report("System Default is Vulkan, but user has requested avoid Vulkan where possible...trying...");
+            }
+            else
+            {
+                if (GraphicsApiConverter.AllCurrentlySupportedFrameworkBackends.Contains(defaultPlatformApi) && GraphicsDevice.IsBackendSupported(defaultPlatformApi))
+                {
+                    CreateGraphicsDevice(defaultPlatformApi);
+                    return true;
+                }
             }
 
             var foundASuitableApi = false;
 
+            var vulkanIsSuitableApi = false;
+
             GraphicsApiConverter.AllCurrentlySupportedFrameworkBackends.ForEach(api =>
             {
-                if (!foundASuitableApi && GraphicsDevice.IsBackendSupported(api))
+                var skip = false;
+                if (api == GraphicsBackend.Vulkan)
+                {
+                    vulkanIsSuitableApi = true;
+                    if (avoidVulkanWherePossible)
+                    {
+                        skip = true;
+                    }
+                }
+
+                if (!skip && !foundASuitableApi && GraphicsDevice.IsBackendSupported(api))
                 {
                     CreateGraphicsDevice(api);
                     foundASuitableApi = true;
                 }
             });
+
+            if (!foundASuitableApi && avoidVulkanWherePossible && vulkanIsSuitableApi)
+            {
+                if (GraphicsDevice.IsBackendSupported(GraphicsBackend.Vulkan))
+                {
+                    _frameworkMessenger.Report("...unable to skip Vulkan as requested");
+                    CreateGraphicsDevice(GraphicsBackend.Vulkan);
+                    foundASuitableApi = true;
+                }
+            }
 
             return foundASuitableApi;
         }

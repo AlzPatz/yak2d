@@ -192,7 +192,7 @@ namespace Yak2D.Graphics
 
         private void FillBufferWithInitialData()
         {
-            //Shared Buffer gets updated in Renderer as needs to update texel size which is related to surface size
+            //Pixellate Buffer also gets updated in Renderer as needs to update texel size which is related to surface size
             UpdatePixellateBuffer();
             UpdateEdgeDetectionBuffer();
             UpdateStaticBuffer();

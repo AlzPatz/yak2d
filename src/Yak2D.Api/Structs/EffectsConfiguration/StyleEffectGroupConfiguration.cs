@@ -1,3 +1,6 @@
+using System;
+using System.Numerics;
+
 namespace Yak2D
 {
     /// <summary>
@@ -25,6 +28,27 @@ namespace Yak2D
     public struct PixellateConfiguration
     {
         /// <summary>
+        /// Returns a pre-set effect configuration scaled between 0 and 1
+        /// </summary>
+        /// <param name="amount">0 to 1 intensity of effect (reflects size of 'pixels')</param>
+        /// <returns></returns>
+        public static PixellateConfiguration PreSet(float amount)
+        {
+            amount = Clamper.Clamp(amount, 0.0f, 1.0f);
+
+            var pow = 4.0f + ((1.0f - amount) * 7.0f);
+
+            var numDivisions = (int)Math.Pow(2.0f, pow);
+
+            return new PixellateConfiguration
+            {
+                Intensity = 1.0f,
+                NumXDivisions = numDivisions,
+                NumYDivisions = numDivisions
+            };
+        }
+
+        /// <summary>
         /// 0 to 1, representing an interpolation between unmodified texture coordinates and modified. 1.0 resulting in max pixellation
         /// </summary>
         public float Intensity { get; set; }
@@ -46,6 +70,22 @@ namespace Yak2D
     public struct EdgeDetectionConfiguration
     {
         /// <summary>
+        /// Returns a pre-set effect configuration scaled between 0 and 1 (uses Freichen)
+        /// </summary>
+        /// <param name="amount">0 to 1 intensity of effect</param>
+        /// <returns></returns>
+        public static EdgeDetectionConfiguration PreSet(float amount)
+        {
+            amount = Clamper.Clamp(amount, 0.0f, 1.0f);
+
+            return new EdgeDetectionConfiguration
+            {
+                Intensity = amount,
+                IsFreichen = true
+            };
+        }
+
+        /// <summary>
         /// Interpolation between pre- effect and post-effect pixels (0 to 1)
         /// </summary>
         public float Intensity { get; set; }
@@ -61,6 +101,24 @@ namespace Yak2D
     /// </summary>
     public struct StaticConfiguration
     {
+        /// <summary>
+        /// Returns a pre-set effect configuration scaled between 0 and 1 (uses 2.0 as texel scalar)
+        /// </summary>
+        /// <param name="amount">0 to 1 intensity of effect</param>
+        /// <returns></returns>
+        public static StaticConfiguration PreSet(float amount)
+        {
+            amount = Clamper.Clamp(amount, 0.0f, 1.0f);
+
+            return new StaticConfiguration
+            {
+                IgnoreTransparent = 0,
+                Intensity = amount,
+                TexelScaler = 2.0f,
+                TimeSpeed = 10.0f
+            };
+        }
+
         /// <summary>
         /// Interpolation between pre- effect and post-effect pixels (0 to 1)
         /// </summary>
@@ -119,6 +177,43 @@ namespace Yak2D
                 OverExposureIntensityMax = 3.4f,
                 OverExposureOscillationsMin = 2,
                 OverExposureOscillationsMax = 4
+            };
+        }
+
+        /// <summary>
+        /// Returns a pre-set effect configuration scaled between 0 and 1
+        /// </summary>
+        /// <param name="amount">0 to 1 intensity of effect</param>
+        /// <returns></returns>
+        public static OldMovieConfiguration PreSet(float amount)
+        {
+            amount = Clamper.Clamp(amount, 0.0f, 1.0f);
+
+            return new OldMovieConfiguration
+            {
+                Intensity = amount,
+                Scratch = 0.02f * (1.8f * amount),
+                Noise = 0.2f * amount,
+                RndShiftCutOff = 0.5f + (amount * 2.0f),
+                RndShiftScalar = 0.6f * amount,
+                Dim = 1.0f * amount,
+
+                ProbabilityRollStarts = 0.002f + (amount * 0.04f),
+                ProbabilityRollEnds = 0.09f + ((1.0f - amount) * 0.09f),
+                RollSpeedMin = 3.5f + (3.8f * amount),
+                RollSpeedMax = 5.6f + (2.0f * amount),
+                RollAccelerationMin = 2.3f + (2.2f * amount),
+                RollAccelerationMax = 3.2f + (3.7f * amount),
+                RollShakeFactor = 0.02f + (amount * 0.45f),
+                RollOverallScale = 0.1f * (0.6f * amount),
+
+                OverExposureProbabilityStart = 0.001f + (amount * 0.01f),
+                OverExposureFlickerTimeMin = 3.6f + (12.5f * amount),
+                OverExposureFlickerTimeMax = 16.0f + (16.0f * amount),
+                OverExposureIntensityMin = 1.3f * (3.7f * amount),
+                OverExposureIntensityMax = 2.4f * (4.7f * amount),
+                OverExposureOscillationsMin = 1 + (int)(amount * 4),
+                OverExposureOscillationsMax = 2 + (int)(amount * 8)
             };
         }
 
@@ -238,6 +333,29 @@ namespace Yak2D
     public struct CrtEffectConfiguration
     {
         /// <summary>
+        /// Returns a pre-set effect configuration scaled between 0 and 1
+        /// </summary>
+        /// <param name="amount">0 to 1 intensity of effect (reflects size of 'pixels')</param>
+        /// <param name="aspect">Aspect ratio (width / height)</param>
+        /// <returns></returns>
+        public static CrtEffectConfiguration PreSet(float amount, float aspect)
+        {
+            amount = Clamper.Clamp(amount, 0.0f, 1.0f);
+
+            var filtersHorizontally = 96;
+
+            return new CrtEffectConfiguration
+            {
+                NumRgbFiltersHorizontally = filtersHorizontally,
+                NumRgbFiltersVertically = (int)(filtersHorizontally * (1.0f / aspect)),
+                RgbPixelFilterAmount = amount,
+                RgbPixelFilterIntensity = amount,
+                SimpleScanlinesIntensity = amount
+
+            };
+        }
+
+        /// <summary>
         /// Scalar related to how aggressively the pixels are filtered through the RGB 'sub pixels'
         /// </summary>
         public float RgbPixelFilterIntensity { get; set; }
@@ -261,5 +379,22 @@ namespace Yak2D
         /// Interpolation between pre- and post-scan line effect pixels (0 to 1)
         /// </summary>
         public float SimpleScanlinesIntensity { get; set; }
+    }
+
+    static class Clamper
+    {
+        public static float Clamp(float value, float min, float max)
+        {
+            var clamped = value;
+            if (clamped < min)
+            {
+                clamped = min;
+            }
+            if (clamped > max)
+            {
+                clamped = max;
+            }
+            return clamped;
+        }
     }
 }

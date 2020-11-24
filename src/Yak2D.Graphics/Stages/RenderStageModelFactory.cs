@@ -143,7 +143,7 @@ namespace Yak2D.Graphics
 
         public ISurfaceCopyStageModel CreateSurfaceCopyDataStage(uint stagingTextureWidth,
                                                                  uint stagingTextureHeight,
-                                                                 Action<uint, TextureData> callback,
+                                                                 Action<TextureData> callback,
                                                                  bool useFloat32PixelFormat)
         {
             return new SurfaceCopyStageModel(_frameworkMessenger,

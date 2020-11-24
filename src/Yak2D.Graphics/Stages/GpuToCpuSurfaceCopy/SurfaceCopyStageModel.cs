@@ -18,7 +18,7 @@ namespace Yak2D.Graphics
 
         private uint _stagingTextureWidth;
         private uint _stagingTextureHeight;
-        private Action<uint, TextureData> _callback;
+        private Action<TextureData> _callback;
         private byte[] _data;
 
         public SurfaceCopyStageModel(IFrameworkMessenger frameworkMessenger,
@@ -27,7 +27,7 @@ namespace Yak2D.Graphics
                                      uint stagingTextureWidth,
                                      uint stagingTextureHeight,
                                      PixelFormat pixelFormat,
-                                     Action<uint, TextureData> callback)
+                                     Action<TextureData> callback)
         {
             _frameworkMessenger = frameworkMessenger;
             _systemComponents = systemComponents;
@@ -56,7 +56,7 @@ namespace Yak2D.Graphics
             _data = new byte[4 * _stagingTextureWidth * _stagingTextureHeight];
         }
 
-        public void SetCallback(Action<uint, TextureData> callback)
+        public void SetCallback(Action<TextureData> callback)
         {
             if (callback != null)
             {
@@ -151,7 +151,7 @@ namespace Yak2D.Graphics
                 }
             }
 
-            _callback.Invoke(0, userData);
+            _callback.Invoke(userData);
         }
     }
 }

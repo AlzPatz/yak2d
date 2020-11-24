@@ -306,7 +306,8 @@ fragment float4 shader( FragmentIn fIn [[stage_in]],
 
                         if (crtEffectFactors.ScanLineAmount > 0.0)
                         {
-                            sample = mix(sample, sample*fmod(tex.y, pixellateFactors.TexelSize.y*2.)*(1. / pixellateFactors.TexelSize.y), crtEffectFactors.ScanLineAmount);
+							float ty = 2.0 * pixellateFactors.TexelSize.y; //Hard coded simple scaline sizing
+                            sample = mix(sample, sample*fmod(tex.y, ty*2.)*(1. / ty), crtEffectFactors.ScanLineAmount);
                         }
 
                         return sample;
