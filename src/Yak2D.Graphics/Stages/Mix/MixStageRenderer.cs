@@ -154,7 +154,6 @@ namespace Yak2D.Graphics
             cl.SetPipeline(_pipeline);
 
             cl.SetGraphicsResourceSet(0, _mixFactorsResource);
-
             cl.SetGraphicsResourceSet(1, mix == null ? _gpuSurfaceManager.SingleWhitePixel.ResourceSet_TexWrap : mix.ResourceSet_TexWrap);
 
             cl.SetGraphicsResourceSet(2, t0 == null ? _whiteTextures[0].ResourceSet_TexWrap : t0.ResourceSet_TexWrap);
