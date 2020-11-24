@@ -108,7 +108,7 @@ jobs:
               fetch-depth: 0
         - name: Run Nerdbank.GitVersioning
           id: nb
-          uses: dotnet/nbgv@v0.3.1
+          uses: dotnet/nbgv@master #v0.3.1
           with:
               path: ${{ env.VERSION_DOT_JSON_DIR }}
         - name: Checkout local actions
