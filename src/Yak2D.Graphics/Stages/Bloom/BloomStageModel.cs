@@ -91,7 +91,9 @@ namespace Yak2D.Graphics
                                                         false,
                                                         false,
                                                         false,
-                                                        samplerType).Id;
+                                                        samplerType,
+                                                        1,
+                                                        TexSampleCount.X1).Id;
         }
 
         public void SetEffectTransition(ref BloomEffectConfiguration config, ref float transitionSeconds)

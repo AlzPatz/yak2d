@@ -97,7 +97,10 @@ namespace Yak2D.Surface
         {
             var texture = _imageSharpLoader.GenerateSingleWhitePixel();
 
-            SingleWhitePixel = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture, true, false);
+            SingleWhitePixel = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture,
+                                                                              true,
+                                                                              false,
+                                                                              SamplerType.Point);
         }
 
         private void LoadSystemTextures()
@@ -118,12 +121,16 @@ namespace Yak2D.Surface
 
             var veldridTexture = _imageSharpLoader.GenerateVeldridTextureFromStream(stream, mipMap);
 
-            return _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(veldridTexture, true, false);
+            return _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(veldridTexture,
+                                                                  true,
+                                                                  false,
+                                                                  SamplerType.Anisotropic);
         }
 
-        public ITexture LoadTextureFromEmbeddedResourceInUserApplication(string texturePathWithoutExtension,
+        public ITexture CreateTextureFromEmbeddedResourceInUserApplication(string texturePathWithoutExtension,
                                                                             ImageFormat imageFormat,
-                                                                            SamplerType samplerType = SamplerType.Anisotropic)
+                                                                            SamplerType samplerType,
+                                                                            bool generateMipMaps)
         {
             if (string.IsNullOrEmpty(texturePathWithoutExtension))
             {
@@ -132,7 +139,7 @@ namespace Yak2D.Surface
 
             var fullPathWithinAssemblyWithoutFileExtension = string.Concat(_startUpProperties.TextureFolderRootName, ".", texturePathWithoutExtension);
             var pathWithSlashesChangedToDots = ReplaceForwardSlashesWithDots(fullPathWithinAssemblyWithoutFileExtension);
-            return LoadTextureFromEmbeddedPngResource(false, false, pathWithSlashesChangedToDots, imageFormat, samplerType);
+            return LoadTextureFromEmbeddedPngResource(false, false, pathWithSlashesChangedToDots, imageFormat, samplerType, generateMipMaps);
         }
 
         private string ReplaceForwardSlashesWithDots(string texturePath)
@@ -152,10 +159,10 @@ namespace Yak2D.Surface
             return LoadTextureDataFromEmbeddedPngResource(pathWithSlashesChangedToDots, imageFormat);
         }
 
-        public ITexture LoadFontTextureFromEmbeddedResource(bool isFrameworkInternal,
+        public ITexture CreateFontTextureFromEmbeddedResource(bool isFrameworkInternal,
                                                                string texturePathWithoutExtension,
                                                                ImageFormat imageFormat,
-                                                               SamplerType samplerType = SamplerType.Anisotropic)
+                                                               SamplerType samplerType)
         {
             if (string.IsNullOrEmpty(texturePathWithoutExtension))
             {
@@ -163,17 +170,30 @@ namespace Yak2D.Surface
             }
 
             IAssembly assembly = isFrameworkInternal ? _fontsAssembly : _applicationAssembly;
-            return LoadTextureFromEmbeddedPngResource(isFrameworkInternal, true, assembly, texturePathWithoutExtension, imageFormat, samplerType);
+            return LoadTextureFromEmbeddedPngResource(isFrameworkInternal,
+                                                      true,
+                                                      assembly,
+                                                      texturePathWithoutExtension,
+                                                      imageFormat,
+                                                      samplerType,
+                                                      true);
         }
 
         private ITexture LoadTextureFromEmbeddedPngResource(bool isFrameworkInternal,
                                                             bool isFontTexture,
                                                             string assetPathWithoutExtension,
                                                             ImageFormat imageFormat,
-                                                            SamplerType samplerType)
+                                                            SamplerType samplerType,
+                                                            bool generateMipMaps)
         {
             var assembly = isFrameworkInternal ? _surfaceAssembly : _applicationAssembly;
-            return LoadTextureFromEmbeddedPngResource(isFrameworkInternal, isFontTexture, assembly, assetPathWithoutExtension, imageFormat, samplerType);
+            return LoadTextureFromEmbeddedPngResource(isFrameworkInternal,
+                                                      isFontTexture,
+                                                      assembly,
+                                                      assetPathWithoutExtension,
+                                                      imageFormat,
+                                                      samplerType,
+                                                      generateMipMaps);
         }
 
         private ITexture LoadTextureFromEmbeddedPngResource(bool isFrameworkInternal,
@@ -181,7 +201,8 @@ namespace Yak2D.Surface
                                                             IAssembly assembly,
                                                             string assetPathWithoutExtension,
                                                             ImageFormat imageFormat,
-                                                            SamplerType samplerType)
+                                                            SamplerType samplerType,
+                                                            bool generateMipMaps)
         {
             var extension = GetFileExtensionFromImageFormat(imageFormat);
 
@@ -203,7 +224,7 @@ namespace Yak2D.Surface
                 return null;
             }
 
-            return GenerateTextureFromStream(stream, isFrameworkInternal, isFontTexture, samplerType);
+            return GenerateTextureFromStream(stream, isFrameworkInternal, isFontTexture, samplerType, generateMipMaps);
         }
 
         private string GetFileExtensionFromImageFormat(ImageFormat format)
@@ -231,9 +252,13 @@ namespace Yak2D.Surface
             return extension;
         }
 
-        public ITexture GenerateTextureFromStream(Stream stream, bool isFrameworkInternal, bool isFontTexture, SamplerType samplerType)
+        public ITexture GenerateTextureFromStream(Stream stream,
+                                                  bool isFrameworkInternal,
+                                                  bool isFontTexture,
+                                                  SamplerType samplerType,
+                                                  bool generateMipMaps)
         {
-            var veldridTexture = _imageSharpLoader.GenerateVeldridTextureFromStream(stream, true);
+            var veldridTexture = _imageSharpLoader.GenerateVeldridTextureFromStream(stream, generateMipMaps);
 
             var id = _idGenerator.New();
 
@@ -267,7 +292,9 @@ namespace Yak2D.Surface
             return _imageSharpLoader.GenerateTextureDataFromStream(stream);
         }
 
-        public ITexture LoadFontTextureFromFile(string path, ImageFormat imageFormat, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture CreateFontTextureFromFile(string path,
+                                                ImageFormat imageFormat,
+                                                SamplerType samplerType)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -277,10 +304,13 @@ namespace Yak2D.Surface
             var extension = GetFileExtensionFromImageFormat(imageFormat);
 
             var filePath = string.Concat(path, extension);
-            return LoadTextureFromPng(filePath, true, samplerType);
+            return LoadTextureFromPng(filePath, true, samplerType, true);
         }
 
-        public ITexture LoadTextureFromFile(string path, ImageFormat imageFormat, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture CreateTextureFromFile(string path,
+                                            ImageFormat imageFormat,
+                                            SamplerType samplerType,
+                                            bool generateMipMaps)
         {
             if (string.IsNullOrEmpty(path))
             {
@@ -290,16 +320,19 @@ namespace Yak2D.Surface
             var extension = GetFileExtensionFromImageFormat(imageFormat);
 
             var filePath = Path.Combine(_startUpProperties.TextureFolderRootName, string.Concat(path, extension));
-            return LoadTextureFromPng(filePath, false, samplerType);
+            return LoadTextureFromPng(filePath, false, samplerType, generateMipMaps);
         }
 
-        private ITexture LoadTextureFromPng(string path, bool isFontTexture, SamplerType samplerType)
+        private ITexture LoadTextureFromPng(string path,
+                                            bool isFontTexture,
+                                            SamplerType samplerType,
+                                            bool generateMipMaps)
         {
             if (_fileSystem.Exists(path))
             {
                 using (var stream = _fileSystem.OpenRead(path))
                 {
-                    return GenerateTextureFromStream(stream, false, isFontTexture, samplerType);
+                    return GenerateTextureFromStream(stream, false, isFontTexture, samplerType, generateMipMaps);
                 }
             }
             else
@@ -338,15 +371,16 @@ namespace Yak2D.Surface
             }
         }
 
-        public ITexture LoadRgbaTextureFromPixelData(uint width,
+        public ITexture CreateRgbaTextureFromPixelData(uint width,
                                                      uint height,
                                                      Rgba32[] pixelData,
-                                                     SamplerType samplerType = SamplerType.Anisotropic,
-                                                     bool isFrameworkInternal = false)
+                                                     SamplerType samplerType,
+                                                     bool generateMipMaps,
+                                                     bool isFrameworkInternal)
         {
             var id = _idGenerator.New();
 
-            var texture = _imageSharpLoader.GenerateRgbaVeldridTextureFromPixelData(pixelData, width, height);
+            var texture = _imageSharpLoader.GenerateRgbaVeldridTextureFromPixelData(pixelData, width, height, generateMipMaps);
 
             var surface = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture, isFrameworkInternal, false, samplerType);
 
@@ -355,10 +389,10 @@ namespace Yak2D.Surface
             return new TextureReference(id);
         }
 
-        public ITexture LoadFloat32TextureFromPixelData(uint width,
+        public ITexture CreateFloat32TextureFromPixelData(uint width,
                                                         uint height,
                                                         float[] pixelData,
-                                                        SamplerType samplerType = SamplerType.Anisotropic)
+                                                        SamplerType samplerType)
         {
             var id = _idGenerator.New();
 
@@ -378,11 +412,21 @@ namespace Yak2D.Surface
                                                  bool hasDepthBuffer,
                                                  bool autoClearColour,
                                                  bool autoClearDepth,
-                                                 SamplerType samplerType = SamplerType.Anisotropic)
+                                                 SamplerType samplerType,
+                                                 uint numberOfMipLevels,
+                                                 TexSampleCount textureSampleCount)
         {
             var id = _idGenerator.New();
 
-            var surface = _gpuSurfaceFactory.CreateGpuSurface(isInternal, width, height, pixelFormat, hasDepthBuffer, samplerType);
+            var surface = _gpuSurfaceFactory.CreateGpuSurface(isInternal,
+                                                              width,
+                                                              height,
+                                                              pixelFormat,
+                                                              hasDepthBuffer,
+                                                              samplerType,
+                                                              numberOfMipLevels,
+                                                              textureSampleCount,
+                                                              false);
 
             if (autoClearDepth && !hasDepthBuffer)
             {
@@ -406,7 +450,15 @@ namespace Yak2D.Surface
         {
             var id = _idGenerator.New();
 
-            var surface = _gpuSurfaceFactory.CreateGpuSurface(true, width, height, pixelFormat, false, SamplerType.Anisotropic, true);
+            var surface = _gpuSurfaceFactory.CreateGpuSurface(true,
+                                                              width,
+                                                              height,
+                                                              pixelFormat,
+                                                              false,
+                                                              SamplerType.Anisotropic,
+                                                              1,
+                                                              TexSampleCount.X1,
+                                                              true);
 
             return _surfaceCollection.Add(id, surface) ? new TextureReference(id) : null;
         }

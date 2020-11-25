@@ -129,10 +129,11 @@ namespace Yak2D.Graphics
             _whiteTextures = new GpuSurface[4];
             for(var t = 0; t < 4; t++)
             {
-                var tex = _gpuSurfaceManager.LoadRgbaTextureFromPixelData(1,
+                var tex = _gpuSurfaceManager.CreateRgbaTextureFromPixelData(1,
                                                                           1,
                                                                           new SixLabors.ImageSharp.PixelFormats.Rgba32[] { new SixLabors.ImageSharp.PixelFormats.Rgba32(1.0f, 1.0f, 1.0f, 1.0f) },
                                                                           SamplerType.Point,
+                                                                          false,
                                                                           true);
                 _whiteTextures[t] = _gpuSurfaceManager.RetrieveSurface(tex.Id);
             }

@@ -22,45 +22,57 @@ namespace Yak2D.Internal
         List<ulong> GetAutoClearDepthSurfaceIds();
         List<ulong> GetAutoClearColourSurfaceIds();
 
-        ITexture LoadTextureFromEmbeddedResourceInUserApplication(string texturePathWithoutExtension,
-                                                                     ImageFormat imageFormat,
-                                                                     SamplerType samplerType = SamplerType.Anisotropic);
+        ITexture CreateTextureFromEmbeddedResourceInUserApplication(string texturePathWithoutExtension,
+                                                                    ImageFormat imageFormat,
+                                                                    SamplerType samplerType,
+                                                                    bool generateMipMaps);
 
-        ITexture LoadFontTextureFromEmbeddedResource(bool isFrameworkInternal,
-                                                        string texturePathWithoutExtension,
-                                                        ImageFormat imageFormat,
-                                                        SamplerType samplerType = SamplerType.Anisotropic);
+        ITexture CreateFontTextureFromEmbeddedResource(bool isFrameworkInternal,
+                                                       string texturePathWithoutExtension,
+                                                       ImageFormat imageFormat,
+                                                       SamplerType samplerType);
 
-        ITexture LoadRgbaTextureFromPixelData(uint width,
-                                              uint height,
-                                              Rgba32[] pixelData,
-                                              SamplerType samplerType = SamplerType.Anisotropic,
-                                              bool isFrameworkInternal = false);
+        ITexture CreateRgbaTextureFromPixelData(uint width,
+                                                uint height,
+                                                Rgba32[] pixelData,
+                                                SamplerType samplerType,
+                                                bool generateMipMaps,
+                                                bool isFrameworkInternal);
 
-        ITexture LoadFloat32TextureFromPixelData(uint width,
-                                                 uint height,
-                                                 float[] pixelData,
-                                                 SamplerType samplerType = SamplerType.Anisotropic);
+        ITexture CreateFloat32TextureFromPixelData(uint width,
+                                                   uint height,
+                                                   float[] pixelData,
+                                                   SamplerType samplerType);
 
-        ITexture LoadTextureFromFile(string path,
-                                        ImageFormat imageFormat,
-                                        SamplerType samplerType = SamplerType.Anisotropic);
+        ITexture CreateTextureFromFile(string path,
+                                       ImageFormat imageFormat,
+                                       SamplerType samplerType,
+                                       bool generateMipMaps);
 
-        ITexture LoadFontTextureFromFile(string texturePathWithoutExtension,
-                                            ImageFormat imageFormat,
-                                            SamplerType samplerType = SamplerType.Anisotropic);
+        ITexture CreateFontTextureFromFile(string texturePathWithoutExtension,
+                                           ImageFormat imageFormat,
+                                           SamplerType samplerType);
 
         ITexture GenerateTextureFromStream(Stream stream,
                                            bool isFrameworkInternal,
                                            bool isFontTexture,
-                                           SamplerType samplerType);
+                                           SamplerType samplerType,
+                                           bool generateMipMaps);
 
-        IRenderTarget CreateRenderSurface(bool isInternal, uint width, uint height, PixelFormat pixelFormat,
-                                          bool hasDepthBuffer, bool autoClearColour = false, bool autoClearDepth = false,
-                                          SamplerType samplerType = SamplerType.Anisotropic);
+        IRenderTarget CreateRenderSurface(bool isInternal,
+                                          uint width,
+                                          uint height,
+                                          PixelFormat pixelFormat,
+                                          bool hasDepthBuffer,
+                                          bool autoClearColour,
+                                          bool autoClearDepth,
+                                          SamplerType samplerType,
+                                          uint numberOfMipLevels,
+                                          TexSampleCount textureSampleCount);
 
-        ITexture CreateGpuCpuStagingSurface(uint width, uint height, PixelFormat pixelFormat);
-
+        ITexture CreateGpuCpuStagingSurface(uint width,
+                                            uint height,
+                                            PixelFormat pixelFormat);
 
         TextureData LoadTextureColourDataFromFile(string path,
                                                   ImageFormat imageFormat);

@@ -154,7 +154,7 @@ namespace Yak2D.Tests
 
             var gpuSurfaceManagerMock = Substitute.For<IGpuSurfaceManager>();
            
-            gpuSurfaceManagerMock.LoadFontTextureFromEmbeddedResource(true, Arg.Any<string>(), ImageFormat.PNG).Returns(new TextureReference(20));
+            gpuSurfaceManagerMock.CreateFontTextureFromEmbeddedResource(true, Arg.Any<string>(), ImageFormat.PNG, Arg.Any<SamplerType>()).Returns(new TextureReference(20));
 
             IFontLoader loader = new FontLoader(
                                     appAssembly,
@@ -187,7 +187,7 @@ namespace Yak2D.Tests
 
             var desc = loader.TryToLoadSubFontDescription("FontFolder", true, AssetSourceEnum.Embedded, ImageFormat.PNG, fntFile);
 
-            gpuSurfaceManagerMock.Received(3).LoadFontTextureFromEmbeddedResource(true, Arg.Any<string>(), ImageFormat.PNG);
+            gpuSurfaceManagerMock.Received(3).CreateFontTextureFromEmbeddedResource(true, Arg.Any<string>(), ImageFormat.PNG, Arg.Any<SamplerType>());
 
             Assert.Equal(fntFile, desc.DotFntLines);
             Assert.Equal(3, desc.Textures.Count);
@@ -210,7 +210,7 @@ namespace Yak2D.Tests
 
             var gpuSurfaceManagerMock = Substitute.For<IGpuSurfaceManager>();
 
-            gpuSurfaceManagerMock.LoadFontTextureFromFile(Arg.Any<string>(), ImageFormat.PNG).Returns(new TextureReference(20));
+            gpuSurfaceManagerMock.CreateFontTextureFromFile(Arg.Any<string>(), ImageFormat.PNG, Arg.Any<SamplerType>()).Returns(new TextureReference(20));
 
             IFontLoader loader = new FontLoader(
                                             appAssembly,
@@ -243,7 +243,7 @@ namespace Yak2D.Tests
 
             var desc = loader.TryToLoadSubFontDescription("FontFolder", false, AssetSourceEnum.File, ImageFormat.PNG, fntFile);
 
-            gpuSurfaceManagerMock.Received(3).LoadFontTextureFromFile(Arg.Any<string>(), ImageFormat.PNG);
+            gpuSurfaceManagerMock.Received(3).CreateFontTextureFromFile(Arg.Any<string>(), ImageFormat.PNG, Arg.Any<SamplerType>());
 
             Assert.Equal(fntFile, desc.DotFntLines);
             Assert.Equal(3, desc.Textures.Count);

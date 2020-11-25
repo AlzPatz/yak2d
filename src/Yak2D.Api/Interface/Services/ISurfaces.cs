@@ -40,10 +40,14 @@ namespace Yak2D
         /// <param name="height">Height in pixels</param>
         /// <param name="autoClearColourAndDepthEachFrame">Instruct the framework to clear the depth and colour pixel data of the render target before each render iteration. Helps ensure the user does not forget too</param>
         /// <param name="samplerType">When the Render Target is sampled as a texture, which sampler filter should be used</param>
+        /// <param name="numberOfMipMapLevels">How many MipMap levels should be created (>0, 1 for none)</param>
+        /// <param name="textureSampleCount">How many samples should be taken per surface read</param>
         IRenderTarget CreateRenderTarget(uint width,
                                          uint height,
                                          bool autoClearColourAndDepthEachFrame = true,
-                                         SamplerType samplerType = SamplerType.Anisotropic);
+                                         SamplerType samplerType = SamplerType.Anisotropic,
+                                         uint numberOfMipMapLevels = 1,
+                                         TexSampleCount textureSampleCount = TexSampleCount.X1);
 
         /// <summary>
         /// Load a texture from an image asset
@@ -52,18 +56,22 @@ namespace Yak2D
         /// <param name="assetType">Embedded in the binary or a file location"</param>
         /// <param name="imageFormat">Image file encoding"</param>
         /// <param name="samplerType">Sampler filter to be when sampling the Texture/param>
+        /// <param name="generateMipMaps">Should MipMaps be created</param>
         ITexture LoadTexture(string path,
                              AssetSourceEnum assetType,
                              ImageFormat imageFormat = ImageFormat.PNG,
-                             SamplerType samplerType = SamplerType.Anisotropic);
+                             SamplerType samplerType = SamplerType.Anisotropic,
+                             bool generateMipMaps = true);
 
         /// <summary>
         /// Load a texture from a stream
         /// </summary>
         /// <param name="stream">"Data stream containing image data"</param>
         /// <param name="samplerType">Sampler filter to be when sampling the Texture/param>
+        /// <param name="generateMipMaps">Should MipMaps be created</param>
         ITexture LoadTexture(Stream stream, 
-                             SamplerType samplerType = SamplerType.Anisotropic);
+                             SamplerType samplerType = SamplerType.Anisotropic,
+                             bool generateMipMaps = true);
 
         /// <summary>
         /// Loads texture colour data from a .png image asset
@@ -98,7 +106,8 @@ namespace Yak2D
         ITexture CreateRgbaFromData(uint textureWidth,
                                     uint textureHeight,
                                     Vector4[] pixels,
-                                    SamplerType samplerType = SamplerType.Anisotropic);
+                                    SamplerType samplerType = SamplerType.Anisotropic,
+                                    bool generateMipMaps = true);
 
 
         /// <summary>

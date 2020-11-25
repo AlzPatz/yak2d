@@ -95,18 +95,18 @@ namespace Yak2D.Surface
             var image = SixLabors.ImageSharp.Image.LoadPixelData(new Rgba32[] {
                                                                     new Rgba32(1.0f, 1.0f, 1.0f, 1.0f)
                                                                     }, 1, 1);
-            var imageSharpTexture = new ImageSharpTexture(image, true);
+            var imageSharpTexture = new ImageSharpTexture(image, false);
 
             var veldridTexture = imageSharpTexture.CreateDeviceTexture(_systemComponents.Device.RawVeldridDevice, _systemComponents.Factory.RawFactory);
 
             return veldridTexture;
         }
 
-        public Texture GenerateRgbaVeldridTextureFromPixelData(Rgba32[] data, uint width, uint height)
+        public Texture GenerateRgbaVeldridTextureFromPixelData(Rgba32[] data, uint width, uint height, bool mipMap)
         {
             var image = SixLabors.ImageSharp.Image.LoadPixelData(data, (int)width, (int)height);
 
-            var imageSharpTexture = new ImageSharpTexture(image, true);
+            var imageSharpTexture = new ImageSharpTexture(image, mipMap);
 
             var veldridTexture = imageSharpTexture.CreateDeviceTexture(_systemComponents.Device.RawVeldridDevice, _systemComponents.Factory.RawFactory);
 

@@ -42,22 +42,23 @@ namespace Yak2D.Surface
         public ITexture LoadTexture(string path,
                                     AssetSourceEnum assetType,
                                     ImageFormat imageFormat = ImageFormat.PNG,
-                                    SamplerType samplerType = SamplerType.Anisotropic)
+                                    SamplerType samplerType = SamplerType.Anisotropic,
+                                    bool generateMipMaps = true)
         {
             switch (assetType)
             {
                 case AssetSourceEnum.File:
-                    return _surfaceManager.LoadTextureFromFile(path, imageFormat, samplerType);
+                    return _surfaceManager.CreateTextureFromFile(path, imageFormat, samplerType, generateMipMaps);
                 case AssetSourceEnum.Embedded:
-                    return _surfaceManager.LoadTextureFromEmbeddedResourceInUserApplication(path, imageFormat, samplerType);
+                    return _surfaceManager.CreateTextureFromEmbeddedResourceInUserApplication(path, imageFormat, samplerType, generateMipMaps);
             }
 
             return null;
         }
 
-        public ITexture LoadTexture(Stream stream, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture LoadTexture(Stream stream, SamplerType samplerType = SamplerType.Anisotropic, bool generateMipMaps = true)
         {
-            return _surfaceManager.GenerateTextureFromStream(stream, false, false, samplerType);
+            return _surfaceManager.GenerateTextureFromStream(stream, false, false, samplerType, generateMipMaps);
         }
 
         public TextureData LoadTextureColourData(string path, AssetSourceEnum assetType, ImageFormat imageFormat)
@@ -81,11 +82,19 @@ namespace Yak2D.Surface
         public IRenderTarget CreateRenderTarget(uint width,
                                                 uint height,
                                                 bool autoClearColourAndDepthEachFrame = true,
-                                                SamplerType samplerType = SamplerType.Anisotropic)
+                                                SamplerType samplerType = SamplerType.Anisotropic,
+                                                uint numberOfMipMapLevels = 1,
+                                                TexSampleCount textureSampleCount = TexSampleCount.X1)
+
         {
             if (width == 0 || height == 0)
             {
                 throw new Yak2DException("Surfaces -> CreateRenderTarget(), dimensions cannot be zero");
+            }
+
+            if(numberOfMipMapLevels == 0)
+            {
+                numberOfMipMapLevels = 1;
             }
 
             return _surfaceManager.CreateRenderSurface(
@@ -96,7 +105,9 @@ namespace Yak2D.Surface
                 true,
                 autoClearColourAndDepthEachFrame,
                 autoClearColourAndDepthEachFrame,
-                samplerType
+                samplerType,
+                numberOfMipMapLevels,
+                textureSampleCount
             );
         }
 
@@ -136,10 +147,14 @@ namespace Yak2D.Surface
                 throw new Yak2DException("Surfaces -> CreateFloat32FromData(), pixel data array size does not match dimensions");
             }
 
-            return _surfaceManager.LoadFloat32TextureFromPixelData(textureWidth, textureHeight, pixels, samplerType);
+            return _surfaceManager.CreateFloat32TextureFromPixelData(textureWidth, textureHeight, pixels, samplerType);
         }
 
-        public ITexture CreateRgbaFromData(uint textureWidth, uint textureHeight, Vector4[] pixels, SamplerType samplerType = SamplerType.Anisotropic)
+        public ITexture CreateRgbaFromData(uint textureWidth,
+                                           uint textureHeight,
+                                           Vector4[] pixels,
+                                           SamplerType samplerType = SamplerType.Anisotropic,
+                                           bool generateMipMaps = true)
         {
             if (pixels == null)
             {
@@ -168,7 +183,7 @@ namespace Yak2D.Surface
                             Clamper.Clamp(value.W, 0.0f, 1.0f)
                         );
             }
-            return _surfaceManager.LoadRgbaTextureFromPixelData(textureWidth, textureHeight, rgba, samplerType);
+            return _surfaceManager.CreateRgbaTextureFromPixelData(textureWidth, textureHeight, rgba, samplerType, generateMipMaps, false);
         }
 
         public void SetMainWindowRenderTargetAutoClearDepth(bool autoClearDepth)

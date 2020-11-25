@@ -17,7 +17,7 @@ namespace Yak2D.Tests
 
             IGpuSurfaceFactory factory = new GpuSurfaceFactory(messenger, components);
 
-            Assert.Throws<Yak2DException>(() => { factory.CreateGpuSurfaceFromTexture(null, false, false); });
+            Assert.Throws<Yak2DException>(() => { factory.CreateGpuSurfaceFromTexture(null, false, false, SamplerType.Anisotropic); });
 
             components.ReleaseResources();
         }
@@ -29,7 +29,7 @@ namespace Yak2D.Tests
 
             var components = new FakeComponents();
 
-           IGpuSurfaceFactory factory = new GpuSurfaceFactory(messenger, components);
+            IGpuSurfaceFactory factory = new GpuSurfaceFactory(messenger, components);
 
             Veldrid.Texture texture = components.Factory.CreateTexture(new Veldrid.TextureDescription
             {
@@ -44,7 +44,10 @@ namespace Yak2D.Tests
                 Usage = Veldrid.TextureUsage.Sampled
             });
 
-            var surface = factory.CreateGpuSurfaceFromTexture(texture, false, false);
+            var surface = factory.CreateGpuSurfaceFromTexture(texture,
+                                                              false,
+                                                              false,
+                                                              SamplerType.Anisotropic);
 
             Assert.Equal(texture, surface.Texture);
             Assert.NotNull(surface.TextureView);
@@ -63,7 +66,15 @@ namespace Yak2D.Tests
 
             IGpuSurfaceFactory factory = new GpuSurfaceFactory(messenger, components);
 
-            var surface = factory.CreateGpuSurface(true, 100, 100, Veldrid.PixelFormat.R32_G32_B32_A32_Float, false, SamplerType.Anisotropic);
+            var surface = factory.CreateGpuSurface(true,
+                                                   100,
+                                                   100,
+                                                   Veldrid.PixelFormat.R32_G32_B32_A32_Float,
+                                                   false,
+                                                   SamplerType.Anisotropic,
+                                                   1,
+                                                   TexSampleCount.X1,
+                                                   false);
 
             Assert.Equal(GpuSurfaceType.RenderTarget | GpuSurfaceType.Internal, surface.Type);
             Assert.NotNull(surface.Texture);
@@ -83,7 +94,7 @@ namespace Yak2D.Tests
 
             IGpuSurfaceFactory factory = new GpuSurfaceFactory(messenger, components);
 
-            Assert.Throws<Yak2DException>(() => { factory.CreateGpuSurface(false, 0, 0, Veldrid.PixelFormat.R32_G32_B32_A32_Float, false, SamplerType.Anisotropic); });
+            Assert.Throws<Yak2DException>(() => { factory.CreateGpuSurface(false, 0, 0, Veldrid.PixelFormat.R32_G32_B32_A32_Float, false, SamplerType.Anisotropic, 1, TexSampleCount.X1, false); });
 
             components.ReleaseResources();
         }

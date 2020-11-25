@@ -87,8 +87,8 @@ namespace Yak2D.Tests
         {
             var manager = SetUpManagerWithFakes();
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromEmbeddedResourceInUserApplication(null, ImageFormat.PNG); });
-            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromEmbeddedResourceInUserApplication("", ImageFormat.PNG); });
+            Assert.Throws<Yak2DException>(() => { manager.CreateTextureFromEmbeddedResourceInUserApplication(null, ImageFormat.PNG, SamplerType.Anisotropic, true); });
+            Assert.Throws<Yak2DException>(() => { manager.CreateTextureFromEmbeddedResourceInUserApplication("", ImageFormat.PNG, SamplerType.Anisotropic, true); });
         }
 
         [Fact]
@@ -96,8 +96,8 @@ namespace Yak2D.Tests
         {
             var manager = SetUpManagerWithFakes();
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromEmbeddedResource(true, null, ImageFormat.PNG); });
-            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromEmbeddedResource(true, "", ImageFormat.PNG); });
+            Assert.Throws<Yak2DException>(() => { manager.CreateFontTextureFromEmbeddedResource(true, null, ImageFormat.PNG, SamplerType.Anisotropic); });
+            Assert.Throws<Yak2DException>(() => { manager.CreateFontTextureFromEmbeddedResource(true, "", ImageFormat.PNG, SamplerType.Anisotropic); });
         }
 
         [Fact]
@@ -105,8 +105,8 @@ namespace Yak2D.Tests
         {
             var manager = SetUpManagerWithFakes();
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromFile(null, ImageFormat.PNG); });
-            Assert.Throws<Yak2DException>(() => { manager.LoadTextureFromFile("", ImageFormat.PNG); });
+            Assert.Throws<Yak2DException>(() => { manager.CreateTextureFromFile(null, ImageFormat.PNG, SamplerType.Anisotropic, true); });
+            Assert.Throws<Yak2DException>(() => { manager.CreateTextureFromFile("", ImageFormat.PNG, SamplerType.Anisotropic, true); });
         }
 
         [Fact]
@@ -114,8 +114,8 @@ namespace Yak2D.Tests
         {
             var manager = SetUpManagerWithFakes();
 
-            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromFile(null, ImageFormat.PNG); });
-            Assert.Throws<Yak2DException>(() => { manager.LoadFontTextureFromFile("", ImageFormat.PNG); });
+            Assert.Throws<Yak2DException>(() => { manager.CreateFontTextureFromFile(null, ImageFormat.PNG, SamplerType.Anisotropic); });
+            Assert.Throws<Yak2DException>(() => { manager.CreateFontTextureFromFile("", ImageFormat.PNG, SamplerType.Anisotropic); });
         }
     }
 }

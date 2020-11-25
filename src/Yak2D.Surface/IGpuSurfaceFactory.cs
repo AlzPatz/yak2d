@@ -5,9 +5,23 @@ namespace Yak2D.Surface
 {
     public interface IGpuSurfaceFactory
     {
-        GpuSurface CreateGpuSurfaceFromTexture(Texture texture, bool isFrameworkInternal, bool isFontTexture, SamplerType samplerType = SamplerType.Anisotropic);
-        GpuSurface CreateGpuSurface(bool isFrameworkInternal, uint width, uint height, PixelFormat pixelFormat, bool hasDepthBuffer, SamplerType samplerType = SamplerType.Anisotropic, bool isGpuToCpuStagingTexture = false);
+        GpuSurface CreateGpuSurfaceFromTexture(Texture texture,
+                                               bool isFrameworkInternal,
+                                               bool isFontTexture,
+                                               SamplerType samplerType);
+
+        GpuSurface CreateGpuSurface(bool isFrameworkInternal,
+                                    uint width,
+                                    uint height,
+                                    PixelFormat pixelFormat,
+                                    bool hasDepthBuffer,
+                                    SamplerType samplerType,
+                                    uint numberMipLevels,
+                                    TexSampleCount sampleCount,
+                                    bool isGpuToCpuStagingTexture);
+
         GpuSurface CreateSurfaceFromSwapChainOutputBuffer(Framebuffer framebuffer);
+
         void ReCreateCachedObjects();
     }
 }

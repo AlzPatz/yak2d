@@ -18,6 +18,11 @@
         /// <summary>
         /// Point Sampling used for Minification, Magnification and Mip Level Filtering
         /// </summary>
-        Point
+        Point,
+
+        /// <summary>
+        /// Point Sampling used for Magnification, Linear for other Filtering
+        /// </summary>
+        PointMagLinearMin
     }
 }

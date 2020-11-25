@@ -16,7 +16,7 @@ namespace Yak2D.Graphics
         public ITexture ConcentricSinusoidalFloat32(uint textureWidth, uint textureHeight, int numQuarterWaves, bool taperInner, bool taperOuter, SineWavePoint centreWaveStartPoint = SineWavePoint.ZeroAscending, float maxAmplitude = 1)
         {
             var data = ConcentricSinusoidal(textureWidth, textureHeight, numQuarterWaves, taperInner, taperOuter, centreWaveStartPoint, maxAmplitude);
-            return _gpuSurfaceManager.LoadFloat32TextureFromPixelData(textureWidth, textureHeight, data);
+            return _gpuSurfaceManager.CreateFloat32TextureFromPixelData(textureWidth, textureHeight, data, SamplerType.Anisotropic);
         }
 
         public ITexture ConcentricSinusoidalRgba(uint textureWidth, uint textureHeight, int numQuarterWaves, bool taperInner, bool taperOuter, SineWavePoint centreWaveStartPoint = SineWavePoint.ZeroAscending, float maxAmplitude = 1)
@@ -33,7 +33,7 @@ namespace Yak2D.Graphics
                             0.0f, 0.2f //Alpha 1 so we can review it in normal draw pipeline
                         );
             }
-            return _gpuSurfaceManager.LoadRgbaTextureFromPixelData(textureWidth, textureHeight, rgba);
+            return _gpuSurfaceManager.CreateRgbaTextureFromPixelData(textureWidth, textureHeight, rgba, SamplerType.Anisotropic, true, false);
         }
 
         private float[] ConcentricSinusoidal(uint textureWidth, uint textureHeight, int numHalfWaves, bool taperInner, bool taperOuter, SineWavePoint centreWaveStartPoint, float maxAmplitude)
