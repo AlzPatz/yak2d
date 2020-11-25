@@ -90,6 +90,29 @@ namespace Yak2D.Surface
             return image;
         }
 
+        private T[] MirrorOverXAxisIfGraphicsApiRequires<T>(uint width, uint height, T[] data)
+        {
+            var backend = _systemComponents.Device.BackendType;
+            if (backend == GraphicsApi.OpenGL || backend == GraphicsApi.OpenGLES)
+            {
+
+                var bytes = new T[width * height];
+
+                for (var y = 0; y < height; y++)
+                {
+                    var flippedY = height - 1 - y;
+                    var StartOfLineInLinearIndex = flippedY * width;
+                    for (var x = 0; x < width; x++)
+                    {
+                        bytes[StartOfLineInLinearIndex + x] = data[(y * width) + x];
+                    }
+                }
+                return bytes;
+            }
+
+            return data;
+        }
+
         public Texture GenerateSingleWhitePixel()
         {
             var image = SixLabors.ImageSharp.Image.LoadPixelData(new Rgba32[] {
@@ -104,6 +127,8 @@ namespace Yak2D.Surface
 
         public Texture GenerateRgbaVeldridTextureFromPixelData(Rgba32[] data, uint width, uint height, bool mipMap)
         {
+            data = MirrorOverXAxisIfGraphicsApiRequires<Rgba32>(width, height, data);
+
             var image = SixLabors.ImageSharp.Image.LoadPixelData(data, (int)width, (int)height);
 
             var imageSharpTexture = new ImageSharpTexture(image, mipMap);
@@ -115,6 +140,8 @@ namespace Yak2D.Surface
 
         public Texture GenerateFloat32VeldridTextureFromPixelData(float[] data, uint width, uint height)
         {
+            data = MirrorOverXAxisIfGraphicsApiRequires<float>(width, height, data);
+
             return _floatTextureBuilder.GenerateFloat32VeldridTextureFromPixelData(data, width, height);
         }
     }

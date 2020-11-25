@@ -265,12 +265,13 @@ namespace Yak2D.Graphics
 
         public void Shutdown()
         {
-            DestroyAllStages(false);
+            DestroyAllStages(true);
             ProcessPendingDestruction();
         }
 
         public void ReInitialise()
         {
+            //Same as shutdown...
             DestroyAllStages(true);
             ProcessPendingDestruction();
         }

@@ -14,8 +14,9 @@ namespace Yak2D
         public Vector3 SpecularColour { get; set; }
 
         /// <summary>
-        /// Shininess is per-mesh, applies to all lights
-        /// Must be >= 1.0f
+        /// Shininess is per-mesh stage, applies to all lights
+        /// Should be >= 1.0f
+        /// 0 to 1 inclusive is Matt. Greater than 1 is shiny, the higher the number the smaller but more intense the shiny area
         /// </summary>
         public float Shininess { get; set; }
 

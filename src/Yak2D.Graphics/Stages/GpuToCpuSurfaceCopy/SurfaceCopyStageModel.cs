@@ -78,9 +78,37 @@ namespace Yak2D.Graphics
             //Create a Device abstraction pass through for this MAP?
             MappedResourceView<byte> mapRead = _systemComponents.Device.RawVeldridDevice.Map<byte>(stagingTexture.Texture, MapMode.Read);
 
-            Marshal.Copy(mapRead.MappedResource.Data, _data, 0, 4 * (int)_stagingTextureWidth * (int)_stagingTextureHeight);
+            var dataRowStride = mapRead.MappedResource.RowPitch;
+
+            var requirePaddedArray = dataRowStride != 4 * _stagingTextureWidth;
+
+            byte[] dataWithPadding = null;
+
+            var dataByteSize = 4 * (int)_stagingTextureWidth * (int)_stagingTextureHeight;
+
+            if(requirePaddedArray)
+            {
+                dataByteSize = (int)dataRowStride * (int)_stagingTextureHeight;
+                dataWithPadding = new byte[dataByteSize];
+            }
+
+            Marshal.Copy(mapRead.MappedResource.Data, requirePaddedArray ? dataWithPadding : _data, 0, dataByteSize);
 
             _systemComponents.Device.RawVeldridDevice.Unmap(stagingTexture.Texture);
+
+            if (requirePaddedArray)
+            {
+                var unpaddedDataRowStride = 4 * _stagingTextureWidth;
+                for (var y = 0; y < _stagingTextureHeight; y++)
+                {
+                    for (var x = 0; x < unpaddedDataRowStride; x++)
+                    {
+                        var indexSource = (y * dataRowStride) + x;
+                        var indexTarget = (y * unpaddedDataRowStride) + x;
+                        _data[indexTarget] = dataWithPadding[indexSource];
+                    }
+                }
+            }
 
             Span<byte> byteSpan = _data;
 
@@ -92,7 +120,6 @@ namespace Yak2D.Graphics
                 Height = _stagingTextureHeight,
                 Pixels = new System.Numerics.Vector4[numberPixels]
             };
-
 
             if (_pixelFormat == PixelFormat.R32_Float)
             {
@@ -119,7 +146,7 @@ namespace Yak2D.Graphics
             else
             {
                 //For the time being this will always be:
-                //PixelFormat.B8_G8_R8_A8_UNorm
+                //PixelFormat.R8_G8_B8_A8_UNorm
 
                 for (var s = 0; s < numberPixels; s++)
                 {
