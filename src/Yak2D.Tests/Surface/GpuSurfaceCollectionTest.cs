@@ -96,7 +96,12 @@ namespace Yak2D.Tests
 
             AddToCollectionTwoInternalTwoRenderTargetsAndOneTexture(collection);
 
-            collection.RemoveAllOfType(GpuSurfaceType.Texture);
+            var ids = collection.ReturnAllOfType(GpuSurfaceType.Texture);
+
+            ids.ForEach(id =>
+            {
+                collection.Remove(id);
+            });
 
             Assert.Equal(3, collection.CountAll());
         }

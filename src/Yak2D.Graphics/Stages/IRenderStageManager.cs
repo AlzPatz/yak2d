@@ -26,6 +26,7 @@ namespace Yak2D.Graphics
 
         bool DestroyStage(ulong stage);
         void DestroyAllStages(bool haveResourcesAlreadyBeenDisposed);
+        void ProcessPendingDestruction();
         void Shutdown();
         void ReInitialise();
     }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Veldrid;
 using Yak2D.Internal;
 
@@ -14,6 +15,8 @@ namespace Yak2D.Graphics
 
         public int ViewportCount { get { return _viewportCollection.Count; } }
 
+        private List<ulong> _viewportsForDestruction;
+
         public ViewportManager(IViewportFactory viewportFactory,
                                 IIdGenerator IdGenerator,
                                 ISimpleCollectionFactory collectionFactory)
@@ -22,25 +25,35 @@ namespace Yak2D.Graphics
             _viewportFactory = viewportFactory;
 
             _viewportCollection = collectionFactory.Create<IViewportModel>(48);
+
+            _viewportsForDestruction = new List<ulong>();
         }
 
         public IViewportModel RetrieveViewportModel(ulong key) => _viewportCollection.Retrieve(key);
 
         public void DestroyViewport(ulong viewport)
         {
-            var model = RetrieveViewport(viewport);
-
-            if (model == null)
-            {
-                return;
-            }
-
-            _viewportCollection.Remove(viewport);
+            _viewportsForDestruction.Add(viewport);
         }
 
         public void DestroyAllViewports()
         {
-            _viewportCollection.RemoveAll();
+            var ids = _viewportCollection.ReturnAllIds();
+
+            ids.ForEach(id =>
+            {
+                _viewportsForDestruction.Add(id);
+            });
+        }
+
+        public void ProcessPendingDestruction()
+        {
+            _viewportsForDestruction.ForEach(id =>
+            {
+                _viewportCollection.Remove(id);
+            });
+
+            _viewportsForDestruction.Clear();
         }
 
         public IViewport CreateViewport(uint minx, uint miny, uint width, uint height)

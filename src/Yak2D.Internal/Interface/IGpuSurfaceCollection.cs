@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Yak2D.Internal
 {
     public interface IGpuSurfaceCollection
@@ -6,7 +8,7 @@ namespace Yak2D.Internal
         int CountOfType(GpuSurfaceType type);
         bool Add(ulong id, GpuSurface surface);
         bool Remove(ulong id);
-        void RemoveAllOfType(GpuSurfaceType type);
+        List<ulong> ReturnAllOfType(GpuSurfaceType type);
         void RemoveAll(bool resourcesAlreadyDestroyed);
         GpuSurface Retrieve(ulong id);
     }

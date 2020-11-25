@@ -76,18 +76,18 @@ namespace Yak2D.Surface
             surface.TextureView?.Dispose();
         }
 
-        public void RemoveAllOfType(GpuSurfaceType type)
+        public List<ulong> ReturnAllOfType(GpuSurfaceType type)
         {
-            var listToRemove = new List<ulong>();
+            var listToReturn = new List<ulong>();
             foreach (var surface in _surfaces)
             {
                 if (surface.Value.Type.HasFlag(type))
                 {
                     DisposeOfASurface(surface.Value);
-                    listToRemove.Add(surface.Key);
+                    listToReturn.Add(surface.Key);
                 }
             }
-            listToRemove.ForEach(x => _surfaces.Remove(x));
+            return listToReturn;
         }
 
         public void RemoveAll(bool resourcesAlreadyDestroyed)

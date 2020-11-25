@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Yak2D.Internal;
 
 namespace Yak2D.Font
@@ -6,8 +7,8 @@ namespace Yak2D.Font
     {
         int Count { get; }
         bool Add(ulong id, IFontModel font);
-        bool Destroy(ulong id);
-        void DestroyAll(bool resourcesAlreadyDestroyed);
+        void Destroy(ulong id, bool resourcesAlreadyDestroyed);
         IFontModel Retrieve(ulong id);
+        List<ulong> ReturnAllIds();
     }
 }

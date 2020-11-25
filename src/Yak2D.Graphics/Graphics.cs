@@ -16,6 +16,9 @@ namespace Yak2D.Graphics
         private readonly IRenderStageManager _renderStageManager;
         private readonly IRenderStageVisitor _renderStageVisitor;
         private readonly IGpuSurfaceManager _surfaceManager;
+        private readonly IViewportManager _viewportManager;
+        private readonly IFontManager _fontManager;
+        private readonly ICameraManager _cameraManager;
         private readonly IFrameworkDebugOverlay _debugOverlay;
 
         private CommandList _cl;
@@ -27,6 +30,9 @@ namespace Yak2D.Graphics
                             IRenderStageManager renderStageManager,
                             IRenderStageVisitor renderStageVisitor,
                             IGpuSurfaceManager surfaceManager,
+                            IViewportManager viewportManager,
+                            IFontManager fontManager,
+                            ICameraManager cameraManager,
                             IFrameworkDebugOverlay debugOverlay)
         {
             _startUpPropertiesCache = startUpPropertiesCache;
@@ -36,6 +42,9 @@ namespace Yak2D.Graphics
             _renderStageManager = renderStageManager;
             _renderStageVisitor = renderStageVisitor;
             _surfaceManager = surfaceManager;
+            _viewportManager = viewportManager;
+            _fontManager = fontManager;
+            _cameraManager = cameraManager;
             _debugOverlay = debugOverlay;
 
             Initialise();
@@ -151,12 +160,22 @@ namespace Yak2D.Graphics
             {
                 _systemComponents.Device.WaitForIdle();
                 _systemComponents.Device.SwapBuffers();
-                //Back on the main thread we can now safely pass data back to the user
-
-                InvokePostRenderingSurfaceCopyCallbacks();
-
+                ExecutePostRenderFunctions();
                 RenderingComplete = true;
             });
+        }
+
+        private void ExecutePostRenderFunctions()
+        {
+            //Back on the main thread we can now safely pass data back to the user
+            InvokePostRenderingSurfaceCopyCallbacks();
+
+            //Process queued framework item destruction
+            _surfaceManager.ProcessPendingDestruction();
+            _renderStageManager.ProcessPendingDestruction();
+            _viewportManager.ProcessPendingDestruction();
+            _fontManager.ProcessPendingDestruction();
+            _cameraManager.ProcessPendingDestruction();
         }
 
         private void InvokePostRenderingSurfaceCopyCallbacks()

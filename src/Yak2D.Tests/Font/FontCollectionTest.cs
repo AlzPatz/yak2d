@@ -61,27 +61,9 @@ namespace Yak2D.Tests
             collection.Add(3, Substitute.For<IFontModel>());
             collection.Add(4, Substitute.For<IFontModel>());
 
-            collection.Destroy(3);
+            collection.Destroy(3, false);
             Assert.Equal(4, collection.Count);
             Assert.True(collection.Add(3, Substitute.For<IFontModel>()));
-        }
-
-        [Fact]
-        public void FontCollection_TestDestroyAllFonts_ReturnCorrectZeroCount()
-        {
-            var messenger = Substitute.For<IFrameworkMessenger>();
-            var surfaceManager = Substitute.For<IGpuSurfaceManager>();
-
-            IFontCollection collection = new FontCollection(messenger, surfaceManager);
-
-            collection.Add(0, Substitute.For<IFontModel>());
-            collection.Add(1, Substitute.For<IFontModel>());
-            collection.Add(2, Substitute.For<IFontModel>());
-            collection.Add(3, Substitute.For<IFontModel>());
-            collection.Add(4, Substitute.For<IFontModel>());
-
-            collection.DestroyAll(true);
-            Assert.Equal(0, collection.Count);
         }
 
         [Fact]

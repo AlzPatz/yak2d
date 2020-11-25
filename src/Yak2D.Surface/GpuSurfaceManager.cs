@@ -49,6 +49,8 @@ namespace Yak2D.Surface
         private List<ulong> _surfacesToAutoClearDepth;
         private List<ulong> _surfacesToAutoClearColour;
 
+        private List<ulong> _surfacesForDestruction;
+
         public GpuSurfaceManager(IApplicationAssembly applicationAssembly,
                                     IFontsAssembly fontsAssembly,
                                     ISurfaceAssembly surfaceAssembly,
@@ -87,6 +89,8 @@ namespace Yak2D.Surface
 
             AutoClearMainWindowDepth = _startUpProperties.AutoClearMainWindowDepthEachFrame;
             AutoClearMainWindowColour = _startUpProperties.AutoClearMainWindowColourEachFrame;
+
+            _surfacesForDestruction = new List<ulong>();
         }
 
         private void GenerateSingleWhitePixel()
@@ -337,13 +341,14 @@ namespace Yak2D.Surface
         public ITexture LoadRgbaTextureFromPixelData(uint width,
                                                      uint height,
                                                      Rgba32[] pixelData,
-                                                     SamplerType samplerType = SamplerType.Anisotropic)
+                                                     SamplerType samplerType = SamplerType.Anisotropic,
+                                                     bool isFrameworkInternal = false)
         {
             var id = _idGenerator.New();
 
             var texture = _imageSharpLoader.GenerateRgbaVeldridTextureFromPixelData(pixelData, width, height);
 
-            var surface = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture, false, false, samplerType);
+            var surface = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture, isFrameworkInternal, false, samplerType);
 
             _surfaceCollection.Add(id, surface);
 
@@ -481,40 +486,54 @@ namespace Yak2D.Surface
             return new Size((int)surface.Texture.Width, (int)surface.Texture.Height);
         }
 
+        public void ProcessPendingDestruction()
+        {
+            _surfacesForDestruction.ForEach(id =>
+            {
+                _surfaceCollection.Remove(id);
+
+                if (_surfacesToAutoClearDepth.Contains(id))
+                {
+                    _surfacesToAutoClearDepth.Remove(id);
+                }
+
+                if (_surfacesToAutoClearColour.Contains(id))
+                {
+                    _surfacesToAutoClearColour.Remove(id);
+                }
+            });
+
+            _surfacesForDestruction.Clear();
+        }
+
         public void DestroySurface(ulong id)
         {
-            _surfaceCollection.Remove(id);
-
-            if (_surfacesToAutoClearDepth.Contains(id))
-            {
-                _surfacesToAutoClearDepth.Remove(id);
-            }
-
-            if (_surfacesToAutoClearColour.Contains(id))
-            {
-                _surfacesToAutoClearColour.Remove(id);
-            }
+            _surfacesForDestruction.Add(id);
         }
 
         public void DestroyAllUserRenderTargets()
         {
-            _surfaceCollection.RemoveAllOfType(GpuSurfaceType.RenderTarget | GpuSurfaceType.User);
-
-            _surfacesToAutoClearDepth.Clear();
-            _surfacesToAutoClearColour.Clear();
+            DestoryAllOfSurfaceType(GpuSurfaceType.RenderTarget | GpuSurfaceType.User);
         }
 
         public void DestroyAllUserTextures()
         {
-            _surfaceCollection.RemoveAllOfType(GpuSurfaceType.Texture | GpuSurfaceType.User);
+            DestoryAllOfSurfaceType(GpuSurfaceType.Texture | GpuSurfaceType.User);
         }
 
         public void DestroyAllUserSurfaces()
         {
-            _surfaceCollection.RemoveAllOfType(GpuSurfaceType.User);
+            DestoryAllOfSurfaceType(GpuSurfaceType.User);
+        }
 
-            _surfacesToAutoClearDepth.Clear();
-            _surfacesToAutoClearColour.Clear();
+        private void DestoryAllOfSurfaceType(GpuSurfaceType type)
+        {
+            var ids = _surfaceCollection.ReturnAllOfType(type);
+
+            ids.ForEach(id =>
+            {
+                _surfacesForDestruction.Add(id);
+            });
         }
 
         public void Shutdown()

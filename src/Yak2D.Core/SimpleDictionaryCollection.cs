@@ -75,5 +75,10 @@ namespace Yak2D.Core
         {
             return _items.ContainsKey(id);
         }
+
+        public List<ulong> ReturnAllIds()
+        {
+            return new List<ulong>(_items.Keys);
+        }
     }
 }

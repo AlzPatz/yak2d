@@ -34,7 +34,8 @@ namespace Yak2D.Internal
         ITexture LoadRgbaTextureFromPixelData(uint width,
                                               uint height,
                                               Rgba32[] pixelData,
-                                              SamplerType samplerType = SamplerType.Anisotropic);
+                                              SamplerType samplerType = SamplerType.Anisotropic,
+                                              bool isFrameworkInternal = false);
 
         ITexture LoadFloat32TextureFromPixelData(uint width,
                                                  uint height,
@@ -66,6 +67,7 @@ namespace Yak2D.Internal
 
         TextureData LoadTextureColourDataFromEmbeddedResourceInUserApplication(string path,
                                                                                       ImageFormat imageFormat);
+
         void RegisterSwapChainOutput(Framebuffer swapChainFrameBuffer, bool removeExisting);
         GpuSurface RetrieveSurface(ulong id, GpuSurfaceType[] disallowedTypes = null);
         Size GetSurfaceDimensions(ulong id);
@@ -73,6 +75,7 @@ namespace Yak2D.Internal
         void DestroyAllUserRenderTargets();
         void DestroyAllUserTextures();
         void DestroyAllUserSurfaces();
+        void ProcessPendingDestruction();
         void Shutdown();
         void ReInitialise();
     }

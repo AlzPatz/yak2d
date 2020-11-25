@@ -12,6 +12,7 @@ namespace Yak2D.Internal
         void ConfigureViewportForActiveFramebuffer(CommandList cl);
         void DestroyViewport(ulong viewport);
         void DestroyAllViewports();
+        void ProcessPendingDestruction();
         void Shutdown();
         void ReInitialise();
     }

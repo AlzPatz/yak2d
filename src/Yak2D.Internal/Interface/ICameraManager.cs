@@ -26,6 +26,7 @@ namespace Yak2D.Internal
         void DestroyAllCameras();
         void DestroyAllCameras2D();
         void DestroyAllCameras3D();
+        void ProcessPendingDestruction();
         void Shutdown();
     }
 }

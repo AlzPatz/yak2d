@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Yak2D.Font
         private readonly IFontLoader _fontLoader;
         private readonly IFontCollection _userFontCollection;
 
-
+        private List<Tuple<ulong, bool>> _fontsForDestruction;
 
         public FontManager(IIdGenerator idGenerator,
                                       IStartupPropertiesCache startUpPropertiesCache,
@@ -31,16 +32,20 @@ namespace Yak2D.Font
             _startUpProperties = startUpPropertiesCache.User;
 
             LoadSystemFonts();
+
+            _fontsForDestruction = new List<Tuple<ulong, bool>>();
         }
 
         public void Shutdown()
         {
-            DestroyAllUserFonts(true);
+            DestroyAllUserFonts(true); 
+            ProcessPendingDestruction();
         }
 
         public void ReInitialise()
         {
             DestroyAllUserFonts(true);
+            ProcessPendingDestruction();
             LoadSystemFonts();
         }
 
@@ -166,15 +171,31 @@ namespace Yak2D.Font
 
         public void DestroyFont(ulong id)
         {
-            _userFontCollection.Destroy(id);
+            _fontsForDestruction.Add(new Tuple<ulong, bool>(id, false));
         }
 
         public void DestroyAllUserFonts(bool resoucesDestroyedAlready)
         {
-            _userFontCollection.DestroyAll(resoucesDestroyedAlready);
+            var ids = _userFontCollection.ReturnAllIds();
+
+            ids.ForEach(id =>
+            {
+                _fontsForDestruction.Add(new Tuple<ulong, bool>(id, resoucesDestroyedAlready));
+            });
         }
 
-             public float MeasureStringLength(string text, float fontSize, IFont font = null)
+        public void ProcessPendingDestruction()
+        {
+            _fontsForDestruction.ForEach(font =>
+            {
+                var id = font.Item1;
+                var resourcesAlreadyDestroyed = font.Item2;
+                _userFontCollection.Destroy(id, resourcesAlreadyDestroyed);
+            });
+            _fontsForDestruction.Clear();
+        }
+
+        public float MeasureStringLength(string text, float fontSize, IFont font = null)
         {
             var fnt = font == null ? SystemFont : RetrieveFont(font.Id);
 

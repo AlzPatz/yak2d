@@ -10,6 +10,8 @@ namespace Yak2D.Internal
 
         void DestroyFont(ulong id);
         void DestroyAllUserFonts(bool resourcesAlreadyDestroyed);
+        void ProcessPendingDestruction();
+
         void Shutdown();
         void ReInitialise();
 

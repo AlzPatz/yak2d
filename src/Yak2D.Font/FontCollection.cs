@@ -46,36 +46,31 @@ namespace Yak2D.Font
             }
         }
 
-        public bool Destroy(ulong id)
+        public void Destroy(ulong id, bool resourcesAlreadyDestroyed)
         {
             if (!_fonts.ContainsKey(id))
             {
                 _frameworkMessenger.Report("FontCollection: Unable to remove font, ulong DOES NOT exist in collection");
-                return false;
+                return;
             }
 
             var font = _fonts[id];
-            ReleaseFontResources(font);
-
-            _fonts.Remove(id);
-            return true;
-        }
-
-        public void DestroyAll(bool resourcesAlreadyDestroyed)
-        {
             if (!resourcesAlreadyDestroyed)
             {
-                foreach (var font in _fonts)
-                {
-                    ReleaseFontResources(font.Value);
-                }
+                ReleaseFontResources(font);
             }
-            _fonts.Clear();
+
+            _fonts.Remove(id);
         }
 
         private void ReleaseFontResources(IFontModel font)
         {
             font?.ReleaseReources(_gpuSurfaceManager);
+        }
+
+        public List<ulong> ReturnAllIds()
+        {
+            return new List<ulong>(_fonts.Keys);
         }
     }
 }

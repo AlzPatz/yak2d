@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Numerics;
 using Yak2D.Internal;
 
@@ -14,16 +15,20 @@ namespace Yak2D.Graphics
         private ISimpleCollection<ICameraModel2D> _camera2DCollection;
         private ISimpleCollection<ICameraModel3D> _camera3DCollection;
 
+        private List<ulong> _camerasToDestroy;
+
         public CameraManager(ICameraFactory cameraFactory,
                                 IIdGenerator idGenerator,
                                 ISimpleCollectionFactory collectionFactory)
-                                
+
         {
             _idGenerator = idGenerator;
             _cameraFactory = cameraFactory;
 
             _camera2DCollection = collectionFactory.Create<ICameraModel2D>(32);
             _camera3DCollection = collectionFactory.Create<ICameraModel3D>(16);
+
+            _camerasToDestroy = new List<ulong>();
         }
 
         public ICameraModel2D RetrieveCameraModel2D(ulong key) => _camera2DCollection.Retrieve(key);
@@ -69,20 +74,7 @@ namespace Yak2D.Graphics
 
         public void DestroyCamera(ulong key)
         {
-            if (_camera2DCollection.Contains(key))
-            {
-                var cam2d = _camera2DCollection.Retrieve(key);
-                cam2d.Destroy();
-                _camera2DCollection.Remove(key);
-                return;
-            }
-
-            if (_camera3DCollection.Contains(key))
-            {
-                var cam3d = _camera3DCollection.Retrieve(key);
-                cam3d.Destroy();
-                _camera3DCollection.Remove(key);
-            }
+            _camerasToDestroy.Add(key);
         }
 
         public void DestroyAllCameras()
@@ -91,30 +83,52 @@ namespace Yak2D.Graphics
             DestroyAllCameras3D();
         }
 
-        public void Shutdown()
-        {
-            //No difference between this and DestroyAllCameras
-            DestroyAllCameras();
-        }
-
         public void DestroyAllCameras2D()
         {
-            foreach (var cam in _camera2DCollection.Iterate())
+            var ids2D = _camera2DCollection.ReturnAllIds();
+            ids2D.ForEach(id =>
             {
-                cam.Destroy();
-            }
-
-            _camera2DCollection.RemoveAll();
+                _camerasToDestroy.Add(id);
+            });
         }
 
         public void DestroyAllCameras3D()
         {
-            foreach (var cam in _camera3DCollection.Iterate())
+            var ids3D = _camera3DCollection.ReturnAllIds();
+            ids3D.ForEach(id =>
             {
-                cam.Destroy();
-            }
+                _camerasToDestroy.Add(id);
+            });
+        }
 
-            _camera3DCollection.RemoveAll();
+        public void ProcessPendingDestruction()
+        {
+            _camerasToDestroy.ForEach(id =>
+            {
+
+                if (_camera2DCollection.Contains(id))
+                {
+                    var cam2d = _camera2DCollection.Retrieve(id);
+                    cam2d.Destroy();
+                    _camera2DCollection.Remove(id);
+                    return;
+                }
+
+                if (_camera3DCollection.Contains(id))
+                {
+                    var cam3d = _camera3DCollection.Retrieve(id);
+                    cam3d.Destroy();
+                    _camera3DCollection.Remove(id);
+                }
+            });
+
+            _camerasToDestroy.Clear();
+        }
+
+        public void Shutdown()
+        {
+            DestroyAllCameras();
+            ProcessPendingDestruction();
         }
     }
 }

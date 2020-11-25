@@ -17,6 +17,8 @@ namespace Yak2D.Graphics
 
         private List<ulong> _drawStagesToAutoClearDynamicQueues;
 
+        private List<Tuple<ulong, bool>> _stagesForDestruction;
+
         public RenderStageManager(IFrameworkMessenger frameworkMessenger,
                                     IIdGenerator idGenerator,
                                     ISystemComponents veldridComponents,
@@ -31,6 +33,8 @@ namespace Yak2D.Graphics
             _renderStageCollection = collectionFactory.Create<IRenderStageModel>(48);
 
             _drawStagesToAutoClearDynamicQueues = new List<ulong>();
+
+            _stagesForDestruction = new List<Tuple<ulong, bool>>();
         }
 
         public IRenderStageModel RetrieveStageModel(ulong id) => _renderStageCollection.Retrieve(id);
@@ -58,35 +62,53 @@ namespace Yak2D.Graphics
 
         public bool DestroyStage(ulong id)
         {
-            var model = _renderStageCollection.Retrieve(id);
-
-            if (model == null)
+            if (_renderStageCollection.Contains(id))
             {
-                _frameworkMessenger.Report("Unable to Destroy a Render Stage as ulong does not exist in collection");
-                return false;
-            }
-            _renderStageCollection.Remove(id);
-            model.DestroyResources();
-
-            if (_drawStagesToAutoClearDynamicQueues.Contains(id))
-            {
-                _drawStagesToAutoClearDynamicQueues.Remove(id);
+                _stagesForDestruction.Add(new Tuple<ulong, bool>(id, false));
+                return true;
             }
 
-            return true;
+            _frameworkMessenger.Report("Unable to Destroy a Render Stage as ulong does not exist in collection");
+            return false;
         }
 
         public void DestroyAllStages(bool haveResourcesAlreadyBeenDisposed)
         {
-            if (!haveResourcesAlreadyBeenDisposed)
+            var ids = _renderStageCollection.ReturnAllIds();
+
+            ids.ForEach(id =>
             {
-                foreach (var model in _renderStageCollection.Iterate())
+                _stagesForDestruction.Add(new Tuple<ulong, bool>(id, haveResourcesAlreadyBeenDisposed));
+            });
+        }
+
+        public void ProcessPendingDestruction()
+        {
+            _stagesForDestruction.ForEach(stage =>
+            {
+                var id = stage.Item1;
+                var resourcesAlreadyDestoryed = stage.Item2;
+
+                var model = _renderStageCollection.Retrieve(id);
+
+                if (model == null && !resourcesAlreadyDestoryed)
+                {
+                    _frameworkMessenger.Report("Warning: Renderstage Model was expected in collection to destroy, but does not exist (is null)");
+                }
+                else
                 {
                     model.DestroyResources();
                 }
-            }
-            _renderStageCollection.RemoveAll();
-            _drawStagesToAutoClearDynamicQueues.Clear();
+
+                _renderStageCollection.Remove(id);
+
+                if (_drawStagesToAutoClearDynamicQueues.Contains(id))
+                {
+                    _drawStagesToAutoClearDynamicQueues.Remove(id);
+                }
+            });
+
+            _stagesForDestruction.Clear();
         }
 
         public IDrawStage CreateDrawStage(bool clearDynamicRequestQueueEachFrame, BlendState blendState)
@@ -244,12 +266,13 @@ namespace Yak2D.Graphics
         public void Shutdown()
         {
             DestroyAllStages(false);
+            ProcessPendingDestruction();
         }
 
         public void ReInitialise()
         {
-            //Duped with same name.. not really needed
             DestroyAllStages(true);
+            ProcessPendingDestruction();
         }
     }
 }

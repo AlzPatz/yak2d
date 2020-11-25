@@ -11,5 +11,6 @@ namespace Yak2D.Internal
         bool Contains(ulong id);
         T Retrieve(ulong id);
         IEnumerable<T> Iterate();
+        List<ulong> ReturnAllIds();
     }
 }
