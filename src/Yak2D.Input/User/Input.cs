@@ -23,6 +23,7 @@ namespace Yak2D.Input
             _windowUpdater = windowUpdater;
         }
 
+        public bool IsMouseOverWindow => _inputMouseKeyboard.IsMouseOverWindow;
         public Vector2 MousePosition => _inputMouseKeyboard.MousePosition;
         public Vector2 MousePositionDeltaSinceLastFrame => _inputMouseKeyboard.MousePositionDeltaSinceLastFrame;
         public Vector2 MouseVelocity => _inputMouseKeyboard.MouseVelocity;

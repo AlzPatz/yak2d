@@ -1,11 +1,15 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Veldrid;
+using Veldrid.Sdl2;
 
 namespace Yak2D.Internal
 {
     public interface IInputMouseKeyboard
     {
+        void CacheEvent(ref SDL_Event ev);
+
+        bool IsMouseOverWindow { get; }
         Vector2 MousePosition { get; }
         Vector2 MousePositionDeltaSinceLastFrame { get; }
         Vector2 MouseVelocity { get; }
@@ -26,6 +30,6 @@ namespace Yak2D.Internal
         List<KeyCode> KeysHeldDown();
         List<KeyCode> KeysReleasedThisFrame();
 
-        void UpdateVeldridInputSnapshot(InputSnapshot snapshot, float timeSinceLastUpdateSeconds);
+        void Update(InputSnapshot snapshot, float timeSinceLastUpdateSeconds);
     }
 }

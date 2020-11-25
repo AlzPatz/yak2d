@@ -186,7 +186,7 @@ namespace Yak2D.Core
             _sdl2EventProcessor.ProcessEvents();
 
             _inputGameController.Update(timeStepSeconds);
-            _inputMouseKeyboard.UpdateVeldridInputSnapshot(_windowUpdater.LatestWindowInputSnapshot, timeStepSeconds);
+            _inputMouseKeyboard.Update(_windowUpdater.LatestWindowInputSnapshot, timeStepSeconds);
 
             if (_coreMessenger.AreThereMessagesInQueue())
             {

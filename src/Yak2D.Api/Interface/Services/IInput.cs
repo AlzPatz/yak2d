@@ -21,6 +21,14 @@ namespace Yak2D
         Vector2 MousePosition { get; }
 
         /// <summary>
+        /// Whether the mouse is currently over the window. Please be aware:
+        /// The implementation is reasonably performant, but registering an off screen requires
+        /// capturing a previous SDL event that when extrapolating motion suggests the next frame the mouse will leave the window
+        /// Therefore, an incorrect reading can (and usually will) be given if a window is covering the application window and the mouse moves into this window's area 
+        /// </summary>
+        bool IsMouseOverWindow { get; }
+
+        /// <summary>
         /// How far the mouse has moved over the desktop since the last update
         /// </summary>
         Vector2 MousePositionDeltaSinceLastFrame { get; }

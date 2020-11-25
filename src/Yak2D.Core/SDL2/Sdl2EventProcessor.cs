@@ -8,14 +8,17 @@ namespace Yak2D.Core
         private readonly ICoreMessenger _coreMessenger;
         private readonly IApplicationMessenger _applicationMessenger;
         private readonly IInputGameController _inputGameController;
+        private readonly IInputMouseKeyboard _inputMouseAndKeyboard;
 
         public Sdl2EventProcessor(ICoreMessenger coreMessenger,
                                   IApplicationMessenger applicationMessenger,
-                                  IInputGameController inputGameController)
+                                  IInputGameController inputGameController,
+                                  IInputMouseKeyboard inputMouseAndKeyboard)
         {
             _coreMessenger = coreMessenger;
             _applicationMessenger = applicationMessenger;
             _inputGameController = inputGameController;
+            _inputMouseAndKeyboard = inputMouseAndKeyboard;
 
             Sdl2Events.Subscribe(ProcessEvent);
         }
@@ -36,6 +39,12 @@ namespace Yak2D.Core
                 case SDL_EventType.ControllerButtonDown:
                 case SDL_EventType.ControllerAxisMotion:
                     _inputGameController.CacheEvent(ref ev);
+                    break;
+                
+                    //Currently Veldrid Snapshot is used for all events. 
+                    //However here is an attempt to faster sample mouse position
+                case SDL_EventType.MouseMotion:
+                    _inputMouseAndKeyboard.CacheEvent(ref ev);
                     break;
 
                 case SDL_EventType.Quit:

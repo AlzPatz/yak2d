@@ -1,13 +1,19 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using Veldrid;
+using Veldrid.Sdl2;
 
 namespace Yak2D.Internal
 {
     public class InputMouseKeyboard : IInputMouseKeyboard
     {
         private readonly IFrameworkDebugOverlay _debugOverlay;
+        private readonly ISystemComponents _systemComponents;
+
+        public bool IsMouseOverWindow { get; private set; }
 
         public Vector2 MousePosition { get; private set; }
         public Vector2 MousePositionDeltaSinceLastFrame { get; private set; }
@@ -23,9 +29,19 @@ namespace Yak2D.Internal
         private HashSet<MouseButton> _mouseButtonsDownThisFrame;
         private Dictionary<MouseButton, float> _mouseButtonsUpThisFrame;
 
-        public InputMouseKeyboard(IFrameworkDebugOverlay debugOverlay)
+        private Queue<SDL_Event> _eventQueue;
+
+        private bool _hasAnInitialMouseMovementEventRegistered;
+        private bool _gotMouseMotionEventThisUpdate;
+        private Vector2 _mouseLastPosition;
+        private Vector2 _mouseLastVelocity;
+        private const int _numberFramesOfMouseMovementExtrapolator = 1;
+
+        public InputMouseKeyboard(IFrameworkDebugOverlay debugOverlay,
+                                  ISystemComponents systemComponents)
         {
             _debugOverlay = debugOverlay;
+            _systemComponents = systemComponents;
 
             _keysDown = new Dictionary<KeyCode, float>();
             _keysDownThisFrame = new HashSet<KeyCode>();
@@ -36,12 +52,69 @@ namespace Yak2D.Internal
             _mouseButtonsUpThisFrame = new Dictionary<MouseButton, float>();
 
             _isFirstFrame = true;
+            _hasAnInitialMouseMovementEventRegistered = false;
+
+            _eventQueue = new Queue<SDL_Event>();
         }
 
-        public void UpdateVeldridInputSnapshot(InputSnapshot snapshot, float timeSinceLastUpdateSeconds)
+        public void CacheEvent(ref SDL_Event ev)
+        {
+            _eventQueue.Enqueue(ev);
+        }
+
+        public void Update(InputSnapshot snapshot, float timeSinceLastUpdateSeconds)
         {
             ProcessKeys(snapshot, timeSinceLastUpdateSeconds);
             ProcessMouse(snapshot, timeSinceLastUpdateSeconds);
+
+            ProcessEventCache();
+        }
+
+        private void ProcessEventCache()
+        {
+            IsMouseOverWindow = false;
+            _gotMouseMotionEventThisUpdate = false;
+
+            while (_eventQueue.Count > 0)
+            {
+                var ev = _eventQueue.Dequeue();
+                ProcessAnEvent(ref ev);
+            }
+
+            if (_gotMouseMotionEventThisUpdate)
+            {
+                IsMouseOverWindow = true;
+            }
+            else
+            {
+                var _mouseNextPossiblePosition = _mouseLastPosition + (_numberFramesOfMouseMovementExtrapolator * _mouseLastVelocity);
+                if (!IsPositionOutsideWindowBounds(_mouseNextPossiblePosition) && _hasAnInitialMouseMovementEventRegistered)
+                {
+                    IsMouseOverWindow = true;
+                }
+            }
+        }
+
+        private void ProcessAnEvent(ref SDL_Event ev)
+        {
+            switch (ev.type)
+            {
+                case SDL_EventType.MouseMotion:
+                    if(!_hasAnInitialMouseMovementEventRegistered)
+                    {
+                        _hasAnInitialMouseMovementEventRegistered = true;
+                    }
+                    _gotMouseMotionEventThisUpdate = true;
+                    SDL_MouseMotionEvent mouseEvent = Unsafe.As<SDL_Event, SDL_MouseMotionEvent>(ref ev);
+                    _mouseLastPosition = new Vector2(mouseEvent.x, mouseEvent.y);
+                    _mouseLastVelocity = new Vector2(mouseEvent.xrel, mouseEvent.yrel);
+                    break;
+            }
+        }
+
+        private bool IsPositionOutsideWindowBounds(Vector2 pos)
+        {
+            return pos.X < 0 || pos.X >= _systemComponents.Window.Width || pos.Y < 0 || pos.Y >= _systemComponents.Window.Height;
         }
 
         public bool IsKeyCurrentlyPressed(KeyCode key) => _keysDown.ContainsKey(key);
