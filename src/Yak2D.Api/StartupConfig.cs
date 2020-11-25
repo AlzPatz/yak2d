@@ -20,6 +20,7 @@ namespace Yak2D
             {
                 PreferredGraphicsApi = GraphicsApi.SystemDefault,
                 AvoidVulkanWherePossible = true,
+                WindowIsResizable = false,
                 WindowState = fullScreen ? DisplayState.FullScreen : DisplayState.Normal,
                 WindowPositionX = 100,
                 WindowPositionY = 100,
@@ -53,6 +54,11 @@ namespace Yak2D
         ///  Sets start up window state
         /// </summary>
         public DisplayState WindowState { get; set; }
+
+        /// <summary>
+        /// Sets whether the window is resizable (can be changed during application runtime) 
+        /// </summary>
+        public bool WindowIsResizable { get; set; }
 
         /// <summary>
         /// Sets X component of top-left position of window

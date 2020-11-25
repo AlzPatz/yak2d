@@ -139,6 +139,8 @@ namespace Yak2D.Core
 
             Window = new SdlWindow(VeldridStartup.CreateWindow(ref windowInfo));
 
+            Window.Resizable = _userStartupProperties.WindowIsResizable;
+
             var options = new GraphicsDeviceOptions(debug: false,
                                                     swapchainDepthFormat: PixelFormat.R16_UNorm,
                                                     syncToVerticalBlank: _vsync,
