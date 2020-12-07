@@ -32,14 +32,14 @@ namespace Yak2D.Graphics
         public ICameraModel3D CreateCamera3D(Vector3 position,
                                              Vector3 lookAt,
                                              Vector3 up,
-                                             float fieldOfViewDegress = 60,
-                                             float aspectRation = 16.0f / 9.0f,
+                                             float fieldOfViewDegress = 75,
+                                             float aspectRatio = 16.0f / 9.0f,
                                              float nearPlane = 0.0001f,
-                                             float farPlane = 1000.0f)
+                                             float farPlane = 10000.0f)
         {
             if (fieldOfViewDegress <= 0.0f)
             {
-                fieldOfViewDegress = 60.0f;
+                fieldOfViewDegress = 75.0f;
             }
 
             if (nearPlane <= 0.0f)
@@ -47,16 +47,9 @@ namespace Yak2D.Graphics
                 nearPlane = 0.0001f;
             }
 
-            if (farPlane <= 0.0f)
+            if (farPlane <= nearPlane)
             {
-                farPlane = 0.0001f;
-            }
-
-            if (farPlane < nearPlane)
-            {
-                var temp = farPlane;
-                farPlane = nearPlane;
-                nearPlane = temp;
+                farPlane = nearPlane + 1000.0f;
             }
 
             if (up == Vector3.Zero)
@@ -74,7 +67,7 @@ namespace Yak2D.Graphics
                                  lookAt,
                                  up,
                                  fieldOfViewDegress,
-                                 aspectRation,
+                                 aspectRatio,
                                  nearPlane,
                                  farPlane);
         }

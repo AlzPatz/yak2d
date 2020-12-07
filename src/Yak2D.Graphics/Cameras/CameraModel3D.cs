@@ -47,7 +47,7 @@ namespace Yak2D.Graphics
 
             InitBuffers();
 
-            SetCameraProjection(fovDegrees, aspectRatio, nearPlane, farPlane, false);
+            SetCameraProjection(fovDegrees, aspectRatio, nearPlane, farPlane, true);
             SetCameraView(position, lookAt, up);
         }
 
