@@ -46,8 +46,6 @@ layout(location = 0) out vec4 fragColor;
 
 vec3 CalculateLightContribution(Light light, vec3 surfaceColour, vec3 surfaceNormal, vec3 surfacePosition, vec3 surfaceToCamera)
 {
-    light.Position.y = -light.Position.y; // Fixes light position issue versus the other APIs
-
     vec3 surfaceToLightDirection;
 
     float attenuation = 1.0;

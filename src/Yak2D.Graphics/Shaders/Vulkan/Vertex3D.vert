@@ -19,14 +19,10 @@ layout(location = 2) out vec2 FragTexCoord;
 
 void main(void)
 {
-    FragTexCoord = vec2(VertTexCoord.x, 1.0 - VertTexCoord.y);
+    FragTexCoord = VertTexCoord;
     FragNormal = VertNormal;
     FragPosition = VertPosition;
     gl_Position = WorldViewProjection * vec4(FragPosition, 1.0);
-    
-    //gl_Position.z = gl_Position.z * 2.0 - gl_Position.w;
-
-    //OpenGL -> Vulkan NDC Space Transform
-    //gl_Position.y = -gl_Position.y; 
-    gl_Position.z = (gl_Position.z + gl_Position.w) / 2.0;
+    //Reconcile the difference between D3D11 and Vulkan clip space coordinates:
+    gl_Position.y = -gl_Position.y; 
 }
