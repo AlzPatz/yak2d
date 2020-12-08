@@ -32,15 +32,16 @@ namespace Yak2D.Graphics
             _frameworkMessenger = frameworkMessenger;
             _systemComponents = systemComponents;
             _surfaceManager = surfaceManager;
-            _pixelFormat = pixelFormat;
 
             SetCallback(callback);
 
-            CreateStagingTextureAndDataArray(stagingTextureWidth, stagingTextureHeight);
+            SetPixelFormatAndCreateStagingTextureAndDataArray(stagingTextureWidth, stagingTextureHeight, TexturePixelFormatConverter.ConvertVeldridToYak(pixelFormat));
         }
 
-        public void CreateStagingTextureAndDataArray(uint stagingTextureWidth, uint stagingTextureHeight)
+        public void SetPixelFormatAndCreateStagingTextureAndDataArray(uint stagingTextureWidth, uint stagingTextureHeight, TexturePixelFormat pixelFormat)
         {
+            _pixelFormat = TexturePixelFormatConverter.ConvertYakToVeldrid(pixelFormat);
+
             _stagingTextureWidth = stagingTextureWidth;
             _stagingTextureHeight = stagingTextureHeight;
 

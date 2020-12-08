@@ -1,4 +1,5 @@
 ﻿using System;
+using Yak2D.Internal;
 
 namespace Yak2D.Graphics
 {
@@ -6,7 +7,7 @@ namespace Yak2D.Graphics
     {
         ulong StagingTextureId { get; }
         void SetCallback(Action<TextureData> callback);
-        void CreateStagingTextureAndDataArray(uint stagingTextureWidth, uint stagingTextureHeight);
+        void SetPixelFormatAndCreateStagingTextureAndDataArray(uint stagingTextureWidth, uint stagingTextureHeight, TexturePixelFormat pixelFormat);
         void CopyDataFromStagingTextureAndPassToUser();
     }
 }

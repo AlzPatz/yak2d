@@ -29,12 +29,21 @@ namespace Yak2D.Graphics
             //Ensure the staging texture is of the correct size
             var stagingTexture = _gpuSurfaceManager.RetrieveSurface(stage.StagingTextureId);
 
-            var doDimensionsMatch = source.Texture.Width == stagingTexture.Texture.Width &&
-                                    source.Texture.Height == stagingTexture.Texture.Height;
+            var doStagingTexturePropertiesMatch = source.Texture.Width == stagingTexture.Texture.Width &&
+                                                    source.Texture.Height == stagingTexture.Texture.Height;
 
-            if (!doDimensionsMatch)
+            var pixelFormatOfSource = source.Texture.Format;
+
+            if (pixelFormatOfSource != stagingTexture.Texture.Format)
             {
-                stage.CreateStagingTextureAndDataArray(source.Texture.Width, source.Texture.Height);
+                doStagingTexturePropertiesMatch = false;
+            }
+
+            if (!doStagingTexturePropertiesMatch)
+            {
+                stage.SetPixelFormatAndCreateStagingTextureAndDataArray(source.Texture.Width,
+                                                                        source.Texture.Height,
+                                                                        TexturePixelFormatConverter.ConvertVeldridToYak(pixelFormatOfSource));
                 stagingTexture = _gpuSurfaceManager.RetrieveSurface(stage.StagingTextureId);
             }
 
