@@ -148,7 +148,6 @@ namespace Yak2D.Surface
                                            bool hasDepthBuffer,
                                            SamplerType samplerType,
                                            uint numberMipLevels,
-                                           TexSampleCount sampleCount,
                                            bool isGpuToCpuStagingTexture)
         {
             if (width == 0 || height == 0)
@@ -168,7 +167,7 @@ namespace Yak2D.Surface
                         1,
                         pixelFormat,
                         isGpuToCpuStagingTexture ? TextureUsage.Staging : TextureUsage.RenderTarget | TextureUsage.Sampled,
-                        TextureSampleCountConverter.ConvertYakToVeldrid(sampleCount)
+                        TextureSampleCountConverter.ConvertYakToVeldrid(_components.SwapChainFramebufferSampleCount)
                         ));
 
             var view = isGpuToCpuStagingTexture ? null : _components.Factory.CreateTextureView(texture);

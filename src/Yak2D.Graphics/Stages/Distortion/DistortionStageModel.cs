@@ -92,8 +92,7 @@ namespace Yak2D.Graphics
                                                         false,
                                                         false,
                                                         samplerType,
-                                                        1,
-                                                        TexSampleCount.X1).Id;
+                                                        1).Id;
         }
 
         public void SetEffectTransition(ref DistortionEffectConfiguration config, ref float transitionSeconds)

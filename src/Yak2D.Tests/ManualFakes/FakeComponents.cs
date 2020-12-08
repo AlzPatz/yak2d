@@ -26,6 +26,10 @@ namespace Yak2D.Tests.ManualFakes
 
         public GraphicsApi GraphicsApi => GraphicsApi.SystemDefault;
 
+        public TexturePixelFormat SwapChainFramebufferPixelFormat => TexturePixelFormat.B8_G8_R8_A8_UNorm;
+
+        public TextureSampleCount SwapChainFramebufferSampleCount => TextureSampleCount.X1;
+
         public bool IsGraphicsApiSupported(GraphicsApi api) => true;
 
         public void RecreateDeviceAndReinitialiseAllResources(Action systemPreAppReinitialisation) { }

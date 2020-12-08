@@ -17,7 +17,6 @@ namespace Yak2D.Surface
                                     bool hasDepthBuffer,
                                     SamplerType samplerType,
                                     uint numberMipLevels,
-                                    TexSampleCount sampleCount,
                                     bool isGpuToCpuStagingTexture);
 
         GpuSurface CreateSurfaceFromSwapChainOutputBuffer(Framebuffer framebuffer);

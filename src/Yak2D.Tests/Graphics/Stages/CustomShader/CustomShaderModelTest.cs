@@ -22,7 +22,7 @@ namespace Yak2D.Tests
             {
                 ColorAttachments = new OutputAttachmentDescription[] { },
                 DepthAttachment = new OutputAttachmentDescription(),
-                SampleCount = TextureSampleCount.Count1
+                SampleCount = Veldrid.TextureSampleCount.Count1
             });
             components.Device.Returns(idevice);
             var loader = Substitute.For<IShaderLoader>();

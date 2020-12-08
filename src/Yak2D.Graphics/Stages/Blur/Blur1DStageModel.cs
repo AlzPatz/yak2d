@@ -92,13 +92,12 @@ namespace Yak2D.Graphics
             return _surfaceManager.CreateRenderSurface(true,
                                                         width,
                                                         height,
-                                                        _startUpPropertiesCache.Internal.PixelFormatForRenderingSurfaces,
+                                                         TexturePixelFormatConverter.ConvertYakToVeldrid(_systemComponents.SwapChainFramebufferPixelFormat),
                                                         false,
                                                         false,
                                                         false,
                                                         samplerType,
-                                                        1,
-                                                        TexSampleCount.X1).Id;
+                                                        1).Id;
         }
 
         public void SetEffectTransition(ref Blur1DEffectConfiguration config, ref float transitionSeconds)

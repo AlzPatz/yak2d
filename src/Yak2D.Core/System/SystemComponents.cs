@@ -16,6 +16,9 @@ namespace Yak2D.Core
         public IDevice Device { get; private set; }
         public IFactory Factory { get; private set; }
 
+        public TexturePixelFormat SwapChainFramebufferPixelFormat { get; private set; }
+        public Internal.TextureSampleCount SwapChainFramebufferSampleCount { get; private set; }
+
         private readonly IFrameworkMessenger _frameworkMessenger;
         private readonly IApplicationMessenger _applicationMessenger;
 
@@ -150,7 +153,15 @@ namespace Yak2D.Core
 
             Factory = new VeldridFactory(new DisposeCollectorResourceFactory(Device.RawVeldridDevice.ResourceFactory));
 
+            RecordSwapChainBackBufferFormats();
+
             _frameworkMessenger.Report("Graphics API Chosen: " + Device.BackendType.ToString());
+        }
+
+        private void RecordSwapChainBackBufferFormats()
+        {
+            SwapChainFramebufferPixelFormat = TexturePixelFormatConverter.ConvertVeldridToYak(Device.SwapchainFramebufferOutputDescription.ColorAttachments[0].Format);
+            SwapChainFramebufferSampleCount = TextureSampleCountConverter.ConvertVeldridToYak(Device.SwapchainFramebufferOutputDescription.SampleCount);
         }
 
         public bool IsGraphicsApiSupported(GraphicsApi api)

@@ -10,6 +10,7 @@ namespace Yak2D.Surface
 {
     public class Surfaces : ISurfaces
     {
+        private ISystemComponents _systemComponents;
         private IStartupPropertiesCache _startUpPropertiesCache;
         private IGpuSurfaceManager _surfaceManager;
 
@@ -18,8 +19,10 @@ namespace Yak2D.Surface
         public int UserTextureCount { get { return _surfaceManager.UserTextureCount; } }
 
         public Surfaces(IStartupPropertiesCache startUpPropertiesCache,
-                        IGpuSurfaceManager surfaceManager)
+                        IGpuSurfaceManager surfaceManager,
+                        ISystemComponents systemComponents)
         {
+            _systemComponents = systemComponents;
             _startUpPropertiesCache = startUpPropertiesCache;
             _surfaceManager = surfaceManager;
         }
@@ -83,8 +86,7 @@ namespace Yak2D.Surface
                                                 uint height,
                                                 bool autoClearColourAndDepthEachFrame = true,
                                                 SamplerType samplerType = SamplerType.Anisotropic,
-                                                uint numberOfMipMapLevels = 1,
-                                                TexSampleCount textureSampleCount = TexSampleCount.X1)
+                                                uint numberOfMipMapLevels = 1)
 
         {
             if (width == 0 || height == 0)
@@ -101,13 +103,12 @@ namespace Yak2D.Surface
                 false,
                 width,
                 height,
-                _startUpPropertiesCache.Internal.PixelFormatForRenderingSurfaces,
+                TexturePixelFormatConverter.ConvertYakToVeldrid(_systemComponents.SwapChainFramebufferPixelFormat),
                 true,
                 autoClearColourAndDepthEachFrame,
                 autoClearColourAndDepthEachFrame,
                 samplerType,
-                numberOfMipMapLevels,
-                textureSampleCount
+                numberOfMipMapLevels
             );
         }
 

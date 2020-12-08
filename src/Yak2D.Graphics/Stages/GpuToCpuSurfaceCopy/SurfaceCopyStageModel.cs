@@ -86,7 +86,7 @@ namespace Yak2D.Graphics
 
             var dataByteSize = 4 * (int)_stagingTextureWidth * (int)_stagingTextureHeight;
 
-            if(requirePaddedArray)
+            if (requirePaddedArray)
             {
                 dataByteSize = (int)dataRowStride * (int)_stagingTextureHeight;
                 dataWithPadding = new byte[dataByteSize];
@@ -138,15 +138,23 @@ namespace Yak2D.Graphics
 
                         t = (y * (int)_stagingTextureWidth) + x;
                     }
-                    
+
                     //We only use the .X / .R component when returning single float data
                     userData.Pixels[t].X = floatSpan[s];
                 }
             }
             else
             {
-                //For the time being this will always be:
-                //PixelFormat.R8_G8_B8_A8_UNorm
+                // Staging Texture uses pixel format that the SwapChainBackBuffer 
+                // this is stored in _pixelFormat
+                // Veldrid defaults to BGRA not RGBA
+
+                // If the format is NOT BGRA it is assumed to be RGBA
+                // It will fail / give strange results for anything else
+                // Currently not caught if not BGRA and no RGBA
+
+                var isBGRA = _pixelFormat == PixelFormat.B8_G8_R8_A8_UNorm ||
+                            _pixelFormat == PixelFormat.B8_G8_R8_A8_UNorm_SRgb;
 
                 for (var s = 0; s < numberPixels; s++)
                 {
@@ -164,10 +172,12 @@ namespace Yak2D.Graphics
                     }
 
                     //Every 4 bytes will represent the 4 components of the colour
-                    var r = t * 4;
-                    var g = r + 1;
-                    var b = g + 1;
-                    var a = b + 1;
+                    var baseIndex = t * 4;
+
+                    var r = isBGRA ? baseIndex + 2 : baseIndex;
+                    var g = baseIndex + 1;
+                    var b = isBGRA ? baseIndex : baseIndex + 2;
+                    var a = baseIndex + 3;
 
                     //Each component of colour is a byte that we need to convert into a 0 - 255 int and 
                     //then get the normalised 0 to 1 value out of it

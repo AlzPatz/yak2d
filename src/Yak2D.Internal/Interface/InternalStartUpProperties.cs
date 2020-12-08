@@ -4,7 +4,6 @@ namespace Yak2D.Internal
 {
     public class InternalStartUpProperties
     {
-        public PixelFormat PixelFormatForRenderingSurfaces { get; set; }
         public float DefaultFpsTrackerUpdatePeriodInSeconds { get; set; }
         public int DrawQueueInitialSizeNumberOfRequests { get; set; }
         public int DrawQueueInitialSizeElementsPerRequestScalar { get; set; }

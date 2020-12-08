@@ -41,13 +41,11 @@ namespace Yak2D
         /// <param name="autoClearColourAndDepthEachFrame">Instruct the framework to clear the depth and colour pixel data of the render target before each render iteration. Helps ensure the user does not forget too</param>
         /// <param name="samplerType">When the Render Target is sampled as a texture, which sampler filter should be used</param>
         /// <param name="numberOfMipMapLevels">How many MipMap levels should be created (>0, 1 for none)</param>
-        /// <param name="textureSampleCount">How many samples should be taken per surface read</param>
         IRenderTarget CreateRenderTarget(uint width,
                                          uint height,
                                          bool autoClearColourAndDepthEachFrame = true,
                                          SamplerType samplerType = SamplerType.Anisotropic,
-                                         uint numberOfMipMapLevels = 1,
-                                         TexSampleCount textureSampleCount = TexSampleCount.X1);
+                                         uint numberOfMipMapLevels = 1);
 
         /// <summary>
         /// Load a texture from an image asset

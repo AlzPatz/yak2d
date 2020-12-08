@@ -67,8 +67,7 @@ namespace Yak2D.Internal
                                           bool autoClearColour,
                                           bool autoClearDepth,
                                           SamplerType samplerType,
-                                          uint numberOfMipLevels,
-                                          TexSampleCount textureSampleCount);
+                                          uint numberOfMipLevels);
 
         ITexture CreateGpuCpuStagingSurface(uint width,
                                             uint height,

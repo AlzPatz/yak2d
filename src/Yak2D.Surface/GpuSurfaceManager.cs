@@ -413,8 +413,7 @@ namespace Yak2D.Surface
                                                  bool autoClearColour,
                                                  bool autoClearDepth,
                                                  SamplerType samplerType,
-                                                 uint numberOfMipLevels,
-                                                 TexSampleCount textureSampleCount)
+                                                 uint numberOfMipLevels)
         {
             var id = _idGenerator.New();
 
@@ -425,7 +424,6 @@ namespace Yak2D.Surface
                                                               hasDepthBuffer,
                                                               samplerType,
                                                               numberOfMipLevels,
-                                                              textureSampleCount,
                                                               false);
 
             if (autoClearDepth && !hasDepthBuffer)
@@ -457,7 +455,6 @@ namespace Yak2D.Surface
                                                               false,
                                                               SamplerType.Anisotropic,
                                                               1,
-                                                              TexSampleCount.X1,
                                                               true);
 
             return _surfaceCollection.Add(id, surface) ? new TextureReference(id) : null;
