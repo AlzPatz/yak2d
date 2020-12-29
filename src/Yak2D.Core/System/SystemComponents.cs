@@ -144,7 +144,13 @@ namespace Yak2D.Core
 
             Window.Resizable = _userStartupProperties.WindowIsResizable;
 
-            var options = new GraphicsDeviceOptions(debug: false,
+            var isDebug = false;
+
+#if DEBUG
+            isDebug = true;
+#endif 
+
+            var options = new GraphicsDeviceOptions(debug: isDebug,
                                                     swapchainDepthFormat: PixelFormat.R16_UNorm,
                                                     syncToVerticalBlank: _vsync,
                                                     resourceBindingModel: ResourceBindingModel.Improved);

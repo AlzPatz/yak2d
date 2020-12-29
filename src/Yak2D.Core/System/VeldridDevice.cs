@@ -36,17 +36,17 @@ namespace Yak2D.Core
 
         public void UpdateBuffer<T>(DeviceBuffer buffer,
                             uint bufferOffsetInBytes,
-                            ref T source) where T : struct => _device?.UpdateBuffer<T>(buffer, bufferOffsetInBytes, ref source);
+                            ref T source) where T : unmanaged => _device?.UpdateBuffer<T>(buffer, bufferOffsetInBytes, ref source);
 
         public void UpdateBuffer<T>(DeviceBuffer buffer,
                                     uint bufferOffsetInBytes,
-                                    T[] source) where T : struct
+                                    T[] source) where T : unmanaged
                             => _device?.UpdateBuffer<T>(buffer, bufferOffsetInBytes, source);
 
         public void UpdateBuffer<T>(DeviceBuffer buffer,
                                     uint bufferOffsetInBytes,
                                     ref T source,
-                                    uint sizeInBytes) where T : struct
+                                    uint sizeInBytes) where T : unmanaged
                             => _device?.UpdateBuffer<T>(buffer, bufferOffsetInBytes, ref source, sizeInBytes);
 
         public void UpdateBuffer(DeviceBuffer buffer,

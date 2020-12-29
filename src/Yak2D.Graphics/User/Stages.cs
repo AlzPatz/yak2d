@@ -415,7 +415,7 @@ namespace Yak2D.Graphics
         }
 
 
-        public void SetCustomShaderUniformValues<T>(ICustomShaderStage stage, string uniformName, T data) where T : struct
+        public void SetCustomShaderUniformValues<T>(ICustomShaderStage stage, string uniformName, T data) where T : unmanaged
         {
             if (stage == null)
             {
@@ -425,13 +425,13 @@ namespace Yak2D.Graphics
             SetCustomShaderUniformValues(stage.Id, uniformName, data);
         }
 
-        public void SetCustomShaderUniformValues<T>(ulong stage, string uniformName, T data) where T : struct
+        public void SetCustomShaderUniformValues<T>(ulong stage, string uniformName, T data) where T : unmanaged
         {
             CacheRenderStageModelInVisitor(stage);
             _renderStageVisitor.CachedCustomShaderModel?.SetUniformValue<T>(uniformName, data);
         }
 
-        public void SetCustomShaderUniformValues<T>(ICustomShaderStage stage, string uniformName, T[] dataArray) where T : struct
+        public void SetCustomShaderUniformValues<T>(ICustomShaderStage stage, string uniformName, T[] dataArray) where T : unmanaged
         {
             if (stage == null)
             {
@@ -440,7 +440,7 @@ namespace Yak2D.Graphics
             SetCustomShaderUniformValues(stage.Id, uniformName, dataArray);
         }
 
-        public void SetCustomShaderUniformValues<T>(ulong stage, string uniformName, T[] dataArray) where T : struct
+        public void SetCustomShaderUniformValues<T>(ulong stage, string uniformName, T[] dataArray) where T : unmanaged
         {
             CacheRenderStageModelInVisitor(stage);
             _renderStageVisitor.CachedCustomShaderModel?.SetUniformValue<T>(uniformName, dataArray);

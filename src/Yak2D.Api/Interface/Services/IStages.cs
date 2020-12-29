@@ -485,7 +485,7 @@ namespace Yak2D
         /// <param name="data">The struct containing the uniform data</param>
         void SetCustomShaderUniformValues<T>(ICustomShaderStage stage,
                                              string uniformName,
-                                             T data) where T : struct;
+                                             T data) where T : unmanaged;
 
         /// <summary>
         /// Update user defined custom shader uniforms - Single value
@@ -495,7 +495,7 @@ namespace Yak2D
         /// <param name="data">The struct containing the uniform data</param>
         void SetCustomShaderUniformValues<T>(ulong stage,
                                              string uniformName,
-                                             T data) where T : struct;
+                                             T data) where T : unmanaged;
 
         /// <summary>
         /// Update user defined custom shader uniforms - Array of values
@@ -505,7 +505,7 @@ namespace Yak2D
         /// <param name="dataArray">The array of structs containing the uniform data</param>
         void SetCustomShaderUniformValues<T>(ICustomShaderStage stage,
                                              string uniformName,
-                                             T[] dataArray) where T : struct;
+                                             T[] dataArray) where T : unmanaged;
 
         /// <summary>
         /// Update user defined custom shader uniforms - Array of values
@@ -515,7 +515,7 @@ namespace Yak2D
         /// <param name="dataArray">The array of structs containing the uniform data</param>
         void SetCustomShaderUniformValues<T>(ulong stage,
                                              string uniformName,
-                                             T[] dataArray) where T : struct;
+                                             T[] dataArray) where T : unmanaged;
 
         /// <summary>
         /// Update user defined callback for GPU to CPU surface pixel data transfer on rendering completion

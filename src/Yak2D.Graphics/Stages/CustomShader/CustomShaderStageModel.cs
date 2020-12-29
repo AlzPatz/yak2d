@@ -228,7 +228,7 @@ namespace Yak2D.Graphics
                                                         false);
         }
 
-        public void SetUniformValue<T>(string uniformName, T data) where T : struct
+        public void SetUniformValue<T>(string uniformName, T data) where T : unmanaged
         {
             if (_uniformBufferNameLookup.ContainsKey(uniformName))
             {
@@ -241,7 +241,7 @@ namespace Yak2D.Graphics
             }
         }
 
-        public void SetUniformValue<T>(string uniformName, T[] dataArray) where T : struct
+        public void SetUniformValue<T>(string uniformName, T[] dataArray) where T : unmanaged
         {
             if (_uniformBufferNameLookup.ContainsKey(uniformName))
             {

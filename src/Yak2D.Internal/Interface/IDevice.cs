@@ -26,16 +26,16 @@ namespace Yak2D.Internal
 
         void UpdateBuffer<T>(DeviceBuffer buffer,
                              uint bufferOffsetInBytes,
-                             ref T source) where T : struct;
+                             ref T source) where T : unmanaged;
 
         void UpdateBuffer<T>(DeviceBuffer buffer,
                      uint bufferOffsetInBytes,
-                     T[] source) where T : struct;
+                     T[] source) where T : unmanaged;
 
         void UpdateBuffer<T>(DeviceBuffer buffer,
                              uint bufferOffsetInBytes,
                              ref T source,
-                             uint sizeInBytes) where T : struct;
+                             uint sizeInBytes) where T : unmanaged;
 
         void UpdateBuffer(DeviceBuffer buffer,
                           uint bufferOffsetInBytes,

@@ -10,7 +10,7 @@ namespace Yak2D.Graphics
         string UserUniformName(int index);
         ResourceSet UserUniformResourceSet(string name);
         ResourceSet UserUniformResourceSet(int index);
-        void SetUniformValue<T>(string uniformName, T data) where T: struct;
-        void SetUniformValue<T>(string uniformName, T[] dataArray) where T: struct;
+        void SetUniformValue<T>(string uniformName, T data) where T: unmanaged;
+        void SetUniformValue<T>(string uniformName, T[] dataArray) where T: unmanaged;
     }
 }
