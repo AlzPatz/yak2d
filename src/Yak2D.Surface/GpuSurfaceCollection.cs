@@ -83,7 +83,6 @@ namespace Yak2D.Surface
             {
                 if (surface.Value.Type.HasFlag(type))
                 {
-                    DisposeOfASurface(surface.Value);
                     listToReturn.Add(surface.Key);
                 }
             }
