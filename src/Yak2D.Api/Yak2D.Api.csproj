@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -17,12 +17,18 @@
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.0" />
     <PackageReference Include="System.Numerics.Vectors" Version="*" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="Veldrid.Sdl2" Version="4.8.0" />
-    <PackageReference Include="Veldrid.Utilities" Version="4.8.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interface\Utilities\DrawingHelpers\" />
+  <!-- Conditionally link to local Veldrid source if it is present within the same directory -->
+  <ItemGroup Condition="Exists('..\..\..\veldrid\')">
+    <ProjectReference Include="..\..\..\veldrid\src\Veldrid.SDL2\Veldrid.SDL2.csproj"/>
+    <ProjectReference Include="..\..\..\veldrid\src\Veldrid.Utilities\Veldrid.Utilities.csproj"/>
+  </ItemGroup>
+
+  <!-- If veldrid source not present, use nuget -->
+  <ItemGroup Condition="!Exists('..\..\..\veldrid\')">
+    <PackageReference Include="Veldrid.Sdl2" Version="4.8.0" />
+    <PackageReference Include="Veldrid.Utilities" Version="4.8.0" />
   </ItemGroup>
 
 </Project>

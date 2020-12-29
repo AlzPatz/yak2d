@@ -12,8 +12,14 @@
     <Version>0.0.0.0</Version>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Veldrid" Version="*" />
+  <!-- Conditionally link to local Veldrid source if it is present within the same directory -->
+  <ItemGroup Condition="Exists('..\..\..\veldrid\')">
+    <ProjectReference Include="..\..\..\veldrid\src\Veldrid\Veldrid.csproj"/>
+  </ItemGroup>
+
+  <!-- If veldrid source not present, use nuget -->
+  <ItemGroup Condition="!Exists('..\..\..\veldrid\')">
+    <PackageReference Include="Veldrid" Version="4.8.0" />
   </ItemGroup>
 
   <ItemGroup>
