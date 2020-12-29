@@ -127,8 +127,6 @@ namespace Yak2D.Surface
 
         public Texture GenerateRgbaVeldridTextureFromPixelData(Rgba32[] data, uint width, uint height, bool mipMap)
         {
-            data = MirrorOverXAxisIfGraphicsApiRequires<Rgba32>(width, height, data);
-
             var image = SixLabors.ImageSharp.Image.LoadPixelData(data, (int)width, (int)height);
 
             var imageSharpTexture = new ImageSharpTexture(image, mipMap);
@@ -140,8 +138,6 @@ namespace Yak2D.Surface
 
         public Texture GenerateFloat32VeldridTextureFromPixelData(float[] data, uint width, uint height)
         {
-            data = MirrorOverXAxisIfGraphicsApiRequires<float>(width, height, data);
-
             return _floatTextureBuilder.GenerateFloat32VeldridTextureFromPixelData(data, width, height);
         }
     }

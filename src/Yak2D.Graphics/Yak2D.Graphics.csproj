@@ -27,10 +27,12 @@
     <PackageReference Include="Veldrid.ImageSharp" Version="4.8.0" />
   </ItemGroup>
 
+  <!-- Conditionally link to local Veldrid spirv source if it is present within the same directory -->
   <ItemGroup Condition="!Exists('..\..\..\veldrid-spirv\')">
     <PackageReference Include="Veldrid.SPIRV" Version="1.0.13" />
   </ItemGroup>
   
+  <!-- If veldrid source not present, use nuget -->
   <ItemGroup Condition="Exists('..\..\..\veldrid-spirv\')">
     <ProjectReference Include="..\..\..\veldrid-spirv\src\Veldrid.SPIRV\Veldrid.SPIRV.csproj"/>
   </ItemGroup>
