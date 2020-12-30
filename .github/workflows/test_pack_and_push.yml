@@ -62,6 +62,7 @@ on:
           - 'src/**'
           - 'version.json'
 env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true #The `set-env` command is disabled. Please upgrade to using Environment Files or opt into unsecure command execution by setting the `ACTIONS_ALLOW_UNSECURE_COMMANDS` environment variable to `true`. For more information see: https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
   TOPLEVEL_BUILD_DIR: "./src/" # Location of .sln or single .csproj (where job "test" should restore, build and test from)
   PUSH_PACK_NON_MASTER_STRING: "push-dev-pack" # String used to signal a Development MyGet package publish for non Master branch 
   DEV_PACKAGE_NAME_SUFFIX: "-dev"         
