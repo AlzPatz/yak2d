@@ -464,10 +464,7 @@ namespace Yak2D.Surface
         {
             if (removeExisting)
             {
-                if (!_surfaceCollection.Remove(MainSwapChainFrameBufferKey))
-                {
-                    _frameworkMessenger.Report("The removal of a surface that caused an error was due to trying to remove a swapchain render target on recreation. Shouldn't happen!");
-                }
+                DestroySurface(MainSwapChainFrameBufferKey);
             }
 
             var surface = _gpuSurfaceFactory.CreateSurfaceFromSwapChainOutputBuffer(swapChainFrameBuffer);

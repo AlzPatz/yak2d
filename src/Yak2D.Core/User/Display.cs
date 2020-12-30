@@ -42,7 +42,7 @@ namespace Yak2D.Core
 
         private void ActionWindowResize()
         {
-            ReSizeWindowRenderSurface();
+            ProcessWindowReSize();
             _applicationMessenger.QueueMessage(FrameworkMessage.WindowWasResized);
         }
 
@@ -61,7 +61,7 @@ namespace Yak2D.Core
             _applicationMessenger.QueueMessage(FrameworkMessage.ApplicationWindowClosing);
         }
 
-        private void ReSizeWindowRenderSurface()
+        private void ProcessWindowReSize()
         {
             _systemComponents.Device.ResizeMainWindow(WindowResolutionWidth, WindowResolutionHeight);
             _gpuSurfaceManager.RegisterSwapChainOutput(_systemComponents.Device.SwapchainFramebuffer, true);
