@@ -16,7 +16,7 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
 
 [Documentation](https://alzpatz.github.io/yak2d-docs/) 
 
-[Demo Samples](https://github.com/AlzPatz/yak2d-samples)!
+[Demo Samples](https://github.com/AlzPatz/yak2d-samples)
 
 ## Key Features
 * Customisable Rendering Pipeline
