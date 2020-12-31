@@ -19,6 +19,7 @@
 # Job #2 "packandpush"
 # Assumes "test" successful
 # Publishes Official Nuget feed RELEASE if MASTER push contains a NEW version number (three integar format 1.2.3) as defined by user in version.json
+# Triggers a documentation rebuild on any push to master - this does mean that documentation can get ahead of official nuget release...
 # Publishes Development DEBUG Package to MyGet feed on ALL pushes to master (version number used four integer format 1.2.3.4) - use development package name to differentiate from official nuget name
 # Uses the fact that Nuget.Org will (on skip duplicates) not allow a package with the same version (Major.Minor.Patch) to be uploaded if it exists already (hence official release when user changed Major.Minor.Patch first occurs),
 # and that uploads to MyGet will use 4 component version number meaning each commit does have a unique version number (MyGet publish will work each time as not duplicated version number)
@@ -62,7 +63,6 @@ on:
           - 'src/**'
           - 'version.json'
 env:
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: true #The `set-env` command is disabled. Please upgrade to using Environment Files or opt into unsecure command execution by setting the `ACTIONS_ALLOW_UNSECURE_COMMANDS` environment variable to `true`. For more information see: https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
   TOPLEVEL_BUILD_DIR: "./src/" # Location of .sln or single .csproj (where job "test" should restore, build and test from)
   PUSH_PACK_NON_MASTER_STRING: "push-dev-pack" # String used to signal a Development MyGet package publish for non Master branch 
   DEV_PACKAGE_NAME_SUFFIX: "-dev"         
@@ -85,8 +85,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1.5.0
-        with:
-            dotnet-version: '3.1.x' 
       - name: Restore
         run: |
             cd ${{ env.TOPLEVEL_BUILD_DIR }}
@@ -97,8 +95,7 @@ jobs:
             dotnet build -c Release --no-restore
       - name: Test
         # Skip testing under ubuntu as SDL2 library not installed on OS instance
-        # Skip testing under MacOS as Veldrid now appears to set OpenGL (not metal) as default backend, which fails
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'windows-latest' || matrix.os == 'macos-latest'
         run: |
           cd ${{ env.TOPLEVEL_BUILD_DIR }}
           dotnet test
@@ -135,6 +132,15 @@ jobs:
               Nuget-Source: ${{ env.NUGET_SOURCE }}
               Nuget-Api-Key: ${{secrets.NUGET_API_KEY}}
               Push-Package: true
+        - name: If pushing to master - Trigger a documentation rebuild
+          if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+          run: |
+             curl -X POST \
+             -H "Authorization: token ${{ secrets.DOCUMENTATION_MANAGEMENT_TOKEN }}" \
+             -H "Accept: application/vnd.github.everest-preview+json" \
+             -H "Content-Type: application/json" \
+             --data '{ "event_type": "yak2d push to master" }' \
+             https://api.github.com/repos/AlzPatz/yak2d-docs-content/dispatches
         - name: If pushing to master, pack a DEBUG version with 1.2.3.4 format and upload to myget under the development name
           if: github.ref == 'refs/heads/master' && github.event_name == 'push'
           id: push_master_to_myget
