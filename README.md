@@ -12,6 +12,8 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
 
 **Supported Graphics APIs: Direct3D 11, Vulkan, Open GL, Metal**
 
+[![NuGet](https://img.shields.io/nuget/v/yak2d.svg)](https://www.nuget.org/packages/Yak2D/)
+
 ## Documentation and Samples
 
 [Documentation](https://alzpatz.github.io/yak2d-docs/) 
