@@ -10,7 +10,7 @@ using Yak2D.Input;
 namespace Yak2D
 {
     /// <summary>
-    /// Welcome to the Yak2D cross platform c# graphics framework!! To get started, please provide Run() your own implementation of the IApplication interface
+    /// Welcome to the Yak2D cross platform c# graphics framework!!! To get started, please provide Run() your own implementation of the IApplication interface
     /// </summary>
     public class Launcher
     {
