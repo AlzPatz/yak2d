@@ -12,6 +12,11 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
 
 **Supported Graphics APIs: Direct3D 11, Vulkan, Open GL, Metal**
 
+## Documentation and Samples
+
+[Documentation](https://alzpatz.github.io/yak2d-docs/) 
+[Demo Samples](https://github.com/AlzPatz/yak2d-samples)!
+
 ## Key Features
 * Customisable Rendering Pipeline
     * Create and use Textures and Render Targets (surfaces) as  inputs and outputs wherever desired in rendering pipeline
@@ -36,10 +41,6 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
     * Easily Create Custom Shader stages, or stages with full exposure to Veldrid objects
 * Input
     * Exposes keyboard, mouse and gamepad input via an abstraction over Veldrid / SDL2
-
-## Documentation
-
-[yak2D documentation](https://alzpatz.github.io/yak2d-docs/)
 
 ## Installation 
 
