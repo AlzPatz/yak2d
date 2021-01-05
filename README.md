@@ -1,4 +1,4 @@
-# ![](logo.png) yak2D 
+# yak2D 
 
 The yak2D framework enables the creation of interactive **cross platform** desktop 2D graphics applications.
 
@@ -13,6 +13,8 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
 **Supported Graphics APIs: Direct3D 11, Vulkan, Open GL, Metal**
 
 [![NuGet](https://img.shields.io/nuget/v/yak2d.svg)](https://www.nuget.org/packages/Yak2D/)
+
+![](logo.png) 
 
 ## Documentation and Samples
 
