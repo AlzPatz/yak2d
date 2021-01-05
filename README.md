@@ -1,4 +1,4 @@
-# yak2D
+# yak2D ![](logo.png)
 
 The yak2D framework enables the creation of interactive **cross platform** desktop 2D graphics applications.
 
