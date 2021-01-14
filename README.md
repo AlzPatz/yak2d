@@ -2,7 +2,7 @@
 
 The yak2D framework enables the creation of interactive **cross platform** desktop 2D graphics applications.
 
-It offers simple 2D polygon and ‘sprite’ drawing functions, in addition to flexible render path creation making use of shader effects (both inbuilt and user defined).
+It offers simple 2D polygon (coloured, textured and dual textured) drawing functions, in addition to flexible render path creation making use of shader effects (both inbuilt and user defined).
 
 Quickly create 2D games and prototypes that run on all major desktop operating systems. Graphics, Input, Windowing and Application Lifecycle are all provided for and managed by the framework (*just add sound*). Avoid the bloat of large game engines (or make life harder for yourself - whatever your opinion). No GUI, **do it all in code..** :)
 
