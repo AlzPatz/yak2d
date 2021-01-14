@@ -8,7 +8,7 @@ Quickly create 2D games and prototypes that run on all major desktop operating s
 
 yak2D is structured as a collection of .NET standard 2.0 class libraries, built upon the [Veldrid](https://github.com/mellinoe/veldrid) cross-platform API agnostic rendering library. Application windowing is handled by SDL2 via [Veldrid](https://github.com/mellinoe/veldrid).
 
-**Supported Desktop Platforms: Windows, Linux and OSX**
+**Supported Desktop Platforms: Windows, Linux and MacOS**
 
 **Supported Graphics APIs: Direct3D 11, Vulkan, Open GL, Metal**
 
