@@ -14,12 +14,12 @@
 
   <ItemGroup>
     <PackageReference Include="HPCsharp" Version="3.12.0" />
-    <PackageReference Include="System.Memory" Version="4.5.4" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
   </ItemGroup>
 
   <!-- Conditionally link to local Veldrid source if it is present within the same directory -->
   <ItemGroup Condition="Exists('..\..\..\veldrid\')">
-    <ProjectReference Include="..\..\..\veldrid\src\Veldrid.ImageSharp\Veldrid.ImageSharp.csproj"/>
+    <ProjectReference Include="..\..\..\veldrid\src\Veldrid.ImageSharp\Veldrid.ImageSharp.csproj" />
   </ItemGroup>
 
   <!-- If veldrid source not present, use nuget -->
@@ -34,7 +34,7 @@
   
   <!-- If veldrid source not present, use nuget -->
   <ItemGroup Condition="Exists('..\..\..\veldrid-spirv\')">
-    <ProjectReference Include="..\..\..\veldrid-spirv\src\Veldrid.SPIRV\Veldrid.SPIRV.csproj"/>
+    <ProjectReference Include="..\..\..\veldrid-spirv\src\Veldrid.SPIRV\Veldrid.SPIRV.csproj" />
   </ItemGroup>
 
   <ItemGroup>
