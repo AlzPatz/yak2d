@@ -82,9 +82,9 @@ jobs:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1.5.0
+        uses: actions/setup-dotnet@v5
       - name: Restore
         run: |
             cd ${{ env.TOPLEVEL_BUILD_DIR }}
@@ -104,7 +104,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Checkout
-          uses: actions/checkout@v2
+          uses: actions/checkout@v5
           with:
               fetch-depth: 0
         - name: Run Nerdbank.GitVersioning
@@ -113,7 +113,7 @@ jobs:
           with:
               path: ${{ env.VERSION_DOT_JSON_DIR }}
         - name: Checkout local actions
-          uses: actions/checkout@v1
+          uses: actions/checkout@v5
         - name: Create Nuget Directory
           run: |
             cd .
@@ -181,7 +181,7 @@ jobs:
               Nuget-Api-Key: ''
               Push-Package: false
         - name: Upload (latest) built package as action artifact
-          uses: actions/upload-artifact@v2
+          uses: actions/upload-artifact@v4
           with:
               name: ${{ env.ARTIFACT_NAME }}${{ steps.nb.outputs.Version }}${{ steps.nb.outputs.BuildMetadataFragment }} 
               path: ./packages/*.nupkg
