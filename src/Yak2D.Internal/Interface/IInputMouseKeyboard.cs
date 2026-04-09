@@ -1,13 +1,14 @@
 using System.Collections.Generic;
 using System.Numerics;
-using Veldrid;
-using Veldrid.Sdl2;
+using NeoVeldrid;
+using NeoVeldrid.Sdl2;
+using Silk.NET.SDL;
 
 namespace Yak2D.Internal
 {
     public interface IInputMouseKeyboard
     {
-        void CacheEvent(ref SDL_Event ev);
+        void CacheEvent(ref Event ev);
 
         bool IsMouseOverWindow { get; }
         Vector2 MousePosition { get; }

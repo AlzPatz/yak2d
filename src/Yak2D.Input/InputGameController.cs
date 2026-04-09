@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Veldrid.Sdl2;
+using NeoVeldrid.Sdl2;
+using Silk.NET.SDL;
 using Yak2D.Internal;
 
 namespace Yak2D.Input
@@ -14,16 +15,17 @@ namespace Yak2D.Input
         private readonly IApplicationMessenger _applicationMessenger;
         private Dictionary<int, GameController> _controllers;
 
-        private Queue<SDL_Event> _eventQueue;
+        private Queue<Event> _eventQueue;
 
         public InputGameController(IFrameworkMessenger frameworkMessenger, IApplicationMessenger applicationMessenger)
         {
             _frameworkMessenger = frameworkMessenger;
             _applicationMessenger = applicationMessenger;
 
-            Sdl2Native.SDL_Init(SDLInitFlags.GameController);
+            Sdl2Window.SdlInstance.Init(Silk.NET.SDL.Sdl.InitGamecontroller); //Correct?
+            //Sdl2Native.SDL_Init(SDLInitFlags.GameController);
 
-            _eventQueue = new Queue<SDL_Event>();
+            _eventQueue = new Queue<Event>();
 
             _controllers = new Dictionary<int, GameController>();
 
@@ -34,22 +36,29 @@ namespace Yak2D.Input
         {
             var validIds = new List<int>();
 
-            var numJoySticks = Sdl2Native.SDL_NumJoysticks();
+            var numJoySticks = Sdl2Window.SdlInstance.NumJoysticks();
+            //var numJoySticks = Sdl2Native.SDL_NumJoysticks();
 
             var numGameControllers = 0;
             for (var c = 0; c < numJoySticks; c++)
             {
-                if (Sdl2Native.SDL_IsGameController(c))
+                if(Sdl2Window.SdlInstance.IsGameController(c) == SdlBool.True)
+                //if (Sdl2Native.SDL_IsGameController(c))
                 {
                     var index = c;
-                    var controller = Sdl2Native.SDL_GameControllerOpen(index);
-                    var joystick = Sdl2Native.SDL_GameControllerGetJoystick(controller);
-                    var instanceId = Sdl2Native.SDL_JoystickInstanceID(joystick);
+                    var controller = Sdl2Window.SdlInstance.GameControllerOpen(index);
+                    var joystick = Sdl2Window.SdlInstance.GameControllerGetJoystick(controller);
+                    var instanceId = Sdl2Window.SdlInstance.JoystickInstanceID(joystick);
+                    //var controller = Sdl2Native.SDL_GameControllerOpen(index);
+                    //var joystick = Sdl2Native.SDL_GameControllerGetJoystick(controller);
+                    //var instanceId = Sdl2Native.SDL_JoystickInstanceID(joystick);
 
-                    var name = Marshal.PtrToStringAnsi((IntPtr)Sdl2Native.SDL_GameControllerName(controller));
+                    var name = Marshal.PtrToStringAnsi((IntPtr)Sdl2Window.SdlInstance.GameControllerName(controller));
+                    //var name = Marshal.PtrToStringAnsi((IntPtr)Sdl2Native.SDL_GameControllerName(controller));
                     _frameworkMessenger.Report(string.Concat("Detected Controller name: ", name));
 
-                    var gameController = new GameController(name, controller, joystick);
+                    var gameController = new GameController(name, *controller, *joystick);
+                    //var gameController = new GameController(name, controller, joystick);
                     if (_controllers.ContainsKey(instanceId))
                     {
                         if (_controllers[instanceId].Name != name)
@@ -80,19 +89,24 @@ namespace Yak2D.Input
 
         private unsafe void RegisterInitialGamepads()
         {
-            var numJoySticks = Sdl2Native.SDL_NumJoysticks();
+            var numJoySticks = Sdl2Window.SdlInstance.NumJoysticks();
+            //var numJoySticks = Sdl2Native.SDL_NumJoysticks();
 
             var numGameControllers = 0;
             for (var c = 0; c < numJoySticks; c++)
             {
-                if (Sdl2Native.SDL_IsGameController(c))
-                {
+                //if (Sdl2Native.SDL_IsGameController(c))
+                if (Sdl2Window.SdlInstance.IsGameController(c) == SdlBool.True)
+                    {
                     var index = c;
-                    var controller = Sdl2Native.SDL_GameControllerOpen(index);
-                    var joystick = Sdl2Native.SDL_GameControllerGetJoystick(controller);
+                    var controller = Sdl2Window.SdlInstance.GameControllerOpen(index);
+                    var joystick = Sdl2Window.SdlInstance.GameControllerGetJoystick(controller);
+                    //var controller = Sdl2Native.SDL_GameControllerOpen(index);
+                    //var joystick = Sdl2Native.SDL_GameControllerGetJoystick(controller);
                     var instanceId = index; //Sdl2Native.SDL_JoystickInstanceID(joystick);
                                             //How to check for controller NULL?
-                    var name = Marshal.PtrToStringAnsi((IntPtr)Sdl2Native.SDL_GameControllerName(controller));
+                    var name = Marshal.PtrToStringAnsi((IntPtr)Sdl2Window.SdlInstance.GameControllerName(controller));
+                    //var name = Marshal.PtrToStringAnsi((IntPtr)Sdl2Native.SDL_GameControllerName(controller));
                     _frameworkMessenger.Report(string.Concat("Detected Controller name: ", name));
 
                     if (_controllers.ContainsKey(instanceId))
@@ -101,7 +115,8 @@ namespace Yak2D.Input
                         continue;
                     }
 
-                    var gameController = new GameController(name, controller, joystick);
+                    var gameController = new GameController(name, *controller, *joystick);
+                    //var gameController = new GameController(name, controller, joystick);
                     _controllers.Add(instanceId, gameController);
 
                     numGameControllers++;
@@ -124,7 +139,7 @@ namespace Yak2D.Input
             }
         }
 
-        public void CacheEvent(ref SDL_Event ev)
+        public void CacheEvent(ref Event ev)
         {
             _eventQueue.Enqueue(ev);
         }
@@ -138,51 +153,51 @@ namespace Yak2D.Input
             }
         }
 
-        private void ProcessAnEvent(ref SDL_Event ev)
+        private void ProcessAnEvent(ref Event ev)
         {
             int id;
-            switch (ev.type)
+            switch ((EventType)ev.Type)
             {
-                case SDL_EventType.ControllerDeviceAdded:
+                case EventType.Controllerdeviceadded:
                     UpdateGamepadRegister();
                     _applicationMessenger.QueueMessage(FrameworkMessage.GamepadAdded);
                     break;
-                case SDL_EventType.ControllerDeviceRemoved:
+                case EventType.Controllerdeviceremoved:
                     UpdateGamepadRegister();
                     _applicationMessenger.QueueMessage(FrameworkMessage.GamepadRemoved);
                     break;
-                case SDL_EventType.ControllerDeviceRemapped:
+                case EventType.Controllerdeviceremapped:
                     //Unsure if am required to process this event. For future investigation
                     break;
-                case SDL_EventType.ControllerButtonUp:
-                case SDL_EventType.ControllerButtonDown:
-                    SDL_ControllerButtonEvent buttonEvent = Unsafe.As<SDL_Event, SDL_ControllerButtonEvent>(ref ev);
+                case EventType.Controllerbuttonup:
+                case EventType.Controllerbuttondown:
+                    ControllerButtonEvent buttonEvent = Unsafe.As<Event, ControllerButtonEvent>(ref ev);
 
-                    id = buttonEvent.which;
+                    id = buttonEvent.Which;
 
                     if (_controllers.ContainsKey(id))
                     {
                         var controller = _controllers[id];
 
-                        var button = ToGamepadButton(buttonEvent.button);
+                        var button = ToGamepadButton((GameControllerButton)buttonEvent.Button);
 
-                        var pressed = buttonEvent.state == 1; //SDL_PRESSED and SDL_RELEASED don't appear to exist
+                        var pressed = buttonEvent.State == 1; //SDL_PRESSED and SDL_RELEASED don't appear to exist
 
                         controller.ProcessButtonEvent(button, pressed);
                     }
                     break;
-                case SDL_EventType.ControllerAxisMotion:
-                    SDL_ControllerAxisEvent axisEvent = Unsafe.As<SDL_Event, SDL_ControllerAxisEvent>(ref ev);
+                case EventType.Controlleraxismotion:
+                    ControllerAxisEvent axisEvent = Unsafe.As<Event, ControllerAxisEvent>(ref ev);
 
-                    id = axisEvent.which;
+                    id = axisEvent.Which;
 
                     if (_controllers.ContainsKey(id))
                     {
                         var controller = _controllers[id];
 
-                        var axis = ToGamepadAxis(axisEvent.axis);
+                        var axis = ToGamepadAxis((GameControllerAxis)axisEvent.Axis);
 
-                        var value = NormalizeAxis(axisEvent.value);
+                        var value = NormalizeAxis(axisEvent.Value);
 
                         controller.ProcessAxisEvent(axis, value);
                     }
@@ -190,12 +205,12 @@ namespace Yak2D.Input
             }
         }
 
-        private GamepadButton ToGamepadButton(SDL_GameControllerButton button)
+        private GamepadButton ToGamepadButton(GameControllerButton button)
         {
             return (GamepadButton)button;
         }
 
-        private GamepadAxis ToGamepadAxis(SDL_GameControllerAxis axis)
+        private GamepadAxis ToGamepadAxis(GameControllerAxis axis)
         {
             return (GamepadAxis)axis;
         }

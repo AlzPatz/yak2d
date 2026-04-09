@@ -1,7 +1,7 @@
 using NSubstitute;
 using System;
 using System.Numerics;
-using Veldrid;
+using NeoVeldrid;
 using Xunit;
 using Yak2D.Graphics;
 using Yak2D.Internal;

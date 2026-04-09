@@ -1,12 +1,13 @@
 using System.Collections.Generic;
-using Veldrid.Sdl2;
+using NeoVeldrid.Sdl2;
+using Silk.NET.SDL;
 
 namespace Yak2D.Internal
 {
     public interface IInputGameController
     {
         void Update(float timeStepSeconds);
-        void CacheEvent(ref SDL_Event ev);
+        void CacheEvent(ref Event ev);
         bool IsGamepadIdValid(int id);
         List<int> ConnectedGamepadIds();
         bool IsGamepadButtonCurrentlyPressed(int id, GamepadButton button);

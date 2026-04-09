@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Veldrid;
+using NeoVeldrid;
 
 namespace Yak2D.Utility
 {
@@ -13,7 +13,7 @@ namespace Yak2D.Utility
             AllCurrentlySupportedFrameworkBackends = new List<GraphicsBackend>
             {
                 GraphicsBackend.Direct3D11,
-                GraphicsBackend.Metal,
+                //GraphicsBackend.Metal,
                 GraphicsBackend.OpenGL,
                 GraphicsBackend.Vulkan, 
                 //GraphicsBackend.OpenGLES
@@ -34,8 +34,8 @@ namespace Yak2D.Utility
             {
                 case GraphicsApi.Direct3D11:
                     return GraphicsBackend.Direct3D11;
-                case GraphicsApi.Metal:
-                    return GraphicsBackend.Metal;
+                //case GraphicsApi.Metal:
+                    //return GraphicsBackend.Metal;
                 case GraphicsApi.OpenGL:
                     return GraphicsBackend.OpenGL;
                 case GraphicsApi.OpenGLES:
@@ -53,8 +53,8 @@ namespace Yak2D.Utility
             {
                 case GraphicsBackend.Direct3D11:
                     return GraphicsApi.Direct3D11;
-                case GraphicsBackend.Metal:
-                    return GraphicsApi.Metal;
+                //case GraphicsBackend.Metal:
+                    //return GraphicsApi.Metal;
                 case GraphicsBackend.OpenGL:
                     return GraphicsApi.OpenGL;
                 case GraphicsBackend.OpenGLES:

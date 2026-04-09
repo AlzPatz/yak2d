@@ -1,6 +1,6 @@
-using Veldrid;
-using Veldrid.Utilities;
-using Veldrid.SPIRV;
+using NeoVeldrid;
+using NeoVeldrid.Utilities;
+using NeoVeldrid.SPIRV;
 using Yak2D.Internal;
 
 namespace Yak2D.Tests.ManualFakes

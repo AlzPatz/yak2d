@@ -2,7 +2,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using Veldrid;
+using NeoVeldrid;
 
 namespace Yak2D.Internal
 {

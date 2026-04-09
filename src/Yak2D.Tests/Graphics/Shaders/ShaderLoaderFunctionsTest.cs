@@ -34,12 +34,12 @@ namespace Yak2D.Tests
 
             var loader = new ShaderLoaderFunctions(messenger, components, applicationassembly, graphicsassembly, filesystem);
 
-            Assert.Null(loader.CreateUniformResourceLayouts(new Veldrid.ResourceLayoutElementDescription[][]
+            Assert.Null(loader.CreateUniformResourceLayouts(new NeoVeldrid.ResourceLayoutElementDescription[][]
                 {
                     null,
-                    new Veldrid.ResourceLayoutElementDescription[]
+                    new NeoVeldrid.ResourceLayoutElementDescription[]
                     {
-                        new Veldrid.ResourceLayoutElementDescription()
+                        new NeoVeldrid.ResourceLayoutElementDescription()
                     },
                 }));
         }

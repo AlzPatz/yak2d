@@ -1,5 +1,5 @@
 using NSubstitute;
-using Veldrid;
+using NeoVeldrid;
 using Xunit;
 using Yak2D.Graphics;
 using Yak2D.Internal;
@@ -22,7 +22,7 @@ namespace Yak2D.Tests
             {
                 ColorAttachments = new OutputAttachmentDescription[] { },
                 DepthAttachment = new OutputAttachmentDescription(),
-                SampleCount = Veldrid.TextureSampleCount.Count1
+                SampleCount = NeoVeldrid.TextureSampleCount.Count1
             });
             components.Device.Returns(idevice);
             var loader = Substitute.For<IShaderLoader>();

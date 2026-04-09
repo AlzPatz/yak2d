@@ -1,5 +1,5 @@
 using System.Linq;
-using Veldrid;
+using NeoVeldrid;
 
 namespace Yak2D.Graphics
 {
@@ -54,7 +54,7 @@ namespace Yak2D.Graphics
               - The aim here was to avoid the stride differences found in some data types across backends, reducing/removing uniform data problems
               * Compiling HLSL with DXC.exe (the latest compiler) causes issues with SharpDX that are quite opague. Compiling with FXC.exe
               - works for included shaders and is therefore the preferred method. In the future I would like to find out why this issue exists (semantics?)
-              * I avoided using Veldrid-SPIRV cross for shader translation across backends to avoid edge case problems,
+              * I avoided using NeoVeldrid-SPIRV cross for shader translation across backends to avoid edge case problems,
               - remove another layer of potential debugging, and also to better learn other shader languages
               - With the shader set relatively fixed, it could be ported to single source, cross translation in the future
 

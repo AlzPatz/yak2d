@@ -1,22 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Veldrid.Sdl2;
+using NeoVeldrid.Sdl2;
 
 namespace Yak2D.Input
 {
     public class GameController
     {
         public string Name { get; private set; }
-        public SDL_GameController Controller { get; private set; }
-        public SDL_Joystick Joystick { get; private set; }
+        public Silk.NET.SDL.GameController Controller { get; private set; }
+        public Silk.NET.SDL.Joystick Joystick { get; private set; }
 
         private Dictionary<GamepadButton, float> _buttonsDown;
         private HashSet<GamepadButton> _buttonsDownThisFrame;
         private Dictionary<GamepadButton, float> _buttonsUpThisFrame;
         private Dictionary<GamepadAxis, float> _axes;
 
-        public GameController(string name, SDL_GameController controller, SDL_Joystick joystick)
+        public GameController(string name, Silk.NET.SDL.GameController controller, Silk.NET.SDL.Joystick joystick)
         {
             Name = name;
             Controller = controller;

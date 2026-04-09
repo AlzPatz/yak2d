@@ -1,4 +1,5 @@
-using Veldrid.Sdl2;
+using NeoVeldrid.Sdl2;
+using Silk.NET.SDL;
 using Yak2D.Internal;
 
 namespace Yak2D.Core
@@ -28,35 +29,34 @@ namespace Yak2D.Core
             Sdl2Events.ProcessEvents();
         }
 
-        private void ProcessEvent(ref SDL_Event ev)
+        private void ProcessEvent(ref Event ev)
         {
-            switch (ev.type)
+            switch ((EventType)ev.Type)
             {
-                case SDL_EventType.ControllerDeviceAdded:
-                case SDL_EventType.ControllerDeviceRemoved:
-                case SDL_EventType.ControllerDeviceRemapped:
-                case SDL_EventType.ControllerButtonUp:
-                case SDL_EventType.ControllerButtonDown:
-                case SDL_EventType.ControllerAxisMotion:
+                case EventType.Controllerdeviceadded:
+                case EventType.Controllerdeviceremapped:
+                case EventType.Controllerbuttonup:
+                case EventType.Controllerbuttondown:
+                case EventType.Controlleraxismotion:
                     _inputGameController.CacheEvent(ref ev);
                     break;
-                
-                    //Currently Veldrid Snapshot is used for all events. 
-                    //However here is an attempt to faster sample mouse position
-                case SDL_EventType.MouseMotion:
+
+                //Currently Veldrid Snapshot is used for all events. 
+                //However here is an attempt to faster sample mouse position
+                case EventType.Mousemotion:
                     _inputMouseAndKeyboard.CacheEvent(ref ev);
                     break;
 
-                case SDL_EventType.Quit:
-                case SDL_EventType.Terminating:
+                case EventType.Quit:
+                case EventType.AppTerminating:
                     _coreMessenger.QueueMessage(CoreMessage.Shutdown);
                     break;
-                case SDL_EventType.LowMemory:
+                case EventType.AppLowmemory:
                     _applicationMessenger.QueueMessage(FrameworkMessage.LowMemoryReported);
                     break;
 
-                case SDL_EventType.RenderDeviceReset:
-                case SDL_EventType.RenderTargetsReset:
+                case EventType.RenderDeviceReset:
+                case EventType.RenderTargetsReset:
                     _coreMessenger.QueueMessage(CoreMessage.DeviceOrRenderTargetsReset);
                     break;
             }

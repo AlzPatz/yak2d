@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using Veldrid;
+using NeoVeldrid;
 using Yak2D.Internal;
 
 namespace Yak2D.Graphics

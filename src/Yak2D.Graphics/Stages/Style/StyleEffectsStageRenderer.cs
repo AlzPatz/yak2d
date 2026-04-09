@@ -1,5 +1,5 @@
 using System.Numerics;
-using Veldrid;
+using NeoVeldrid;
 using Yak2D.Internal;
 
 namespace Yak2D.Graphics
@@ -15,7 +15,7 @@ namespace Yak2D.Graphics
         private readonly IViewportManager _viewportManager;
 
         private ShaderPackage _shaderPackage;
-        private Veldrid.Pipeline _pipeline;
+        private NeoVeldrid.Pipeline _pipeline;
 
         public StyleEffectsStageRenderer(IFrameworkMessenger frameworkMessenger,
                                                                         ISystemComponents systemComponents,

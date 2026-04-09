@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
 		<Authors>Alex Paterson</Authors>
 		<Description>A component of the Yak2D graphics framework, a C# .NET core framework for interactive 2D cross platform desktop graphics applications, built upon the Veldrid Library</Description>
@@ -13,8 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HPCsharp" Version="3.12.0" />
-    <PackageReference Include="System.Memory" Version="4.5.5" />
+    <PackageReference Include="HPCsharp" Version="3.19.0" />
   </ItemGroup>
 
   <!-- Conditionally link to local Veldrid source if it is present within the same directory -->
@@ -24,12 +23,12 @@
 
   <!-- If veldrid source not present, use nuget -->
   <ItemGroup Condition="!Exists('..\..\..\veldrid\')">
-    <PackageReference Include="Veldrid.ImageSharp" Version="4.9.0" />
+    <PackageReference Include="NeoVeldrid.ImageSharp" Version="1.0.0-rc.1" />
   </ItemGroup>
 
   <!-- Conditionally link to local Veldrid spirv source if it is present within the same directory -->
   <ItemGroup Condition="!Exists('..\..\..\veldrid-spirv\')">
-    <PackageReference Include="Veldrid.SPIRV" Version="1.0.15" />
+    <PackageReference Include="NeoVeldrid.SPIRV" Version="1.0.0-rc.1" />
   </ItemGroup>
   
   <!-- If veldrid source not present, use nuget -->

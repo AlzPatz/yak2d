@@ -2,9 +2,10 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.IO;
 using System.Numerics;
-using Veldrid;
-using Veldrid.ImageSharp;
+using NeoVeldrid;
+using NeoVeldrid.ImageSharp;
 using Yak2D.Internal;
+using System;
 
 namespace Yak2D.Surface
 {
@@ -131,8 +132,10 @@ namespace Yak2D.Surface
 
             var imageSharpTexture = new ImageSharpTexture(image, mipMap);
 
-            var veldridTexture = imageSharpTexture.CreateDeviceTexture(_systemComponents.Device.RawVeldridDevice, _systemComponents.Factory.RawFactory);
+            Texture veldridTexture = null;
 
+            veldridTexture = imageSharpTexture.CreateDeviceTexture(_systemComponents.Device.RawVeldridDevice, _systemComponents.Factory.RawFactory);
+           
             return veldridTexture;
         }
 

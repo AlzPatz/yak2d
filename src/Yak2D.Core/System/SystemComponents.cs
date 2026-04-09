@@ -1,9 +1,9 @@
 using System;
-using Veldrid;
+using NeoVeldrid;
 using Yak2D.Internal;
 using Yak2D.Utility;
-using Veldrid.StartupUtilities;
-using Veldrid.Utilities;
+using NeoVeldrid.StartupUtilities;
+using NeoVeldrid.Utilities;
 
 namespace Yak2D.Core
 {
@@ -32,7 +32,7 @@ namespace Yak2D.Core
         {
             _frameworkMessenger = frameworkMessenger;
             _applicationMessenger = applicationMessenger;
-            _frameworkMessenger.Report("Veldrid Components Initialising...");
+            _frameworkMessenger.Report("NeoVeldrid Components Initialising...");
 
             _userStartupProperties = defaultPropertiesCache.User;
 
@@ -64,7 +64,7 @@ namespace Yak2D.Core
                 _frameworkMessenger.Report("Graphics API Requested: SystemDefault");
             }
 
-            var defaultPlatformApi = VeldridStartup.GetPlatformDefaultBackend();
+            var defaultPlatformApi = NeoVeldridStartup.GetPlatformDefaultBackend();
 
             if (avoidVulkanWherePossible && defaultPlatformApi == GraphicsBackend.Vulkan)
             {
@@ -140,7 +140,7 @@ namespace Yak2D.Core
                 windowInfo.WindowInitialState = WindowStateConverter.ConvertDisplayStateToVeldridWindowState(_userStartupProperties.WindowState);
             }
 
-            Window = new SdlWindow(VeldridStartup.CreateWindow(ref windowInfo));
+            Window = new SdlWindow(NeoVeldridStartup.CreateWindow(ref windowInfo));
 
             Window.Resizable = _userStartupProperties.WindowIsResizable;
 
@@ -155,7 +155,7 @@ namespace Yak2D.Core
                                                     syncToVerticalBlank: _vsync,
                                                     resourceBindingModel: ResourceBindingModel.Improved);
 
-            Device = new VeldridDevice(VeldridStartup.CreateGraphicsDevice(Window.RawWindow, options, backend));
+            Device = new VeldridDevice(NeoVeldridStartup.CreateGraphicsDevice(Window.RawWindow, options, backend));
 
             Factory = new VeldridFactory(new DisposeCollectorResourceFactory(Device.RawVeldridDevice.ResourceFactory));
 
@@ -181,7 +181,7 @@ namespace Yak2D.Core
         {
             if (api == GraphicsApi.SystemDefault)
             {
-                api = GraphicsApiConverter.ConvertVeldridGraphicsBackendToApi(VeldridStartup.GetPlatformDefaultBackend());
+                api = GraphicsApiConverter.ConvertVeldridGraphicsBackendToApi(NeoVeldridStartup.GetPlatformDefaultBackend());
             }
 
             if (api == GraphicsApi)
@@ -228,6 +228,7 @@ namespace Yak2D.Core
             Device.WaitForIdle();
             Factory.DisposeAll();
             Device.Dispose();
+            Window.Close();
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using Veldrid;
+using NeoVeldrid;
 using Yak2D.Internal;
 
 namespace Yak2D.Surface
@@ -31,7 +31,7 @@ namespace Yak2D.Surface
 
         private unsafe Texture Build(float[] data, uint width, uint height)
         {
-            Veldrid.Texture texture = _components.Factory.CreateTexture(TextureDescription.Texture2D(
+            NeoVeldrid.Texture texture = _components.Factory.CreateTexture(TextureDescription.Texture2D(
                 width, height, 1, 1, PixelFormat.R32_Float, TextureUsage.Sampled));
 
             Span<float> span = data; //Not needed, as conversion of simple array implicit to span

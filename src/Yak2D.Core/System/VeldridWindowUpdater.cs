@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Veldrid;
+using NeoVeldrid;
 using Yak2D.Internal;
 
 namespace Yak2D.Core

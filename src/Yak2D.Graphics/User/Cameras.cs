@@ -158,7 +158,7 @@ namespace Yak2D.Graphics
 
             var cameraModel = _cameraManager.RetrieveCameraModel2D(camera.Id);
 
-            var resolution = cameraModel == null ? new Veldrid.Point(0, 0) : cameraModel.GetVirtualResolution();
+            var resolution = cameraModel == null ? new NeoVeldrid.Point(0, 0) : cameraModel.GetVirtualResolution();
 
             return new Size(resolution.X, resolution.Y);
         }
@@ -167,7 +167,7 @@ namespace Yak2D.Graphics
         {
             var cameraModel = _cameraManager.RetrieveCameraModel2D(camera);
 
-            var resolution = cameraModel == null ? new Veldrid.Point(0, 0) : cameraModel.GetVirtualResolution();
+            var resolution = cameraModel == null ? new NeoVeldrid.Point(0, 0) : cameraModel.GetVirtualResolution();
 
             return new Size(resolution.X, resolution.Y);
         }

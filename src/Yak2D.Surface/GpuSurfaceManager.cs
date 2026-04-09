@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using SixLabors.ImageSharp.PixelFormats;
-using Veldrid;
+using NeoVeldrid;
 using Yak2D.Internal;
 
 namespace Yak2D.Surface

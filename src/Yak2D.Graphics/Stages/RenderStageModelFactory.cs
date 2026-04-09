@@ -151,7 +151,7 @@ namespace Yak2D.Graphics
                                              _gpuSurfaceManager,
                                              stagingTextureWidth,
                                              stagingTextureHeight,
-                                             useFloat32PixelFormat ? Veldrid.PixelFormat.R32_Float : TexturePixelFormatConverter.ConvertYakToVeldrid(_systemComponents.SwapChainFramebufferPixelFormat),
+                                             useFloat32PixelFormat ? NeoVeldrid.PixelFormat.R32_Float : TexturePixelFormatConverter.ConvertYakToVeldrid(_systemComponents.SwapChainFramebufferPixelFormat),
                                              callback);
         }
     }

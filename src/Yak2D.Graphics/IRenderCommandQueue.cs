@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Veldrid;
+using NeoVeldrid;
 
 namespace Yak2D.Graphics
 {

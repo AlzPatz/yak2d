@@ -1,6 +1,6 @@
 using System;
-using Veldrid;
-using Veldrid.StartupUtilities;
+using NeoVeldrid;
+using NeoVeldrid.StartupUtilities;
 using Yak2D.Internal;
 
 namespace Yak2D.Tests.ManualFakes
@@ -15,7 +15,7 @@ namespace Yak2D.Tests.ManualFakes
 
         public FakeGraphicsDevice()
         {
-            var backend = VeldridStartup.GetPlatformDefaultBackend();
+            var backend = NeoVeldridStartup.GetPlatformDefaultBackend();
 
             switch (backend)
             {
@@ -33,7 +33,7 @@ namespace Yak2D.Tests.ManualFakes
                     });
                     break;
                 case GraphicsBackend.OpenGL:
-                    var window = VeldridStartup.CreateWindow(new WindowCreateInfo
+                    var window = NeoVeldridStartup.CreateWindow(new WindowCreateInfo
                     {
                         WindowWidth = 100,
                         WindowHeight = 100,
@@ -43,7 +43,7 @@ namespace Yak2D.Tests.ManualFakes
                         Y = 200
                     });
 
-                    Device = VeldridStartup.CreateGraphicsDevice(window, new GraphicsDeviceOptions
+                    Device = NeoVeldridStartup.CreateGraphicsDevice(window, new GraphicsDeviceOptions
                     {
                         Debug = true,
                         HasMainSwapchain = false,
@@ -56,7 +56,7 @@ namespace Yak2D.Tests.ManualFakes
                     }, GraphicsBackend.OpenGL);
 
                     break;
-                case GraphicsBackend.Metal:
+               /*case GraphicsBackend.Metal:
                     Device = GraphicsDevice.CreateMetal(new GraphicsDeviceOptions
                     {
                         Debug = true,
@@ -68,7 +68,7 @@ namespace Yak2D.Tests.ManualFakes
                         SwapchainSrgbFormat = false,
                         SyncToVerticalBlank = true
                     });
-                    break;
+                    break;*/
                 case GraphicsBackend.Vulkan:
                     Device = GraphicsDevice.CreateVulkan(new GraphicsDeviceOptions
                     {

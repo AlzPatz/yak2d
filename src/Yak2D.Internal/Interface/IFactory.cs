@@ -1,5 +1,5 @@
-using Veldrid;
-using Veldrid.Utilities;
+using NeoVeldrid;
+using NeoVeldrid.Utilities;
 
 namespace Yak2D.Internal
 {

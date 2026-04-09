@@ -1,5 +1,5 @@
 using System.Numerics;
-using Veldrid;
+using NeoVeldrid;
 using Yak2D.Internal;
 
 namespace Yak2D.Graphics
@@ -14,7 +14,7 @@ namespace Yak2D.Graphics
         private readonly IDownSamplerWeightsAndOffsets _downSamplerValues;
 
         private ShaderPackage _shaderPackage;
-        private Veldrid.Pipeline _pipeline;
+        private NeoVeldrid.Pipeline _pipeline;
 
         private DeviceBuffer _samplerFactorsUniformBlockBuffer;
         private ResourceSet _samplerFactorsUniformBlockResourceSet;

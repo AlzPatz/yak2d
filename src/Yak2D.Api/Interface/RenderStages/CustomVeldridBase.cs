@@ -1,6 +1,6 @@
-using Veldrid;
-using Veldrid.Sdl2;
-using Veldrid.Utilities;
+using NeoVeldrid;
+using NeoVeldrid.Sdl2;
+using NeoVeldrid.Utilities;
 
 namespace Yak2D
 {

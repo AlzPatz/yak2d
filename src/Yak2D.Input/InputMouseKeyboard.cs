@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using Veldrid;
-using Veldrid.Sdl2;
+using NeoVeldrid;
+using NeoVeldrid.Sdl2;
+using Silk.NET.SDL;
 
 namespace Yak2D.Internal
 {
@@ -29,7 +30,7 @@ namespace Yak2D.Internal
         private HashSet<MouseButton> _mouseButtonsDownThisFrame;
         private Dictionary<MouseButton, float> _mouseButtonsUpThisFrame;
 
-        private Queue<SDL_Event> _eventQueue;
+        private Queue<Event> _eventQueue;
 
         private bool _hasAnInitialMouseMovementEventRegistered;
         private bool _gotMouseMotionEventThisUpdate;
@@ -54,10 +55,10 @@ namespace Yak2D.Internal
             _isFirstFrame = true;
             _hasAnInitialMouseMovementEventRegistered = false;
 
-            _eventQueue = new Queue<SDL_Event>();
+            _eventQueue = new Queue<Event>();
         }
 
-        public void CacheEvent(ref SDL_Event ev)
+        public void CacheEvent(ref Event ev)
         {
             _eventQueue.Enqueue(ev);
         }
@@ -95,19 +96,19 @@ namespace Yak2D.Internal
             }
         }
 
-        private void ProcessAnEvent(ref SDL_Event ev)
+        private void ProcessAnEvent(ref Event ev)
         {
-            switch (ev.type)
+            switch ((EventType)ev.Type)
             {
-                case SDL_EventType.MouseMotion:
+                case EventType.Mousemotion:
                     if(!_hasAnInitialMouseMovementEventRegistered)
                     {
                         _hasAnInitialMouseMovementEventRegistered = true;
                     }
                     _gotMouseMotionEventThisUpdate = true;
-                    SDL_MouseMotionEvent mouseEvent = Unsafe.As<SDL_Event, SDL_MouseMotionEvent>(ref ev);
-                    _mouseLastPosition = new Vector2(mouseEvent.x, mouseEvent.y);
-                    _mouseLastVelocity = new Vector2(mouseEvent.xrel, mouseEvent.yrel);
+                    MouseMotionEvent mouseEvent = Unsafe.As<Event, MouseMotionEvent>(ref ev);
+                    _mouseLastPosition = new Vector2(mouseEvent.X, mouseEvent.Y);
+                    _mouseLastVelocity = new Vector2(mouseEvent.Xrel, mouseEvent.Yrel);
                     break;
             }
         }
@@ -247,7 +248,7 @@ namespace Yak2D.Internal
             }
         }
 
-        private MouseButton ToMouseButton(Veldrid.MouseButton button)
+        private MouseButton ToMouseButton(NeoVeldrid.MouseButton button)
         {
             return (MouseButton)button;
         }

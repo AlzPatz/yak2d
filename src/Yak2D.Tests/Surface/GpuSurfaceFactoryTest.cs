@@ -31,17 +31,17 @@ namespace Yak2D.Tests
 
             IGpuSurfaceFactory factory = new GpuSurfaceFactory(messenger, components);
 
-            Veldrid.Texture texture = components.Factory.CreateTexture(new Veldrid.TextureDescription
+            NeoVeldrid.Texture texture = components.Factory.CreateTexture(new NeoVeldrid.TextureDescription
             {
                 Width = 64,
                 Height = 64,
                 ArrayLayers = 1,
                 Depth = 1,
-                Format = Veldrid.PixelFormat.R32_G32_B32_A32_Float,
+                Format = NeoVeldrid.PixelFormat.R32_G32_B32_A32_Float,
                 MipLevels = 1,
-                SampleCount = Veldrid.TextureSampleCount.Count1,
-                Type = Veldrid.TextureType.Texture2D,
-                Usage = Veldrid.TextureUsage.Sampled
+                SampleCount = NeoVeldrid.TextureSampleCount.Count1,
+                Type = NeoVeldrid.TextureType.Texture2D,
+                Usage = NeoVeldrid.TextureUsage.Sampled
             });
 
             var surface = factory.CreateGpuSurfaceFromTexture(texture,
@@ -69,7 +69,7 @@ namespace Yak2D.Tests
             var surface = factory.CreateGpuSurface(true,
                                                    100,
                                                    100,
-                                                   Veldrid.PixelFormat.R32_G32_B32_A32_Float,
+                                                   NeoVeldrid.PixelFormat.R32_G32_B32_A32_Float,
                                                    false,
                                                    SamplerType.Anisotropic,
                                                    1,
@@ -93,7 +93,7 @@ namespace Yak2D.Tests
 
             IGpuSurfaceFactory factory = new GpuSurfaceFactory(messenger, components);
 
-            Assert.Throws<Yak2DException>(() => { factory.CreateGpuSurface(false, 0, 0, Veldrid.PixelFormat.R32_G32_B32_A32_Float, false, SamplerType.Anisotropic, 1, false); });
+            Assert.Throws<Yak2DException>(() => { factory.CreateGpuSurface(false, 0, 0, NeoVeldrid.PixelFormat.R32_G32_B32_A32_Float, false, SamplerType.Anisotropic, 1, false); });
 
             components.ReleaseResources();
         }

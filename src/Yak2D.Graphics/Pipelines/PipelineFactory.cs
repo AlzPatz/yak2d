@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Veldrid;
+using NeoVeldrid;
 using Yak2D.Internal;
 
 namespace Yak2D.Graphics

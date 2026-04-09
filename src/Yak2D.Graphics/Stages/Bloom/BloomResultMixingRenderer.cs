@@ -1,5 +1,5 @@
 using System.Numerics;
-using Veldrid;
+using NeoVeldrid;
 using Yak2D.Internal;
 
 namespace Yak2D.Graphics
@@ -15,7 +15,7 @@ namespace Yak2D.Graphics
         private ShaderPackage _shaderPackage;
         private DeviceBuffer _uniformBlockBuffer;
         private ResourceSet _uniformBlockResourceSet;
-        private Veldrid.Pipeline _pipeline;
+        private NeoVeldrid.Pipeline _pipeline;
 
         private float _currentMixAmount = 1.0f;
 

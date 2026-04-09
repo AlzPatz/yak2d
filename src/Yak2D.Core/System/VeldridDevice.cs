@@ -1,5 +1,5 @@
 using System;
-using Veldrid;
+using NeoVeldrid;
 using Yak2D.Internal;
 using Yak2D.Utility;
 
