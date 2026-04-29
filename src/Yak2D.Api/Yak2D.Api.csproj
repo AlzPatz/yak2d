@@ -15,8 +15,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
-    <PackageReference Include="System.Numerics.Vectors" Version="*" />
-    <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 
   <!-- Conditionally link to local Veldrid source if it is present within the same directory -->
