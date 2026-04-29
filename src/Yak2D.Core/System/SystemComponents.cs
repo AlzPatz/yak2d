@@ -223,7 +223,7 @@ namespace Yak2D.Core
 
         public void ReleaseResources()
         {
-            _frameworkMessenger.Report("Releasing all Veldrid Components...");
+            _frameworkMessenger.Report("Releasing all NeoVeldrid Components...");
 
             Device.WaitForIdle();
             Factory.DisposeAll();
