@@ -58,15 +58,15 @@ namespace Yak2D.Tests
 
             var messenger = Substitute.For<IFrameworkMessenger>();
 
-            var q0 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q0 = new DrawQueue(messenger, 12, 4, false);
             Add(q0, FillType.Coloured, 0UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 0);
             var w0 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q0 };
 
-            var q1 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q1 = new DrawQueue(messenger, 12, 4, false);
             Add(q1, FillType.Coloured, 1UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 0);
             var w1 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q1 };
 
-            var q2 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q2 = new DrawQueue(messenger, 12, 4, false);
             Add(q2, FillType.Coloured, 2UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 0);
             var w2 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q2 };
 
@@ -144,15 +144,15 @@ namespace Yak2D.Tests
 
             var messenger = Substitute.For<IFrameworkMessenger>();
 
-            var q0 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q0 = new DrawQueue(messenger, 12, 4, false);
             Add(q0, FillType.Coloured, 0UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 3);
             var w0 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q0 };
 
-            var q1 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q1 = new DrawQueue(messenger, 12, 4, false);
             Add(q1, FillType.Coloured, 1UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 2);
             var w1 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q1 };
 
-            var q2 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q2 = new DrawQueue(messenger, 12, 4, false);
             Add(q2, FillType.Coloured, 2UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 10);
             var w2 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q2 };
 
@@ -171,15 +171,15 @@ namespace Yak2D.Tests
 
             var messenger = Substitute.For<IFrameworkMessenger>();
 
-            var q0 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q0 = new DrawQueue(messenger, 12, 4, false);
             Add(q0, FillType.Coloured, 0UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 3);
             var w0 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q0 };
 
-            var q1 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q1 = new DrawQueue(messenger, 12, 4, false);
             Add(q1, FillType.Coloured, 1UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 10);
             var w1 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q1 };
 
-            var q2 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q2 = new DrawQueue(messenger, 12, 4, false);
             Add(q2, FillType.Coloured, 2UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 10);
             var w2 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q2 };
 
@@ -204,15 +204,15 @@ namespace Yak2D.Tests
 
             var messenger = Substitute.For<IFrameworkMessenger>();
 
-            var q0 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q0 = new DrawQueue(messenger, 12, 4, false);
             Add(q0, FillType.Coloured, 0UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 3);
             var w0 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q0 };
 
-            var q1 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q1 = new DrawQueue(messenger, 12, 4, false);
             Add(q1, FillType.Coloured, 1UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 10, 1.0f);
             var w1 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q1 };
 
-            var q2 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q2 = new DrawQueue(messenger, 12, 4, false);
             Add(q2, FillType.Coloured, 2UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 10, 0.5f);
             var w2 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q2 };
 
@@ -233,15 +233,15 @@ namespace Yak2D.Tests
 
             var messenger = Substitute.For<IFrameworkMessenger>();
 
-            var q0 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q0 = new DrawQueue(messenger, 12, 4, false);
             Add(q0, FillType.Coloured, 12UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 3);
             var w0 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q0 };
 
-            var q1 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q1 = new DrawQueue(messenger, 12, 4, false);
             Add(q1, FillType.Coloured, 1UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 10, 1.0f);
             var w1 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q1 };
 
-            var q2 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q2 = new DrawQueue(messenger, 12, 4, false);
             Add(q2, FillType.Coloured, 2UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 10, 0.5f);
             var w2 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q2 };
 
@@ -269,17 +269,17 @@ namespace Yak2D.Tests
 
             var messenger = Substitute.For<IFrameworkMessenger>();
 
-            var q0 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q0 = new DrawQueue(messenger, 12, 4, false);
             Add(q0, FillType.Coloured, 12UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 3);
             Add(q0, FillType.Coloured, 12UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 3);
             Add(q0, FillType.Coloured, 12UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 11);
             var w0 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q0 };
 
-            var q1 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q1 = new DrawQueue(messenger, 12, 4, false);
             Add(q1, FillType.Coloured, 1UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 9, 1.0f);
             var w1 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q1 };
 
-            var q2 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q2 = new DrawQueue(messenger, 12, 4, false);
             Add(q2, FillType.Coloured, 2UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 10, 0.5f);
             var w2 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q2 };
 
@@ -308,17 +308,17 @@ namespace Yak2D.Tests
 
             var messenger = Substitute.For<IFrameworkMessenger>();
 
-            var q0 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q0 = new DrawQueue(messenger, 12, 4, false);
             Add(q0, FillType.Coloured, 12UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 3);
             Add(q0, FillType.Coloured, 12UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 3);
             Add(q0, FillType.Coloured, 12UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 11);
             var w0 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q0 };
 
-            var q1 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q1 = new DrawQueue(messenger, 12, 4, false);
             Add(q1, FillType.Coloured, 1UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 9, 1.0f);
             var w1 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q1 };
 
-            var q2 = new DrawQueue(messenger, new ComparerCollection(), 12, 4, false);
+            var q2 = new DrawQueue(messenger, 12, 4, false);
             Add(q2, FillType.Coloured, 2UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 10, 0.5f);
             var w2 = new QueueWrap { Id = 0, BufferPositionOfFirstIndex = 0, BufferPositionOfFirstVertex = 0, Queue = q2 };
 

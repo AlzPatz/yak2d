@@ -12,9 +12,8 @@ namespace Yak2D.Tests
         public void DrawQueueTest_InitialQueue_CatchSmallSizeInputs()
         {
             var messenger = Substitute.For<IFrameworkMessenger>();
-            IComparerCollection comparers = new ComparerCollection();
 
-            IDrawQueue queue = new DrawQueue(messenger, comparers, -10, -4, false);
+            IDrawQueue queue = new DrawQueue(messenger, -10, -4, false);
 
             Assert.Equal(512, queue.Data.QueueSizeSingleProperty);
             Assert.Equal(4096, queue.Data.QueueSizeIndex);
@@ -24,9 +23,8 @@ namespace Yak2D.Tests
         public void DrawQueueTest_CheckBasicAdd_NumberAndContentOfRequestsOK()
         {
             var messenger = Substitute.For<IFrameworkMessenger>();
-            IComparerCollection comparers = new ComparerCollection();
 
-            IDrawQueue queue = new DrawQueue(messenger, comparers, 32, 4, false);
+            IDrawQueue queue = new DrawQueue(messenger, 32, 4, false);
 
             for (var n = 0; n < 10; n++)
             {
@@ -80,9 +78,8 @@ namespace Yak2D.Tests
         public void DrawQueueTest_CheckBasicClear_ConfirmZeroPostClear()
         {
             var messenger = Substitute.For<IFrameworkMessenger>();
-            IComparerCollection comparers = new ComparerCollection();
 
-            IDrawQueue queue = new DrawQueue(messenger, comparers, 32, 4, false);
+            IDrawQueue queue = new DrawQueue(messenger, 32, 4, false);
 
             for (var n = 0; n < 10; n++)
             {
@@ -138,9 +135,8 @@ namespace Yak2D.Tests
         public void DrawQueueTest_TestingAddIfValid_FailOnAllAsEachHasConfigurationIssue(int numverts, int numindices, FillType fill, ulong tex0, ulong tex1, float depth, int layer)
         {
             var messenger = Substitute.For<IFrameworkMessenger>();
-            IComparerCollection comparers = new ComparerCollection();
 
-            IDrawQueue queue = new DrawQueue(messenger, comparers, 32, 4, false);
+            IDrawQueue queue = new DrawQueue(messenger, 32, 4, false);
 
             var target = CoordinateSpace.Screen;
             var colour = Colour.White;
@@ -182,9 +178,8 @@ namespace Yak2D.Tests
         public void DrawQueueTest_TestingSort_OrderingIsCorrect()
         {
             var messenger = Substitute.For<IFrameworkMessenger>();
-            IComparerCollection comparers = new ComparerCollection();
 
-            IDrawQueue queue = new DrawQueue(messenger, comparers, 32, 4, false);
+            IDrawQueue queue = new DrawQueue(messenger, 32, 4, false);
 
             AddItem(queue, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, FillType.Coloured, 0UL, 0UL, 0.5f, 1); //0
             AddItem(queue, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, FillType.Coloured, 0UL, 0UL, 0.6f, 1); //1

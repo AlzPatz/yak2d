@@ -12,9 +12,11 @@
     <Version>0.0.0.0</Version>
   </PropertyGroup>
 
+    <!--	
   <ItemGroup>
     <PackageReference Include="HPCsharp" Version="3.19.0" />
   </ItemGroup>
+    -->
 
   <!-- Conditionally link to local Veldrid source if it is present within the same directory -->
   <ItemGroup Condition="Exists('..\..\..\veldrid\')">

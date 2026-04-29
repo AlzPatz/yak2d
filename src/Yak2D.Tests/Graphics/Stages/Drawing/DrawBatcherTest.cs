@@ -108,7 +108,7 @@ namespace Yak2D.Tests
             });
 
             var queues = new DrawQueueGroup(new IdGenerator(messenger),
-                                            new DrawQueueFactory(messenger, properties, new ComparerCollection()),
+                                            new DrawQueueFactory(messenger, properties),
                                             Substitute.For<IDrawStageBuffers>(),
                                             Substitute.For<IQueueToBufferBlitter>(),
                                             false);
@@ -147,7 +147,7 @@ namespace Yak2D.Tests
             });
 
             var queues = new DrawQueueGroup(new IdGenerator(messenger),
-                                            new DrawQueueFactory(messenger, properties, new ComparerCollection()),
+                                            new DrawQueueFactory(messenger, properties),
                                             Substitute.For<IDrawStageBuffers>(),
                                             Substitute.For<IQueueToBufferBlitter>(),
                                             false);
@@ -196,7 +196,7 @@ namespace Yak2D.Tests
             });
 
             var queues = new DrawQueueGroup(new IdGenerator(messenger),
-                                            new DrawQueueFactory(messenger, properties, new ComparerCollection()),
+                                            new DrawQueueFactory(messenger, properties),
                                             Substitute.For<IDrawStageBuffers>(),
                                             Substitute.For<IQueueToBufferBlitter>(),
                                             false);
@@ -265,7 +265,7 @@ namespace Yak2D.Tests
             });
 
             var queues = new DrawQueueGroup(new IdGenerator(messenger),
-                                            new DrawQueueFactory(messenger, properties, new ComparerCollection()),
+                                            new DrawQueueFactory(messenger, properties),
                                             Substitute.For<IDrawStageBuffers>(),
                                             Substitute.For<IQueueToBufferBlitter>(),
                                             false);
@@ -361,7 +361,7 @@ namespace Yak2D.Tests
             });
 
             var queues = new DrawQueueGroup(new IdGenerator(messenger),
-                                            new DrawQueueFactory(messenger, properties, new ComparerCollection()),
+                                            new DrawQueueFactory(messenger, properties),
                                             Substitute.For<IDrawStageBuffers>(),
                                             Substitute.For<IQueueToBufferBlitter>(),
                                             false);
@@ -410,7 +410,7 @@ namespace Yak2D.Tests
             });
 
             var queues = new DrawQueueGroup(new IdGenerator(messenger),
-                                            new DrawQueueFactory(messenger, properties, new ComparerCollection()),
+                                            new DrawQueueFactory(messenger, properties),
                                             Substitute.For<IDrawStageBuffers>(),
                                             Substitute.For<IQueueToBufferBlitter>(),
                                             false);
@@ -459,7 +459,7 @@ namespace Yak2D.Tests
             });
 
             var queues = new DrawQueueGroup(new IdGenerator(messenger),
-                                            new DrawQueueFactory(messenger, properties, new ComparerCollection()),
+                                            new DrawQueueFactory(messenger, properties),
                                             Substitute.For<IDrawStageBuffers>(),
                                             Substitute.For<IQueueToBufferBlitter>(),
                                             false);
@@ -508,7 +508,7 @@ namespace Yak2D.Tests
             });
 
             var queues = new DrawQueueGroup(new IdGenerator(messenger),
-                                            new DrawQueueFactory(messenger, properties, new ComparerCollection()),
+                                            new DrawQueueFactory(messenger, properties),
                                             Substitute.For<IDrawStageBuffers>(),
                                             Substitute.For<IQueueToBufferBlitter>(),
                                             false);
@@ -552,7 +552,7 @@ namespace Yak2D.Tests
             });
 
             var queues = new DrawQueueGroup(new IdGenerator(Substitute.For<IFrameworkMessenger>()),
-                                            new DrawQueueFactory(messenger, properties, new ComparerCollection()),
+                                            new DrawQueueFactory(messenger, properties),
                                             Substitute.For<IDrawStageBuffers>(),
                                             Substitute.For<IQueueToBufferBlitter>(),
                                             false);
@@ -605,7 +605,7 @@ namespace Yak2D.Tests
             });
 
             var queues = new DrawQueueGroup(new IdGenerator(Substitute.For<IFrameworkMessenger>()),
-                                            new DrawQueueFactory(messenger, properties, new ComparerCollection()),
+                                            new DrawQueueFactory(messenger, properties),
                                             Substitute.For<IDrawStageBuffers>(),
                                             Substitute.For<IQueueToBufferBlitter>(),
                                             false);

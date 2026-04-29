@@ -58,7 +58,6 @@ namespace Yak2D
             container.Register<IIdGenerator, IdGenerator>(Lifestyle.Singleton);
             container.Register<IGraphics, Graphics.Graphics>(Lifestyle.Singleton);
             container.Register<ISimpleCollectionFactory, SimpleDictionaryCollectionFactory>(Lifestyle.Singleton);
-            container.Register<IComparerCollection, ComparerCollection>(Lifestyle.Singleton);
             container.Register<ICameraFactory, CameraFactory>(Lifestyle.Singleton);
             container.Register<ICameraManager, CameraManager>(Lifestyle.Singleton);
             container.Register<IQueueToBufferBlitter, QueueToBufferBlitter>(Lifestyle.Singleton);

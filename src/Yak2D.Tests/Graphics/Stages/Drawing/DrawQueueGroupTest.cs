@@ -26,7 +26,7 @@ namespace Yak2D.Tests
                 DrawQueueInitialSizeNumberOfRequests = 32,
                 DrawQueueInitialSizeElementsPerRequestScalar = 4
             });
-            var queueFactory = new DrawQueueFactory(messenger, properties, new ComparerCollection());
+            var queueFactory = new DrawQueueFactory(messenger, properties);
             var buffers = Substitute.For<IDrawStageBuffers>();
             var blitter = Substitute.For<IQueueToBufferBlitter>();
 

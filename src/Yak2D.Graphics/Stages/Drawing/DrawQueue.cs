@@ -1,4 +1,5 @@
-using HPCsharp;
+using System;
+using System.Collections.Generic;
 using Yak2D.Utility;
 
 namespace Yak2D.Graphics
@@ -8,34 +9,31 @@ namespace Yak2D.Graphics
         public QueueData Data { get; private set; }
 
         private readonly IFrameworkMessenger _frameworkMessenger;
-        private readonly IComparerCollection _comparers;
         private readonly bool _skipDepthsAndLayersSort;
 
         public DrawQueue(IFrameworkMessenger frameworkMessenger,
-                         IComparerCollection comparers,
                          int initialRequestQueueSize,
                          int scalarForPerElementArraySizes,
                          bool skipDrawQueueSortingByDepthsAndLayers)
         {
-            if(initialRequestQueueSize < 1)
+            if (initialRequestQueueSize < 1)
             {
                 initialRequestQueueSize = 512;
             }
 
-            if(scalarForPerElementArraySizes < 1)
+            if (scalarForPerElementArraySizes < 1)
             {
                 scalarForPerElementArraySizes = 8;
             }
 
             _frameworkMessenger = frameworkMessenger;
-            _comparers = comparers;
             _skipDepthsAndLayersSort = skipDrawQueueSortingByDepthsAndLayers;
 
             var perElementArraySize = initialRequestQueueSize * scalarForPerElementArraySizes;
 
             InitialiseDataObject(initialRequestQueueSize, perElementArraySize);
 
-            Clear(); //Ensure counters set to 0 (will be by default but let's not rely on that)
+            Clear();
         }
 
         private void InitialiseDataObject(int sizePerRequest, int sizePerElement)
@@ -73,34 +71,62 @@ namespace Yak2D.Graphics
 
         public void Sort()
         {
-            //Array.Sort is unstable, so using HPCsharp library. This is Apache License, not MIT. Reasonably compatible
-            //Timsort would be a nice option but it's GPL. I'm not a fan of the GPL
+            var numRequests = Data.NumRequests;
 
-            _comparers.TextureCoordMode.SetItems(Data.TextureMode1);
-            Data.Ordering.SortMergeInPlace(0, Data.NumRequests, _comparers.TextureCoordMode);
-
-            _comparers.TextureCoordMode.SetItems(Data.TextureMode0);
-            Data.Ordering.SortMergeInPlace(0, Data.NumRequests, _comparers.TextureCoordMode);
-
-            _comparers.DrawType.SetItems(Data.Types);
-            Data.Ordering.SortMergeInPlace(0, Data.NumRequests, _comparers.DrawType);
-
-            _comparers.ULong.SetItems(Data.Texture1);
-            Data.Ordering.SortMergeInPlace(0, Data.NumRequests, _comparers.ULong);
-
-            _comparers.ULong.SetItems(Data.Texture0);
-            Data.Ordering.SortMergeInPlace(0, Data.NumRequests, _comparers.ULong);
-
-            if (_skipDepthsAndLayersSort)
-            {
+            if (numRequests <= 1)
                 return;
-            }
 
-            _comparers.ReverseFloat.SetItems(Data.Depths);
-            Data.Ordering.SortMergeInPlace(0, Data.NumRequests, _comparers.ReverseFloat);
+            // Capture local array references for comparer closure consistency
+            // and to avoid repeated property lookups during sort
+            var layers = Data.Layers;
+            var depths = Data.Depths;
+            var texture0 = Data.Texture0;
+            var texture1 = Data.Texture1;
+            var types = Data.Types;
+            var texMode0 = Data.TextureMode0;
+            var texMode1 = Data.TextureMode1;
+            var skipDepthAndLayerSort = _skipDepthsAndLayersSort;
 
-             _comparers.Integer.SetItems(Data.Layers);
-            Data.Ordering.SortMergeInPlace(0, Data.NumRequests, _comparers.Integer);
+            // Array.Sort is stable from .NET 7 onwards - no need for HPCSharp
+            // Data.Ordering holds draw request indices [0..n-1], sorted here into
+            // the order downstream rendering should consume them
+            //
+            // Priority (high to low):
+            //   Layer (asc), Depth (desc), Texture0, Texture1, DrawType, TexMode0, TexMode1
+            Array.Sort(Data.Ordering, 0, numRequests, Comparer<int>.Create((left, right) =>
+            {
+                int result;
+
+                if (!skipDepthAndLayerSort)
+                {
+                    result = layers[left].CompareTo(layers[right]);
+                    if (result != 0)
+                        return result;
+
+                    // Depth sorted descending (back to front), so right.CompareTo(left)
+                    result = depths[right].CompareTo(depths[left]);
+                    if (result != 0)
+                        return result;
+                }
+
+                result = texture0[left].CompareTo(texture0[right]);
+                if (result != 0)
+                    return result;
+
+                result = texture1[left].CompareTo(texture1[right]);
+                if (result != 0)
+                    return result;
+
+                result = ((int)types[left]).CompareTo((int)types[right]);
+                if (result != 0)
+                    return result;
+
+                result = ((int)texMode0[left]).CompareTo((int)texMode0[right]);
+                if (result != 0)
+                    return result;
+
+                return ((int)texMode1[left]).CompareTo((int)texMode1[right]);
+            }));
         }
 
         public bool AddIfValid(ref CoordinateSpace target,
@@ -110,8 +136,8 @@ namespace Yak2D.Graphics
                                 ref int[] indices,
                                 ref ulong texture0,
                                 ref ulong texture1,
-                                ref TextureCoordinateMode texmode0,
-                                ref TextureCoordinateMode texmode1,
+                                ref TextureCoordinateMode texMode0,
+                                ref TextureCoordinateMode texMode1,
                                 ref float depth,
                                 ref int layer)
         {
@@ -137,8 +163,8 @@ namespace Yak2D.Graphics
             {
                 texture0 = 0UL;
                 texture1 = 0UL;
-                texmode0 = TextureCoordinateMode.None;
-                texmode1 = TextureCoordinateMode.None;
+                texMode0 = TextureCoordinateMode.None;
+                texMode1 = TextureCoordinateMode.None;
             }
             else
             {
@@ -156,32 +182,27 @@ namespace Yak2D.Graphics
                     _frameworkMessenger.Report("Add draw request failed: No Texture1 provided for Dual Textured Drawing");
                     return false;
                 }
+
                 if (texture0 == texture1)
                 {
                     _frameworkMessenger.Report("Add draw request failed: Same texture provided for both textures in Dual Textured drawing. Not supported");
                     return false;
                 }
 
-                if (texmode0 == TextureCoordinateMode.None)
-                {
-                    texmode0 = TextureCoordinateMode.Wrap;
-                }
+                if (texMode0 == TextureCoordinateMode.None)
+                    texMode0 = TextureCoordinateMode.Wrap;
 
-                if (texmode1 == TextureCoordinateMode.None)
-                {
-                    texmode1 = TextureCoordinateMode.Wrap;
-                }
+                if (texMode1 == TextureCoordinateMode.None)
+                    texMode1 = TextureCoordinateMode.Wrap;
             }
 
             if (type == FillType.Textured)
             {
-                if (texmode0 == TextureCoordinateMode.None)
-                {
-                    texmode0 = TextureCoordinateMode.Wrap;
-                }
+                if (texMode0 == TextureCoordinateMode.None)
+                    texMode0 = TextureCoordinateMode.Wrap;
 
                 texture1 = 0UL;
-                texmode1 = TextureCoordinateMode.None;
+                texMode1 = TextureCoordinateMode.None;
             }
 
             if (depth < 0.0f || depth > 1.0f)
@@ -194,9 +215,10 @@ namespace Yak2D.Graphics
             {
                 _frameworkMessenger.Report("Add draw request failed: a negative layer number is not valid");
                 return false;
-            };
+            }
 
-            Add(ref target, ref type, ref colour, ref vertices, ref indices, ref texture0, ref texture1, ref texmode0, ref texmode1, ref depth, ref layer);
+            Add(ref target, ref type, ref colour, ref vertices, ref indices,
+                ref texture0, ref texture1, ref texMode0, ref texMode1, ref depth, ref layer);
 
             return true;
         }
@@ -208,8 +230,8 @@ namespace Yak2D.Graphics
                         ref int[] indices,
                         ref ulong texture0,
                         ref ulong texture1,
-                        ref TextureCoordinateMode texmode0,
-                        ref TextureCoordinateMode texmode1,
+                        ref TextureCoordinateMode texMode0,
+                        ref TextureCoordinateMode texMode1,
                         ref float depth,
                         ref int layer)
         {
@@ -230,20 +252,16 @@ namespace Yak2D.Graphics
             Data.FirstIndexPosition[Data.NumRequests] = Data.NumIndicesUsed;
             Data.Texture0[Data.NumRequests] = texture0;
             Data.Texture1[Data.NumRequests] = texture1;
-            Data.TextureMode0[Data.NumRequests] = texmode0;
-            Data.TextureMode1[Data.NumRequests] = texmode1;
+            Data.TextureMode0[Data.NumRequests] = texMode0;
+            Data.TextureMode1[Data.NumRequests] = texMode1;
             Data.Depths[Data.NumRequests] = depth;
             Data.Layers[Data.NumRequests] = layer;
 
             for (var v = 0; v < numVertices; v++)
-            {
                 Data.Vertices[Data.NumVerticesUsed + v] = vertices[v];
-            }
 
             for (var i = 0; i < numIndices; i++)
-            {
                 Data.Indices[Data.NumIndicesUsed + i] = indices[i];
-            }
 
             Data.NumRequests++;
             Data.NumVerticesUsed += numVertices;

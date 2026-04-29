@@ -13,7 +13,7 @@ namespace Yak2D.Tests
             var messenger = Substitute.For<IFrameworkMessenger>();
             IQueueToBufferBlitter blitter = new QueueToBufferBlitter();
 
-            var q = new DrawQueue(messenger, new ComparerCollection(), 36, 8, false);
+            var q = new DrawQueue(messenger, 36, 8, false);
 
             Add(q, FillType.Coloured, 0UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 0);
             Add(q, FillType.Coloured, 0UL, 0UL, TextureCoordinateMode.Mirror, TextureCoordinateMode.Mirror, 0);
