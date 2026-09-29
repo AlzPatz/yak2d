@@ -1,5 +1,7 @@
 using NSubstitute;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Xunit;
 using Yak2D.Graphics;
@@ -212,6 +214,79 @@ namespace Yak2D.Tests
             for(var n = 0; n < order.Length; n++)
             {
                 Assert.Equal(order[n], queue.Data.Ordering[n]);
+            }
+        }
+
+        [Fact]
+        public void DrawQueueTest_TestingSort_IdenticalRequestsKeepSubmissionOrder()
+        {
+            var messenger = Substitute.For<IFrameworkMessenger>();
+
+            IDrawQueue queue = new DrawQueue(messenger, 16, 4, false);
+
+            var count = 1000;
+            for (var n = 0; n < count; n++)
+            {
+                AddItem(queue, TextureCoordinateMode.Wrap, TextureCoordinateMode.Wrap, FillType.Textured, 5UL, 0UL, 0.5f, 2);
+            }
+
+            queue.Sort();
+
+            for (var n = 0; n < count; n++)
+            {
+                Assert.Equal(n, queue.Data.Ordering[n]);
+            }
+        }
+
+        [Fact]
+        public void DrawQueueTest_TestingSort_MatchesStableReferenceSortOnRandomData()
+        {
+            var messenger = Substitute.For<IFrameworkMessenger>();
+
+            var random = new Random(1234);
+            var layers = new[] { -3, -1, 0, 1, 7, int.MinValue, int.MaxValue };
+            var depths = new[] { -1.0f, -0.0f, 0.0f, 0.25f, 0.5f, 1.0f, 3.5f };
+            var textures = new[] { 0UL, 1UL, 2UL, 1000UL, ulong.MaxValue - 1UL, ulong.MaxValue, 1UL << 63 };
+            var fills = new[] { FillType.Coloured, FillType.Textured, FillType.DualTextured };
+            var modes = new[] { TextureCoordinateMode.None, TextureCoordinateMode.Wrap, TextureCoordinateMode.Mirror };
+
+            foreach (var skipLayersAndDepths in new[] { false, true })
+            {
+                IDrawQueue queue = new DrawQueue(messenger, 16, 4, skipLayersAndDepths);
+
+                var count = 5000;
+                var requests = new List<(int Index, int Layer, float Depth, ulong T0, ulong T1, FillType Fill, TextureCoordinateMode M0, TextureCoordinateMode M1)>();
+                for (var n = 0; n < count; n++)
+                {
+                    var r = (Index: n,
+                             Layer: layers[random.Next(layers.Length)],
+                             Depth: depths[random.Next(depths.Length)],
+                             T0: textures[random.Next(textures.Length)],
+                             T1: textures[random.Next(textures.Length)],
+                             Fill: fills[random.Next(fills.Length)],
+                             M0: modes[random.Next(modes.Length)],
+                             M1: modes[random.Next(modes.Length)]);
+                    requests.Add(r);
+                    AddItem(queue, r.M0, r.M1, r.Fill, r.T0, r.T1, r.Depth, r.Layer);
+                }
+
+                queue.Sort();
+
+                // LINQ OrderBy / ThenBy is documented as a stable sort
+                var ordered = skipLayersAndDepths ? requests.OrderBy(r => 0) : requests.OrderBy(r => r.Layer).ThenByDescending(r => r.Depth);
+                var expected = ordered.ThenBy(r => r.T0)
+                                      .ThenBy(r => r.T1)
+                                      .ThenBy(r => (int)r.Fill)
+                                      .ThenBy(r => (int)r.M0)
+                                      .ThenBy(r => (int)r.M1)
+                                      .Select(r => r.Index)
+                                      .ToArray();
+
+                Assert.Equal(expected, queue.Data.Ordering.Take(count).ToArray());
+
+                // Sorting a persistent (already sorted) queue again gives the same result
+                queue.Sort();
+                Assert.Equal(expected, queue.Data.Ordering.Take(count).ToArray());
             }
         }
 

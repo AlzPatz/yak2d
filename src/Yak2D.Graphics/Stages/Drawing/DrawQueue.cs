@@ -11,6 +11,8 @@ namespace Yak2D.Graphics
         private readonly IFrameworkMessenger _frameworkMessenger;
         private readonly bool _skipDepthsAndLayersSort;
 
+        private DrawQueueSortKey[] _sortKeys = Array.Empty<DrawQueueSortKey>();
+
         public DrawQueue(IFrameworkMessenger frameworkMessenger,
                          int initialRequestQueueSize,
                          int scalarForPerElementArraySizes,
@@ -76,57 +78,42 @@ namespace Yak2D.Graphics
             if (numRequests <= 1)
                 return;
 
-            // Capture local array references for comparer closure consistency
-            // and to avoid repeated property lookups during sort
-            var layers = Data.Layers;
-            var depths = Data.Depths;
-            var texture0 = Data.Texture0;
-            var texture1 = Data.Texture1;
-            var types = Data.Types;
-            var texMode0 = Data.TextureMode0;
-            var texMode1 = Data.TextureMode1;
-            var skipDepthAndLayerSort = _skipDepthsAndLayersSort;
+            if (_sortKeys.Length < numRequests)
+            {
+                _sortKeys = new DrawQueueSortKey[Data.Ordering.Length];
+            }
 
-            // Array.Sort is stable from .NET 7 onwards - no need for HPCSharp
-            // Data.Ordering holds draw request indices [0..n-1], sorted here into
-            // the order downstream rendering should consume them
+            // Data.Ordering holds draw request indices, sorted here into the order downstream
+            // rendering should consume them
             //
             // Priority (high to low):
-            //   Layer (asc), Depth (desc), Texture0, Texture1, DrawType, TexMode0, TexMode1
-            Array.Sort(Data.Ordering, 0, numRequests, Comparer<int>.Create((left, right) =>
+            //   Layer (asc), Depth (desc), Texture0, Texture1, DrawType, TexMode0, TexMode1, submission order
+            //
+            // Keys are built from the original request index (not the current Ordering), so sorting
+            // a persistent queue again gives the same result
+            var includeLayerAndDepth = !_skipDepthsAndLayersSort;
+            var data = Data;
+            for (var n = 0; n < numRequests; n++)
             {
-                int result;
+                _sortKeys[n] = new DrawQueueSortKey(includeLayerAndDepth,
+                                                    data.Layers[n],
+                                                    data.Depths[n],
+                                                    data.Texture0[n],
+                                                    data.Texture1[n],
+                                                    data.Types[n],
+                                                    data.TextureMode0[n],
+                                                    data.TextureMode1[n],
+                                                    n);
+            }
 
-                if (!skipDepthAndLayerSort)
-                {
-                    result = layers[left].CompareTo(layers[right]);
-                    if (result != 0)
-                        return result;
+            // Keys are unique (index included) so this unstable sort yields a stable ordering
+            _sortKeys.AsSpan(0, numRequests).Sort();
 
-                    // Depth sorted descending (back to front), so right.CompareTo(left)
-                    result = depths[right].CompareTo(depths[left]);
-                    if (result != 0)
-                        return result;
-                }
-
-                result = texture0[left].CompareTo(texture0[right]);
-                if (result != 0)
-                    return result;
-
-                result = texture1[left].CompareTo(texture1[right]);
-                if (result != 0)
-                    return result;
-
-                result = ((int)types[left]).CompareTo((int)types[right]);
-                if (result != 0)
-                    return result;
-
-                result = ((int)texMode0[left]).CompareTo((int)texMode0[right]);
-                if (result != 0)
-                    return result;
-
-                return ((int)texMode1[left]).CompareTo((int)texMode1[right]);
-            }));
+            var ordering = data.Ordering;
+            for (var n = 0; n < numRequests; n++)
+            {
+                ordering[n] = _sortKeys[n].Index;
+            }
         }
 
         public bool AddIfValid(ref CoordinateSpace target,
