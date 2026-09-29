@@ -17,6 +17,7 @@ namespace Yak2D
 
         /// <summary>
         /// Interpolation fraction first rises to 1, then falls back to 0, and repeats
+        /// </summary>
         LoopReverse
     }
 }

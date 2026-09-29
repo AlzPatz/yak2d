@@ -286,6 +286,7 @@ namespace Yak2D
         /// <param name="texWrap0">Primary Texture Coordinate Wrap behaviour</param>
         /// <param name="texWrap1">Secondary Texure Coordinate Wrap behaviour</param>
         /// <param name="intensity">Scalar quantity to multply the height factor of the drawn pixels</param>
+        /// <param name="validate">Check whether the content of the draw request appears valid before adding to the queue</param>
         void DrawDistortion(IDistortionStage stage,
                     CoordinateSpace target,
                     FillType type,
@@ -314,6 +315,7 @@ namespace Yak2D
         /// <param name="texWrap0">Primary Texture Coordinate Wrap behaviour</param>
         /// <param name="texWrap1">Secondary Texure Coordinate Wrap behaviour</param>
         /// <param name="intensity">Scalar quantity to multply the height factor of the drawn pixels</param>
+        /// <param name="validate">Check whether the content of the draw request appears valid before adding to the queue</param>
         void DrawDistortion(ulong stage,
                     CoordinateSpace target,
                     FillType type,

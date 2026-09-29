@@ -23,7 +23,7 @@ namespace Yak2D
         /// Should the framework be utilised above a certain percentage (currently hard coded at 95%) for a number of frames (currently 8)
         /// Then the relieve pressure on the system, the fixed timestep is doubled
         /// The opposite is true for underutilisation, however the time period over which it must be observed to 
-        /// result in a timestep halfing is longer (120 frames currentyl hardcoded at <= 40% utilisation)
+        /// result in a timestep halfing is longer (120 frames currentyl hardcoded at &lt;= 40% utilisation)
         /// </summary>
         Fixed_Adaptive,
 

@@ -5,7 +5,7 @@ namespace Yak2D
     /// </summary>
     public enum LightType
     {
-        // <summary>
+        /// <summary>
         /// A uniform direction, constant intensity light source       
         /// </summary>
         Directional,

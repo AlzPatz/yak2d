@@ -25,8 +25,8 @@
 
   <!-- If veldrid source not present, use nuget -->
   <ItemGroup Condition="!Exists('..\..\..\veldrid\')">
-    <PackageReference Include="NeoVeldrid.SDL2" Version="1.0.0" />
-    <PackageReference Include="NeoVeldrid.Utilities" Version="1.0.0" />
+    <PackageReference Include="NeoVeldrid.SDL2" Version="1.2.1" />
+    <PackageReference Include="NeoVeldrid.Utilities" Version="1.2.1" />
   </ItemGroup>
 
 </Project>

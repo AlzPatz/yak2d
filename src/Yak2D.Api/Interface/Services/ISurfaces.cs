@@ -25,7 +25,7 @@ namespace Yak2D
 
         /// <summary>
         /// Textures cannot be drawn too, they do not have a depth component
-        /// <summary>
+        /// </summary>
         int UserTextureCount { get; }
 
         /// <summary>
@@ -50,10 +50,10 @@ namespace Yak2D
         /// <summary>
         /// Load a texture from an image asset
         /// </summary>
-        /// <param name="path">Image asset name including path (no file extension)"</param>
-        /// <param name="assetType">Embedded in the binary or a file location"</param>
-        /// <param name="imageFormat">Image file encoding"</param>
-        /// <param name="samplerType">Sampler filter to be when sampling the Texture/param>
+        /// <param name="path">Image asset name including path (no file extension)</param>
+        /// <param name="assetType">Embedded in the binary or a file location</param>
+        /// <param name="imageFormat">Image file encoding</param>
+        /// <param name="samplerType">Sampler filter to be when sampling the Texture</param>
         /// <param name="generateMipMaps">Should MipMaps be created</param>
         ITexture LoadTexture(string path,
                              AssetSourceEnum assetType,
@@ -64,8 +64,8 @@ namespace Yak2D
         /// <summary>
         /// Load a texture from a stream
         /// </summary>
-        /// <param name="stream">"Data stream containing image data"</param>
-        /// <param name="samplerType">Sampler filter to be when sampling the Texture/param>
+        /// <param name="stream">Data stream containing image data</param>
+        /// <param name="samplerType">Sampler filter to be when sampling the Texture</param>
         /// <param name="generateMipMaps">Should MipMaps be created</param>
         ITexture LoadTexture(Stream stream, 
                              SamplerType samplerType = SamplerType.Anisotropic,
@@ -74,9 +74,9 @@ namespace Yak2D
         /// <summary>
         /// Loads texture colour data from a .png image asset
         /// </summary>
-        /// <param name="path">Image (.png) asset name including path (no file extension)"</param>
-        /// <param name="assetType">Embedded in the binary or a file location"</param>
-        /// <param name="imageFormat">Image file encoding"</param>
+        /// <param name="path">Image (.png) asset name including path (no file extension)</param>
+        /// <param name="assetType">Embedded in the binary or a file location</param>
+        /// <param name="imageFormat">Image file encoding</param>
         TextureData LoadTextureColourData(string path,
                                               AssetSourceEnum assetType,
                                               ImageFormat imageFormat = ImageFormat.PNG);
@@ -87,7 +87,7 @@ namespace Yak2D
         /// <param name="textureWidth">Width in pixels</param>
         /// <param name="textureHeight">Height in pixels</param>
         /// <param name="pixels">Pixel data, one dimensional array, texture top-left pixel at 0 index, data ordered in rows</param>
-        /// <param name="samplerType">Sampler filter to be when sampling the Texture/param>
+        /// <param name="samplerType">Sampler filter to be when sampling the Texture</param>
         ITexture CreateFloat32FromData(uint textureWidth,
                                        uint textureHeight,
                                        float[] pixels,
@@ -100,7 +100,8 @@ namespace Yak2D
         /// <param name="textureWidth">Width in pixels</param>
         /// <param name="textureHeight">Height in pixels</param>
         /// <param name="pixels">Pixel data, one dimensional array, texture top-left pixel at 0 index, data ordered in rows</param>
-        /// <param name="samplerType">Sampler filter to be when sampling the Texture/param>
+        /// <param name="samplerType">Sampler filter to be when sampling the Texture</param>
+        /// <param name="generateMipMaps">Should MipMaps be created</param>
         ITexture CreateRgbaFromData(uint textureWidth,
                                     uint textureHeight,
                                     Vector4[] pixels,

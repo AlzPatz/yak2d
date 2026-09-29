@@ -13,7 +13,7 @@ namespace Yak2D
         /// Return a drawable (transformable) shape object with identical parameters except scaled
         /// </summary>
         /// <param name="xScaling">X dimension scaling factor (negative numbers will be mulitplied by -1)</param>
-        /// <param name="yScaling">Y dimension scaling factor (negative numbers will be mulitplied by -1)<</param>
+        /// <param name="yScaling">Y dimension scaling factor (negative numbers will be mulitplied by -1)</param>
         ITransformable Scale(float xScaling,
                              float yScaling);
 

@@ -13,9 +13,9 @@ namespace Yak2D
         /// <summary>
         /// Create and submit the draw request to draw the shape in its current state to a draw stage
         /// </summary>
-        /// <param name="drawStage">DrawStage reference<</param>
+        /// <param name="drawStage">DrawStage reference</param>
         /// <param name="space">The coordinate space (world or screen) that the vertices should be transformed by</param>
-        /// <param name="depth">Z depth of vertices defining ordering within a layer (0.0 [front] to 1.0 [back])<</param>
+        /// <param name="depth">Z depth of vertices defining ordering within a layer (0.0 [front] to 1.0 [back])</param>
         /// <param name="layer">>= 0. The layer that these vertices belong too, lower layers are drawn behind higher layers</param>
         void SubmitDraw(IDrawStage drawStage,
                         CoordinateSpace space,
@@ -25,7 +25,7 @@ namespace Yak2D
         /// Create a draw request (to submit to a DrawStage later) to draw the shape in its current state
         /// </summary>
         /// <param name="space">The coordinate space (world or screen) that the vertices should be transformed by</param>
-        /// <param name="depth">Z depth of vertices defining ordering within a layer (0.0 [front] to 1.0 [back])<</param>
+        /// <param name="depth">Z depth of vertices defining ordering within a layer (0.0 [front] to 1.0 [back])</param>
         /// <param name="layer">>= 0. The layer that these vertices belong too, lower layers are drawn behind higher layers</param>
         DrawRequest GenerateDrawRequest(CoordinateSpace space,
                                         float depth,
@@ -40,7 +40,7 @@ namespace Yak2D
         /// <summary>
         /// Return a drawable shape object with identical parameters except modified position
         /// </summary>
-        /// <param name="position">Amount to shift shape position by</param>
+        /// <param name="delta">Amount to shift shape position by</param>
         ITransformable ShiftPosition(Vector2 delta);
 
         /// <summary>

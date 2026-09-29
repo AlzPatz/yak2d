@@ -12,7 +12,7 @@ namespace Yak2D
 
         /// <summary>
         /// A collection used to manage the evolution, position, size, intensity of distortion 'sprites' (textured quads) drawn over time
-        /// <summary>
+        /// </summary>
         /// <param name="initialCollectionSize">Collection will be automatically doubled in size when required</param>
         IDistortionCollection CreateNewCollection(uint initialCollectionSize = 64);
     }

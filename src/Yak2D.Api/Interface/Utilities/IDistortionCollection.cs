@@ -5,7 +5,7 @@ namespace Yak2D
     /// <summary>
     /// A collection used to manage the evolution, position, size, intensity of distortion 'sprites' (textured square quads) over time
     /// The user should call Update() and Draw() to evolve and display the collection
-    /// <summary>
+    /// </summary>
     public interface IDistortionCollection
     {
         /// <summary>

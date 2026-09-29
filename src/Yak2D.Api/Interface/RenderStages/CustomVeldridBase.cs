@@ -28,9 +28,9 @@ namespace Yak2D
         /// <param name="cl">Current in-use veldrid command list. Add commands to the render queue</param>
         /// <param name="device">Current veldrid graphics device</param>
         /// <param name="texture0">Input Texture</param>
-        /// <param name="texture1">Input Texture<</param>
-        /// <param name="texture2">Input Texture<</param>
-        /// <param name="texture3">Input Texture<</param>
+        /// <param name="texture1">Input Texture</param>
+        /// <param name="texture2">Input Texture</param>
+        /// <param name="texture3">Input Texture</param>
         /// <param name="framebufferTarget">Output RenderTarget (veldrid framebuffer)</param>
         public abstract void Render(CommandList cl,
                                     GraphicsDevice device,

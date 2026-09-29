@@ -34,13 +34,13 @@ namespace Yak2D
         /// <summary>
         /// Destroy viewport object data
         /// </summary>
-        /// <param name"viewport">The viewport reference to destroy</param>                                 
+        /// <param name="viewport">The viewport reference to destroy</param>                                 
         void DestroyViewport(IViewport viewport);
 
         /// <summary>
         /// Destroy viewport object data
         /// </summary>
-        /// <param name"viewport">The viewport id to destroy</param>                                 
+        /// <param name="viewport">The viewport id to destroy</param>                                 
         void DestroyViewport(ulong viewport);
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace Yak2D
         /// Creates a stage enabling copying of surface pixel data to cpu array
         /// </summary>
         /// <param name="initialStagingTextureWidth">Initial width of staging texture created. If a texture of a difference size is copied from this is recreated at rendertime (slower)</param>
-        /// <param name="initialStagingTextureHeight">Initial width of staging texture created. If a texture of a difference size is copied from this is recreated at rendertime (slower)<</param>
+        /// <param name="initialStagingTextureHeight">Initial width of staging texture created. If a texture of a difference size is copied from this is recreated at rendertime (slower)</param>
         /// <param name="callback">User delegate called once rendering complete to provide user the results data. Rendering may happen asynchronously hence the use of callbacks to avoid multithreaded issues</param>
         /// <param name="useFloat32PixelFormat">Set True if surface copying data from has pixel type of single floats. False, default, is four component RGBA</param>
         /// <returns></returns>
@@ -381,7 +381,7 @@ namespace Yak2D
         /// Update Mesh Render Overall Light Properties - Number of lights, specular colour, shininess
         /// </summary>
         /// <param name="stage">The stage reference</param>
-        /// <param name="config">The target stage configuration</param>
+        /// <param name="configuration">The target stage configuration</param>
         /// <param name="transitionSeconds">Time in seconds over which to interpolate the current configuration to the target configuration</param>        
         void SetMeshRenderLightingProperties(IMeshRenderStage stage,
                                              MeshRenderLightingPropertiesConfiguration configuration,

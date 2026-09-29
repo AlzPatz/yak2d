@@ -23,12 +23,14 @@ namespace Yak2D
         /// <summary>
         /// Returns vector that is the input vector rotated clockwise by the requests angle in radians
         /// </summary>
+        /// <param name="v">Vector to rotate</param>
         /// <param name="radians">Clockwise rotation angle in radians</param>
         Vector2 RotateVectorClockwise(Vector2 v, float radians);
 
         /// <summary>
         /// Returns vector that is the input vector rotated clockwise by the requests angle in radians
         /// </summary>
+        /// <param name="v">Vector to rotate</param>
         /// <param name="radians">Clockwise rotation angle in radians</param>
         Vector2 RotateVectorClockwise(ref Vector2 v, float radians);
 
@@ -41,6 +43,7 @@ namespace Yak2D
         /// <param name="rounded">Whether the line / arrow as rounded ends</param>
         /// <param name="centreOfCurveRadiusAtLineEndPoints">Whether the start and end points represent the centre of a rounded end's radius. False implies the line / arrow has no vertices more extreme than the start / end points</param>
         /// <param name="numberOfCurveSegments">Number of segments that a rounded end is divided up into</param>
+        /// <param name="isArrow">Whether to generate an arrow head at the end point</param>
         /// <param name="headLength">How long the arrow head is (aslong as the total arrow length can support it)</param>
         /// <param name="headWidth">Width arrow head at the widest point</param>
         Tuple<Vector2[], int[]> LineAndArrowVertexAndIndicesGenerator(  Vector2 start,

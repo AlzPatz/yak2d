@@ -41,7 +41,7 @@ namespace Yak2D
         /// [1] [2] [3]
         /// [4] [5] [6]
         ///
-        ///  & within a[x]
+        ///  &amp; within a[x]
         ///
         ///  TopLeft    -  TopRight
         ///      |            |
