@@ -6,11 +6,11 @@ It offers simple 2D polygon (coloured, textured and dual textured) drawing funct
 
 Quickly create 2D games and prototypes that run on all major desktop operating systems. Graphics, Input, Windowing and Application Lifecycle are all provided for and managed by the framework (*just add sound*). Avoid the bloat of large game engines (or make life harder for yourself - whatever your opinion). No GUI, **do it all in code..** :)
 
-yak2D is structured as a collection of .NET standard 2.0 class libraries, built upon the [Veldrid](https://github.com/mellinoe/veldrid) cross-platform API agnostic rendering library. Application windowing is handled by SDL2 via [Veldrid](https://github.com/mellinoe/veldrid).
+yak2D is a .NET 10 library, built upon [NeoVeldrid](https://www.nuget.org/packages/NeoVeldrid) (a maintained fork of the [Veldrid](https://github.com/mellinoe/veldrid) cross-platform, graphics API agnostic rendering library). Application windowing and input are handled by SDL2, which is bundled with the NuGet package - there are no native libraries to install.
 
-**Supported Desktop Platforms: Windows, Linux and MacOS**
+**Supported Desktop Platforms: Windows, Linux and macOS** (x64 and arm64)
 
-**Supported Graphics APIs: Direct3D 11, Vulkan, Open GL, Metal**
+**Supported Graphics APIs: Direct3D 11, Vulkan, OpenGL** *(Metal support is currently disabled; macOS runs on OpenGL, or Vulkan via MoltenVK)*
 
 ![](logo.png) 
 
@@ -18,7 +18,7 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
 
 ## Documentation and Samples
 
-[Documentation](https://alzpatz.github.io/yak2d-docs/) 
+[Documentation](https://alzpatz.github.io/yak2d-docs/) - including a step by step [Getting Started](https://alzpatz.github.io/yak2d-docs/articles/gettingstarted.html) tutorial
 
 [Demo Samples](https://github.com/AlzPatz/yak2d-samples)
 
@@ -43,59 +43,60 @@ yak2D is structured as a collection of .NET standard 2.0 class libraries, built 
     * Pixellate, Static, Edge Detection, Old-Movie Reel, CRT monitor 
     * Height Map Distortion (such as shock waves)
     * Render surfaces to 3D meshes (Phong lighting model with up to 8 lights)
-    * Easily Create Custom Shader stages, or stages with full exposure to Veldrid objects
+    * Easily Create Custom Shader stages, or stages with full exposure to NeoVeldrid objects (including compute shaders)
+* GPU to CPU surface copies (read back rendered pixel data)
 * Input
-    * Exposes keyboard, mouse and gamepad input via an abstraction over Veldrid / SDL2
+    * Exposes keyboard, mouse and gamepad input via an abstraction over NeoVeldrid / SDL2
 
-## Installation 
+## Installation
 
-Add yak2D to your project via your Nuget Package Manager:
-* Visual Studio:
-    ![Search via Visual Studio](.github/nuget_vs.png?raw=true)
-* .NET core command line
-    ```shell
-    dotnet add package yak2D --version *
-    ```
-    Replace `*` with desired version number or leave it as is to download the latest version
+yak2D requires the [.NET 10 SDK](https://dotnet.microsoft.com/download) (or later) on Windows, Linux or macOS.
 
-yak2D, like Veldrid, uses the standard .NET core tooling. [Install the tools](https://www.microsoft.com/net/download/core) and build normally ('dotnet build')
+Add yak2D to your project from NuGet:
 
-## Usage 
+```shell
+dotnet add package Yak2D
+```
 
-1. Create a new .NET core console application
-    * Visual Studio:
-    Create a new console application using the wizard
-    * .NET core command line 
+or search for `Yak2D` in the NuGet package manager of Visual Studio or Rider.
+
+## Usage
+
+1. Create a new console application and add yak2D:
     ```shell
     dotnet new console -n MyApplicationName
+    cd MyApplicationName
+    dotnet add package Yak2D
     ```
-    
-2. Add yak2D to your project via the Nuget package manager (see installation above)
 
-3. Create a class overriding the IApplication interface. Implement the interface methods: 
+2. Create a class implementing the `IApplication` interface. Its methods are called by the framework in this order:
     * **OnStartup()**
       - Runs before Configure(). Add non-yak2D related code if desired to run before other methods are called
     * **Configure()**
-      - Return an object containing the configuration properties for the framework (window resolution, update timestep type, etc)
-    * **ProcessMessage()**
-      - Runs before an Update() iteration. Allows user to process important messages. Top Tip: GraphicsDeviceRecreated will require the recreation of all framework objects (surfaces, render stages, fonts, etc). Common usage is for the user to make it to call CreateResources() and SwapChainFramebufferReCreated will invalid any current references held to the framebuffer
+      - Return a `StartupConfig` containing the configuration properties for the framework (window resolution, graphics API, update timestep type, etc). `StartupConfig.Default(...)` provides sensible defaults
     * **CreateResources()**
       - Runs once on start up, where the user can create required framework resources (surfaces, render stages, fonts, etc). Can make sense to manually call when graphics device is lost, or any time resources are lost
+    * **ProcessMessage()**
+      - Runs before an Update() iteration. Allows user to process important messages. Top Tip: GraphicsDeviceRecreated will require the recreation of all framework objects (surfaces, render stages, fonts, etc) - common usage is to call CreateResources(). SwapChainFramebufferReCreated will invalidate any current references held to the framebuffer
     * **Update()**
-      - Runs once per simulation update
+      - Runs once per simulation update. Return false to exit the application
     * **PreDrawing()**
-      - Runs before Drawing(). A good time to set effect configurations and clear draw queues  
+      - Runs before Drawing(). A good time to set effect configurations and clear draw queues
     * **Drawing()**
       - User should build DrawStage and DistortionStage draw request queues here
-    * **Rending()**
-      - Build the rendering pipeline by queuing up draw stages
+    * **Rendering()**
+      - Build the rendering pipeline by queuing up render stages
     * **Shutdown()**
       - Runs once as application, well, shuts down ...
-    
-4. In Program.cs, or whether appropriate, pass your IApplication object to the static method **Launcher.Run()**
 
-5. Build and Run!
-    * .NET core command line
+3. In `Program.cs`, pass your IApplication object to the static method **Launcher.Run()**:
+    ```csharp
+    using Yak2D;
+
+    Launcher.Run(new MyApplication());
+    ```
+
+4. Build and Run!
     ```shell
     dotnet run
     ```
@@ -114,9 +115,11 @@ When the version number (3 digit form, i.e 1.2.3) is updated in version.json, a 
 
 [![NuGet](https://img.shields.io/nuget/v/yak2d.svg)](https://www.nuget.org/packages/Yak2D/)
 
-**Yak2D-dev** Development / DEBUG packages are avaliable from [MyGet](https://www.myget.org/feed/Packages/yak2d-dev). These are published whenever the master branch has a code commit in /src (including when the version.json number is not updated) - the package name is suffixed with -dev and the version number includes a 4th component (and potential commit id based string) autogenerated using nerdbank.gitversioning during the ci build and package steps. A package is also pushed to [MyGet](https://www.myget.org/feed/Packages/yak2d-dev) whenever a commit is made on a non-master branch that contains "push-pack-dev" in the commit string. 
+**Yak2D-dev** Development / DEBUG packages are available from [MyGet](https://www.myget.org/feed/Packages/yak2d-dev). These are published whenever the master branch has a code commit in /src (including when the version.json number is not updated) - the package name is suffixed with -dev and the version number includes a 4th component (and potential commit id based string) autogenerated using nerdbank.gitversioning during the ci build and package steps. A package is also pushed to [MyGet](https://www.myget.org/feed/Packages/yak2d-dev) whenever a commit is made on a non-master branch that contains "push-pack-dev" in the commit string. 
 
-Note - all test must pass for a package to be published to any source
+The solution is built on Windows, Linux and macOS for every push. Tests run on Windows, and must pass for a package to be published to any source.
+
+Pushing to master also triggers a rebuild of the [Documentation](https://alzpatz.github.io/yak2d-docs/), whose API reference is generated from the source code comments.
 
 Finally, for a push to any branch, or pull request to master, packages are uploaded as downloadable build artifacts on github.
 
@@ -130,7 +133,7 @@ Let me know - I will try to address any that come up!
 
 ## Credits
 
-[Veldrid](https://github.com/mellinoe/veldrid) is awesome, and Eric is a great person.
+[Veldrid](https://github.com/mellinoe/veldrid) is awesome, and Eric is a great person. Thanks also to the maintainers of [NeoVeldrid](https://www.nuget.org/packages/NeoVeldrid) for keeping it going, and to [Silk.NET](https://github.com/dotnet/Silk.NET) and [SDL](https://www.libsdl.org/).
 
 ## License
 
