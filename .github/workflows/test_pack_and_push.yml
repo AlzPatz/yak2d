@@ -95,9 +95,15 @@ jobs:
         run:  |
             cd ${{ env.TOPLEVEL_BUILD_DIR }}
             dotnet build -c Release --no-restore
+      - name: Install SDL2 and software Vulkan driver (ubuntu)
+        # Runners have no GPU or display; Mesa's lavapipe provides a CPU Vulkan device for the GPU-backed tests
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsdl2-2.0-0 libvulkan1 mesa-vulkan-drivers
       - name: Test
-        # Skip testing under ubuntu as SDL2 library not installed on OS instance
-        if: matrix.os == 'windows-latest'
+        # Skip testing under macOS as there is no Vulkan/Metal device available for the GPU-backed tests
+        if: matrix.os != 'macos-latest'
         run: |
           cd ${{ env.TOPLEVEL_BUILD_DIR }}
           dotnet test

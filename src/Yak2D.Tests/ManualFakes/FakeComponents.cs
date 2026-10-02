@@ -36,8 +36,8 @@ namespace Yak2D.Tests.ManualFakes
 
         public void ReleaseResources()
         {
-            _fakeDevice?.Dispose();
             _fakeFactory?.Dispose();
+            _fakeDevice?.Dispose();
         }
 
         public void SetGraphicsApi(GraphicsApi api, Action systemPreAppReinitialisation) { }
