@@ -87,11 +87,17 @@ namespace Yak2D.Graphics
             _stagesForDestruction.ForEach(stage =>
             {
                 var id = stage.Item1;
-                var resourcesAlreadyDestoryed = stage.Item2;
+
+                //The same id can be queued more than once in a frame (e.g. DestroyStage() followed by a
+                //Shutdown() or ReInitialise() that queues every stage). It is destroyed the first time, so skip it after
+                if (!_renderStageCollection.Contains(id))
+                {
+                    return;
+                }
 
                 var model = _renderStageCollection.Retrieve(id);
 
-                if (model == null && !resourcesAlreadyDestoryed)
+                if (model == null)
                 {
                     _frameworkMessenger.Report("Warning: Renderstage Model was expected in collection to destroy, but does not exist (is null)");
                 }
