@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using SixLabors.ImageSharp.PixelFormats;
 using NeoVeldrid;
 using Yak2D.Internal;
 
@@ -39,7 +38,7 @@ namespace Yak2D.Surface
         private readonly IFrameworkMessenger _frameworkMessenger;
         private readonly IIdGenerator _idGenerator;
         private readonly IGpuSurfaceCollection _surfaceCollection;
-        private readonly IImageSharpLoader _imageSharpLoader;
+        private readonly IImageLoader _imageLoader;
         private readonly IGpuSurfaceFactory _gpuSurfaceFactory;
         private readonly ISystemComponents _components;
         private readonly IFileSystem _fileSystem;
@@ -58,7 +57,7 @@ namespace Yak2D.Surface
                                     IIdGenerator idGenerator,
                                     IStartupPropertiesCache startUpPropertiesCache,
                                     IGpuSurfaceCollection gpuSurfaceCollection,
-                                    IImageSharpLoader imageSharpLoader,
+                                    IImageLoader imageLoader,
                                     IGpuSurfaceFactory gpuSurfaceFactory,
                                     ISystemComponents components,
                                     IFileSystem fileSystem)
@@ -70,7 +69,7 @@ namespace Yak2D.Surface
             _frameworkMessenger = frameworkMessenger;
             _idGenerator = idGenerator;
             _surfaceCollection = gpuSurfaceCollection;
-            _imageSharpLoader = imageSharpLoader;
+            _imageLoader = imageLoader;
             _gpuSurfaceFactory = gpuSurfaceFactory;
             _components = components;
             _fileSystem = fileSystem;
@@ -95,7 +94,7 @@ namespace Yak2D.Surface
 
         private void GenerateSingleWhitePixel()
         {
-            var texture = _imageSharpLoader.GenerateSingleWhitePixel();
+            var texture = _imageLoader.GenerateSingleWhitePixel();
 
             SingleWhitePixel = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture,
                                                                               true,
@@ -119,7 +118,7 @@ namespace Yak2D.Surface
                 return null;
             }
 
-            var veldridTexture = _imageSharpLoader.GenerateVeldridTextureFromStream(stream, mipMap);
+            var veldridTexture = _imageLoader.GenerateVeldridTextureFromStream(stream, mipMap);
 
             return _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(veldridTexture,
                                                                   true,
@@ -258,7 +257,7 @@ namespace Yak2D.Surface
                                                   SamplerType samplerType,
                                                   bool generateMipMaps)
         {
-            var veldridTexture = _imageSharpLoader.GenerateVeldridTextureFromStream(stream, generateMipMaps);
+            var veldridTexture = _imageLoader.GenerateVeldridTextureFromStream(stream, generateMipMaps);
 
             var id = _idGenerator.New();
 
@@ -289,7 +288,7 @@ namespace Yak2D.Surface
                 return default(TextureData);
             }
 
-            return _imageSharpLoader.GenerateTextureDataFromStream(stream);
+            return _imageLoader.GenerateTextureDataFromStream(stream);
         }
 
         public ITexture CreateFontTextureFromFile(string path,
@@ -361,7 +360,7 @@ namespace Yak2D.Surface
             {
                 using (var stream = _fileSystem.OpenRead(path))
                 {
-                    return _imageSharpLoader.GenerateTextureDataFromStream(stream);
+                    return _imageLoader.GenerateTextureDataFromStream(stream);
                 }
             }
             else
@@ -373,14 +372,14 @@ namespace Yak2D.Surface
 
         public ITexture CreateRgbaTextureFromPixelData(uint width,
                                                      uint height,
-                                                     Rgba32[] pixelData,
+                                                     RgbaByte[] pixelData,
                                                      SamplerType samplerType,
                                                      bool generateMipMaps,
                                                      bool isFrameworkInternal)
         {
             var id = _idGenerator.New();
 
-            var texture = _imageSharpLoader.GenerateRgbaVeldridTextureFromPixelData(pixelData, width, height, generateMipMaps);
+            var texture = _imageLoader.GenerateRgbaVeldridTextureFromPixelData(pixelData, width, height, generateMipMaps);
 
             var surface = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture, isFrameworkInternal, false, samplerType);
 
@@ -396,7 +395,7 @@ namespace Yak2D.Surface
         {
             var id = _idGenerator.New();
 
-            var texture = _imageSharpLoader.GenerateFloat32VeldridTextureFromPixelData(pixelData, width, height);
+            var texture = _imageLoader.GenerateFloat32VeldridTextureFromPixelData(pixelData, width, height);
 
             var surface = _gpuSurfaceFactory.CreateGpuSurfaceFromTexture(texture, false, false, samplerType);
 

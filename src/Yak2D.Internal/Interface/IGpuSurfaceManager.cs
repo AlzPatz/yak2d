@@ -1,8 +1,7 @@
-using SixLabors.ImageSharp.PixelFormats;
+using NeoVeldrid;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using NeoVeldrid;
 
 namespace Yak2D.Internal
 {
@@ -34,7 +33,7 @@ namespace Yak2D.Internal
 
         ITexture CreateRgbaTextureFromPixelData(uint width,
                                                 uint height,
-                                                Rgba32[] pixelData,
+                                                RgbaByte[] pixelData,
                                                 SamplerType samplerType,
                                                 bool generateMipMaps,
                                                 bool isFrameworkInternal);

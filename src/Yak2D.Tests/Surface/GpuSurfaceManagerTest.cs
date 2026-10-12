@@ -18,7 +18,7 @@ namespace Yak2D.Tests
             var id = Substitute.For<IIdGenerator>();
             var props = Substitute.For<IStartupPropertiesCache>();
             var surfaceCollection = Substitute.For<IGpuSurfaceCollection>();
-            var imagesharp = Substitute.For<IImageSharpLoader>();
+            var imagesharp = Substitute.For<IImageLoader>();
             var surfacefactory = Substitute.For<IGpuSurfaceFactory>();
             var filesystem = Substitute.For<IFileSystem>();
 
@@ -53,7 +53,7 @@ namespace Yak2D.Tests
             var id = Substitute.For<IIdGenerator>();
             var props = Substitute.For<IStartupPropertiesCache>();
             var surfaceCollection = Substitute.For<IGpuSurfaceCollection>();
-            var imagesharp = Substitute.For<IImageSharpLoader>();
+            var imagesharp = Substitute.For<IImageLoader>();
             var surfacefactory = Substitute.For<IGpuSurfaceFactory>();
             var filesystem = Substitute.For<IFileSystem>();
 

@@ -1,4 +1,4 @@
-using SixLabors.ImageSharp.PixelFormats;
+using NeoVeldrid;
 using System;
 using Yak2D.Internal;
 
@@ -23,11 +23,11 @@ namespace Yak2D.Graphics
         {
             var data = ConcentricSinusoidal(textureWidth, textureHeight, numQuarterWaves, taperInner, taperOuter, centreWaveStartPoint, maxAmplitude);
             var pixelcount = textureWidth * textureHeight;
-            var rgba = new Rgba32[pixelcount];
+            var rgba = new RgbaByte[pixelcount];
             for (var p = 0; p < pixelcount; p++)
             {
                 var value = data[p];
-                rgba[p] = new Rgba32(
+                rgba[p] = RgbaBytes.FromFloats(
                             value > 0.0f ? value : 0.0f,
                             value < 0.0f ? -value : 0.0f,
                             0.0f, 0.2f //Alpha 1 so we can review it in normal draw pipeline

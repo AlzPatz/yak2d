@@ -131,7 +131,7 @@ namespace Yak2D.Graphics
             {
                 var tex = _gpuSurfaceManager.CreateRgbaTextureFromPixelData(1,
                                                                           1,
-                                                                          new SixLabors.ImageSharp.PixelFormats.Rgba32[] { new SixLabors.ImageSharp.PixelFormats.Rgba32(1.0f, 1.0f, 1.0f, 1.0f) },
+                                                                          new NeoVeldrid.RgbaByte[] { new NeoVeldrid.RgbaByte(255, 255, 255, 255) },
                                                                           SamplerType.Point,
                                                                           false,
                                                                           true);

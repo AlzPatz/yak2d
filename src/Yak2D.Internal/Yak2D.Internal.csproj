@@ -15,7 +15,6 @@
   <!-- Conditionally link to local Veldrid source if it is present within the same directory -->
   <ItemGroup Condition="Exists('..\..\..\veldrid\')">
     <ProjectReference Include="..\..\..\veldrid\src\Veldrid\Veldrid.csproj"/>
-    <ProjectReference Include="..\..\..\veldrid\src\Veldrid.ImageSharp\Veldrid.ImageSharp.csproj"/>
     <ProjectReference Include="..\..\..\veldrid\src\Veldrid.StartupUtilities\Veldrid.StartupUtilities.csproj"/>
     <ProjectReference Include="..\..\..\veldrid\src\Veldrid.Utilities\Veldrid.Utilities.csproj"/>
   </ItemGroup>
@@ -23,7 +22,6 @@
   <!-- If veldrid source not present, use nuget -->
   <ItemGroup Condition="!Exists('..\..\..\veldrid\')">
     <PackageReference Include="NeoVeldrid" Version="1.2.1" />
-    <PackageReference Include="NeoVeldrid.ImageSharp" Version="1.2.1" />
     <PackageReference Include="NeoVeldrid.StartupUtilities" Version="1.2.1" />
     <PackageReference Include="NeoVeldrid.Utilities" Version="1.2.1" />
   </ItemGroup>

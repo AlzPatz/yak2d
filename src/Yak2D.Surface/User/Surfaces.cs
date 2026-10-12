@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Numerics;
-using SixLabors.ImageSharp.PixelFormats;
+using NeoVeldrid;
 using Yak2D.Internal;
 using Yak2D.Utility;
 
@@ -173,16 +173,11 @@ namespace Yak2D.Surface
             }
 
             var pixelcount = textureWidth * textureHeight;
-            var rgba = new Rgba32[pixelcount];
+            var rgba = new RgbaByte[pixelcount];
             for (var p = 0; p < pixelcount; p++)
             {
                 var value = pixels[p];
-                rgba[p] = new Rgba32(
-                            Clamper.Clamp(value.X, 0.0f, 1.0f),
-                            Clamper.Clamp(value.Y, 0.0f, 1.0f),
-                            Clamper.Clamp(value.Z, 0.0f, 1.0f),
-                            Clamper.Clamp(value.W, 0.0f, 1.0f)
-                        );
+                rgba[p] = RgbaBytes.FromFloats(value.X, value.Y, value.Z, value.W);
             }
             return _surfaceManager.CreateRgbaTextureFromPixelData(textureWidth, textureHeight, rgba, samplerType, generateMipMaps, false);
         }
