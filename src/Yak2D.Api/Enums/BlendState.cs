@@ -13,7 +13,9 @@ namespace Yak2D
         /// <summary>
         /// Common BlendState (default)
         /// Destination[RGB] = (Source[RGB] * Source[A]) + (Destination[RGB] * (1.0 - Source[A]))
-        /// Desination[A] = Source[A] + (1.0 - Source[A]) == 1.0 Constant
+        /// Destination[A] = Source[A] + (Destination[A] * (1.0 - Source[A]))
+        /// On an opaque target the alpha stays 1.0. On a transparent render target the result holds
+        /// premultiplied colour with the correct coverage in alpha, ready to be composited with Premultiplied
         /// </summary>
         Alpha,
 
@@ -27,6 +29,15 @@ namespace Yak2D
         /// <summary>
         /// Destination[RGBA] = Destination[RGBA] + Source[RGBA]
         /// </summary>
-        AdditiveComponentWise
+        AdditiveComponentWise,
+
+        /// <summary>
+        /// For source colours that are already multiplied by their alpha, such as a render target that was drawn
+        /// into with Alpha blending. Use it to composite such a surface onto another without darkening its
+        /// semi-transparent pixels
+        /// Destination[RGB] = Source[RGB] + (Destination[RGB] * (1.0 - Source[A]))
+        /// Destination[A] = Source[A] + (Destination[A] * (1.0 - Source[A]))
+        /// </summary>
+        Premultiplied
     }
 }
