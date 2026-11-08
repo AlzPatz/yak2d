@@ -10,6 +10,13 @@ namespace Yak2D.Core
         public GraphicsDevice RawVeldridDevice { get { return _device; } }
         private GraphicsDevice _device;
 
+        //Graphics.Render presents on a thread-pool task (WaitForIdle + SwapBuffers) while the main thread keeps pumping
+        //SDL events, and a window resize event re-creates the swapchain from the main thread. A present that returns
+        //out-of-date also re-creates the swapchain, so without this both threads could be in vkCreateSwapchainKHR on
+        //the same surface at once (Vulkan requires the surface and old swapchain to be externally synchronised), which
+        //segfaulted inside the NVIDIA driver during a window drag. Every swapchain-touching call takes this lock.
+        private readonly object _swapchainLock = new object();
+
         public Framebuffer SwapchainFramebuffer => _device?.SwapchainFramebuffer;
         public OutputDescription SwapchainFramebufferOutputDescription => _device.SwapchainFramebuffer.OutputDescription;
         public GraphicsApi BackendType => GraphicsApiConverter.ConvertVeldridGraphicsBackendToApi(_device.BackendType);
@@ -57,12 +64,30 @@ namespace Yak2D.Core
 
         public void SubmitCommands(CommandList cl) => _device?.SubmitCommands(cl);
 
-        public void SwapBuffers() => _device?.SwapBuffers();
+        public void SwapBuffers()
+        {
+            lock (_swapchainLock)
+            {
+                _device?.SwapBuffers();
+            }
+        }
 
-        public void WaitForIdle() => _device?.WaitForIdle();
+        public void WaitForIdle()
+        {
+            lock (_swapchainLock)
+            {
+                _device?.WaitForIdle();
+            }
+        }
 
         public void Dispose() => _device?.Dispose();
 
-        public void ResizeMainWindow(uint windowResolutionWidth, uint windowResolutionHeight) => _device.ResizeMainWindow(windowResolutionWidth, windowResolutionHeight);
+        public void ResizeMainWindow(uint windowResolutionWidth, uint windowResolutionHeight)
+        {
+            lock (_swapchainLock)
+            {
+                _device.ResizeMainWindow(windowResolutionWidth, windowResolutionHeight);
+            }
+        }
     }
 }
