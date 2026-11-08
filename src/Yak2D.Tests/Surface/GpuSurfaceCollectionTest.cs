@@ -145,5 +145,42 @@ namespace Yak2D.Tests
 
             Assert.Equal(GpuSurfaceType.Undefined, surface.Type);
         }
+
+        private static NeoVeldrid.Framebuffer CreateFramebuffer(NeoVeldrid.GraphicsDevice device)
+        {
+            var colour = device.ResourceFactory.CreateTexture(NeoVeldrid.TextureDescription.Texture2D(4, 4, 1, 1, NeoVeldrid.PixelFormat.R8_G8_B8_A8_UNorm, NeoVeldrid.TextureUsage.RenderTarget));
+            return device.ResourceFactory.CreateFramebuffer(new NeoVeldrid.FramebufferDescription(null, colour));
+        }
+
+        [Fact]
+        public void SurfaceCollection_TestRemoveSwapChainOutput_DoesNotDisposeSwapChainFramebuffer()
+        {
+            var device = new Yak2D.Tests.ManualFakes.FakeGraphicsDevice();
+            var messenger = Substitute.For<IFrameworkMessenger>();
+            var framebuffer = CreateFramebuffer(device.Device);
+
+            var collection = new GpuSurfaceCollection(messenger);
+            collection.Add(9, new GpuSurface { Type = GpuSurfaceType.SwapChainOutput | GpuSurfaceType.Internal, Framebuffer = framebuffer });
+
+            Assert.True(collection.Remove(9));
+            Assert.False(framebuffer.IsDisposed);
+            framebuffer.Dispose();
+            device.Dispose();
+        }
+
+        [Fact]
+        public void SurfaceCollection_TestRemoveRenderTarget_DisposesItsFramebuffer()
+        {
+            var device = new Yak2D.Tests.ManualFakes.FakeGraphicsDevice();
+            var messenger = Substitute.For<IFrameworkMessenger>();
+            var framebuffer = CreateFramebuffer(device.Device);
+
+            var collection = new GpuSurfaceCollection(messenger);
+            collection.Add(9, new GpuSurface { Type = GpuSurfaceType.RenderTarget | GpuSurfaceType.User, Framebuffer = framebuffer });
+
+            Assert.True(collection.Remove(9));
+            Assert.True(framebuffer.IsDisposed);
+            device.Dispose();
+        }
     }
 }

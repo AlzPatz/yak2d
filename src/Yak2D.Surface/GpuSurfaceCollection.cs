@@ -69,7 +69,12 @@ namespace Yak2D.Surface
 
         private void DisposeOfASurface(GpuSurface surface)
         {
-            surface.Framebuffer?.Dispose();
+            //The swapchain output surface only wraps the swapchain's framebuffer, which the swapchain owns and keeps
+            //(re-creating its attachments) across a window resize. Disposing it here destroyed the live window target.
+            if (!surface.Type.HasFlag(GpuSurfaceType.SwapChainOutput))
+            {
+                surface.Framebuffer?.Dispose();
+            }
             surface.ResourceSet_TexWrap?.Dispose();
             surface.ResourceSet_TexMirror?.Dispose();
             surface.Texture?.Dispose();
