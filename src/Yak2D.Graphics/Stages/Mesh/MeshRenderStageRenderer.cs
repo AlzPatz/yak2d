@@ -62,8 +62,8 @@ namespace Yak2D.Graphics
 
             uniformDescriptions[2] = new ResourceLayoutElementDescription[]
             {
-                new ResourceLayoutElementDescription("Texture", ResourceKind.TextureReadOnly, ShaderStages.Fragment),
-                new ResourceLayoutElementDescription("Sampler", ResourceKind.Sampler, ShaderStages.Fragment)
+                new ResourceLayoutElementDescription("Sampler", ResourceKind.TextureReadOnly, ShaderStages.Fragment),
+                new ResourceLayoutElementDescription("Texture", ResourceKind.Sampler, ShaderStages.Fragment)
             };
 
             uniformDescriptions[3] = new ResourceLayoutElementDescription[]

@@ -47,6 +47,9 @@ namespace Yak2D.Graphics
                 a preference to code each backend shader individually
               - HOWEVER - for custom shaders stages, a SPIR-V .glsl can be used, enabling runtime cross platform compilation
               - The rules for SPIR-V shaders are 1. paths are rooted in Shaders/ base directory, .glsl extension and main() entiry point
+                2. a custom shader's Texture uniform occupies one set with the texture at binding 0 and the sampler at binding 1,
+                named Texture_<Name> and Sampler_<Name> on the SPIR-V path (precompiled OpenGL shaders keep Sampler_<Name> as the
+                sampler2D uniform name). OpenGL binds textures by element name, so the names must match what the shader source declares
 
               Notes:
               * You may note significant padding in shader uniforms, and the avoidance of some vector types, particularly float/vec3s

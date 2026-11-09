@@ -136,9 +136,17 @@ namespace Yak2D
         /// Creates a stage for a user defined shader effect 
         /// The user defines the shader code, constrained by a set maximum number of texture and uniform configuration variable inputs
         /// </summary>
+        /// <remarks>
+        /// Each uniform description becomes one resource set, in the order given.
+        /// A Texture uniform's set has two elements: the texture at binding 0 and the sampler at binding 1.
+        /// When useSpirvCompile is true the texture element is named Texture_&lt;Name&gt; and the sampler element Sampler_&lt;Name&gt;.
+        /// When false (precompiled per-backend shaders) the texture element is named Sampler_&lt;Name&gt; and the sampler element Texture_&lt;Name&gt;,
+        /// so a precompiled OpenGL shader declares uniform sampler2D Sampler_&lt;Name&gt;.
+        /// A Data uniform's set has one UniformBuffer element named exactly Name.
+        /// </remarks>
         /// <param name="fragmentShaderPathName">Shader code filename (no extension) including path"</param>
         /// <param name="assetType">Embedded in the binary or a file location"</param>
-        /// <param name="uniformDescriptions">Description of shader uniforms (textures or data structs)</param>
+        /// <param name="uniformDescriptions">Description of shader uniforms (textures or data structs). One resource set per description, in order. A Texture uniform's set has the texture at binding 0 and the sampler at binding 1, named Texture_&lt;Name&gt; / Sampler_&lt;Name&gt; when useSpirvCompile is true, and Sampler_&lt;Name&gt; / Texture_&lt;Name&gt; for precompiled shaders. A Data uniform is one UniformBuffer element named Name</param>
         /// <param name="blendState">How source pixels are mixed with destination pixels on surfaces</param>
         /// <param name="useSpirvCompile">Compile shader code at runtime from .glsl SPIRV shader</param>
         ICustomShaderStage CreateCustomShaderStage(string fragmentShaderPathName,

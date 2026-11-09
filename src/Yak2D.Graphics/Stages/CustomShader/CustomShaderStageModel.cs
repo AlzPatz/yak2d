@@ -145,11 +145,20 @@ namespace Yak2D.Graphics
                         }
                         textureCount++;
 
+                        //Element order is fixed: texture at binding 0, sampler at binding 1, because every surface's
+                        //resource set is built that way (GpuSurfaceFactory.GenerateCachedTextureLayout). Only the names
+                        //depend on the path. NeoVeldrid's OpenGL backend binds a texture by looking up the element's name
+                        //as a GLSL uniform. A SPIR-V cross-compiled combined sampler is named after the texture
+                        //(Texture_<Name>), so on the SPIR-V path the TextureReadOnly element must carry that name.
+                        //Precompiled OpenGL shaders declare 'uniform sampler2D Sampler_<Name>', so the precompiled path
+                        //keeps Sampler_<Name> (texture) / Texture_<Name> (sampler)
+                        var textureElementName = string.Concat(_useSpirvCompile ? "Texture_" : "Sampler_", desc.Name);
+                        var samplerElementName = string.Concat(_useSpirvCompile ? "Sampler_" : "Texture_", desc.Name);
                         uniformDescriptions.Add(
                             new ResourceLayoutElementDescription[]
                             {
-                                new ResourceLayoutElementDescription(string.Concat("Sampler_", desc.Name), ResourceKind.TextureReadOnly, ShaderStages.Fragment),
-                                new ResourceLayoutElementDescription(string.Concat("Texture_", desc.Name), ResourceKind.Sampler, ShaderStages.Fragment)
+                                new ResourceLayoutElementDescription(textureElementName, ResourceKind.TextureReadOnly, ShaderStages.Fragment),
+                                new ResourceLayoutElementDescription(samplerElementName, ResourceKind.Sampler, ShaderStages.Fragment)
                             }
                         );
                         break;

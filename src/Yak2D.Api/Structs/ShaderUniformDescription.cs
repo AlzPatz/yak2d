@@ -6,7 +6,10 @@ namespace Yak2D
     public struct ShaderUniformDescription
     {
         /// <summary>
-        /// Uniform string name - used as a refrence when updating values
+        /// Uniform string name - used as a reference when updating values.
+        /// For Texture uniforms the name is also the suffix of the shader resource names in that uniform's set
+        /// (texture at binding 0, sampler at binding 1): Texture_&lt;Name&gt; / Sampler_&lt;Name&gt; on the SPIR-V (useSpirvCompile) path,
+        /// and Sampler_&lt;Name&gt; / Texture_&lt;Name&gt; for precompiled shaders
         /// </summary>
         public string Name { get; set; }
 
