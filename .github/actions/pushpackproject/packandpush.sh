@@ -54,16 +54,25 @@ for dir in *; do
             cd $dir
         
             # Pack
-            dotnet pack -c "$BUILD_CONFIGURATION" -o .
-            
-            # Push
+            if ! dotnet pack -c "$BUILD_CONFIGURATION" -o .; then
+                echo "packandpush.sh: dotnet pack failed in project directory '$dir'" >&2
+                exit 1
+            fi
+
+            # Push (fail the step on any push error; --skip-duplicate keeps re-pushes of an existing version successful)
             if [ "$PUSH_PACKAGE" = true ]; then
-                dotnet nuget push *.nupkg -s $NUGET_SOURCE -k $NUGET_API_KEY --skip-duplicate 
+                if ! dotnet nuget push *.nupkg -s $NUGET_SOURCE -k $NUGET_API_KEY --skip-duplicate; then
+                    echo "packandpush.sh: dotnet nuget push failed in project directory '$dir'" >&2
+                    exit 1
+                fi
             fi
 
             # Copy packages to the storage directory (to upload as artefacts later)
-            cp *.nupkg ${ROOT}/packages/
-            
+            if ! cp *.nupkg ${ROOT}/packages/; then
+                echo "packandpush.sh: copying packages to ${ROOT}/packages/ failed in project directory '$dir'" >&2
+                exit 1
+            fi
+
             # Remember to come back out of directory
             cd ..
         fi
