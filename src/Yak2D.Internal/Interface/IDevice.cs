@@ -44,6 +44,7 @@ namespace Yak2D.Internal
         void SubmitCommands(CommandList cl);
 
         void WaitForIdle();
+        bool TryWaitForIdle(TimeSpan timeout);
         void SwapBuffers();
         void Dispose();
         void ResizeMainWindow(uint windowResolutionWidth, uint windowResolutionHeight);

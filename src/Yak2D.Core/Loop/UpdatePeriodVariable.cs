@@ -77,7 +77,8 @@ namespace Yak2D.Core
 
         public void ProcessSingleUpdate(double updatePeriod, LoopProperties loopProps, IFramesPerSecondMonitor framesPerSecondMonitor, Func<float, bool> update, ITimer loopTimer)
         {
-            loopProps.Running = update((float)updatePeriod);
+            var continueRunning = update((float)updatePeriod);
+            loopProps.Running = loopProps.Running && continueRunning;
             loopProps.TimeOfLastUpdate += updatePeriod;
             framesPerSecondMonitor.RegisterUpdateFrame();
 

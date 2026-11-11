@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using NeoVeldrid;
 using Yak2D.Internal;
 using Yak2D.Utility;
@@ -79,6 +80,29 @@ namespace Yak2D.Core
                 _device?.WaitForIdle();
             }
         }
+
+        //Bounded variant for shutdown: if a present is stuck holding the swapchain lock (e.g. vkAcquireNextImageKHR
+        //blocked after the window was destroyed), give up after the timeout instead of blocking forever
+        public bool TryWaitForIdle(TimeSpan timeout)
+        {
+            if (!Monitor.TryEnter(_swapchainLock, timeout))
+            {
+                return false;
+            }
+
+            try
+            {
+                _device?.WaitForIdle();
+                return true;
+            }
+            finally
+            {
+                Monitor.Exit(_swapchainLock);
+            }
+        }
+
+        //Test seam only (exposed to Yak2D.Tests via InternalsVisibleTo)
+        internal object SwapchainLock => _swapchainLock;
 
         public void Dispose() => _device?.Dispose();
 

@@ -118,6 +118,8 @@ namespace Yak2D.Tests.ManualFakes
             throw new NotImplementedException();
         }
 
+        public bool TryWaitForIdle(TimeSpan timeout) => throw new NotImplementedException();
+
         public void SwapBuffers()
         {
             throw new NotImplementedException();

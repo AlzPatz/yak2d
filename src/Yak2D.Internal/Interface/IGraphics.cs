@@ -1,3 +1,5 @@
+using System;
+
 namespace Yak2D.Internal
 {
     public interface IGraphics
@@ -6,5 +8,6 @@ namespace Yak2D.Internal
         void PrepareForDrawing();
         void Render(float timeSinceLastDraw);
         void ReInitalise();
+        bool WaitForRenderingToComplete(TimeSpan timeout);
     }
 }

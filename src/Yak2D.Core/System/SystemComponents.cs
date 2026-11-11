@@ -225,9 +225,16 @@ namespace Yak2D.Core
         {
             _frameworkMessenger.Report("Releasing all NeoVeldrid Components...");
 
-            Device.WaitForIdle();
-            Factory.DisposeAll();
-            Device.Dispose();
+            if (Device.TryWaitForIdle(TimeSpan.FromMilliseconds(500)))
+            {
+                Factory.DisposeAll();
+                Device.Dispose();
+            }
+            else
+            {
+                _frameworkMessenger.Report("Swapchain is still busy (swap in flight did not finish); skipping device wait and dispose");
+            }
+
             Window.Close();
         }
     }

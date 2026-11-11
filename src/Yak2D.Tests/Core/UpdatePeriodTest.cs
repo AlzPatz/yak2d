@@ -50,6 +50,57 @@ namespace Yak2D.Tests
             Assert.Equal(1, count);
         }
 
+        [Fact]
+        public void UpdatePeriod_Fixed_ShutdownRequestedDuringUpdateIsNotOverwritten()
+        {
+            var messenger = Substitute.For<IFrameworkMessenger>();
+            var analytics = Substitute.For<IDebugAnalytics>();
+            var monitor = Substitute.For<IFramesPerSecondMonitor>();
+            ITimer timer = new StopWatchTimerFactory().Create();
+
+            IUpdatePeriod updater = new UpdatePeriodFixed(messenger, analytics);
+
+            var props = new LoopProperties { FixedUpdateTimeStepInSeconds = 0.01, Running = true };
+
+            updater.ProcessSingleUpdate(0.01, props, monitor, (t) => { props.Running = false; return true; }, timer);
+
+            Assert.False(props.Running);
+        }
+
+        [Fact]
+        public void UpdatePeriod_FixedAdaptive_ShutdownRequestedDuringUpdateIsNotOverwritten()
+        {
+            var messenger = Substitute.For<IFrameworkMessenger>();
+            var analytics = Substitute.For<IDebugAnalytics>();
+            var monitor = Substitute.For<IFramesPerSecondMonitor>();
+            ITimer timer = new StopWatchTimerFactory().Create();
+
+            IUpdatePeriod updater = new UpdatePeriodFixedAdaptive(messenger, analytics);
+
+            var props = new LoopProperties { FixedUpdateTimeStepInSeconds = 0.01, Running = true };
+
+            updater.ProcessSingleUpdate(0.01, props, monitor, (t) => { props.Running = false; return true; }, timer);
+
+            Assert.False(props.Running);
+        }
+
+        [Fact]
+        public void UpdatePeriod_Variable_ShutdownRequestedDuringUpdateIsNotOverwritten()
+        {
+            var messenger = Substitute.For<IFrameworkMessenger>();
+            var analytics = Substitute.For<IDebugAnalytics>();
+            var monitor = Substitute.For<IFramesPerSecondMonitor>();
+            ITimer timer = new StopWatchTimerFactory().Create();
+
+            IUpdatePeriod updater = new UpdatePeriodVariable(messenger, analytics);
+
+            var props = new LoopProperties { FixedUpdateTimeStepInSeconds = 0.01, Running = true };
+
+            updater.ProcessSingleUpdate(0.01, props, monitor, (t) => { props.Running = false; return true; }, timer);
+
+            Assert.False(props.Running);
+        }
+
         //TODO: Get UpdatePeriodFixedAdaptive under test, perhaps will require some refactoring to enable easier testing of update period changes
     }
 }

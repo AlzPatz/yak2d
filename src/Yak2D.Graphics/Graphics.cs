@@ -22,6 +22,7 @@ namespace Yak2D.Graphics
         private readonly IFrameworkDebugOverlay _debugOverlay;
 
         private CommandList _cl;
+        private Task _renderTask;
 
         public Graphics(IStartupPropertiesCache startUpPropertiesCache,
                             ISystemComponents systemComponents,
@@ -156,13 +157,34 @@ namespace Yak2D.Graphics
 
             _renderStageVisitor.ClearCachedDrawingModels();
 
-            Task.Run(() =>
+            _renderTask = Task.Run(() =>
             {
                 _systemComponents.Device.WaitForIdle();
-                _systemComponents.Device.SwapBuffers();
+                if (_systemComponents.Window.Exists)
+                {
+                    _systemComponents.Device.SwapBuffers();
+                }
                 ExecutePostRenderFunctions();
                 RenderingComplete = true;
             });
+        }
+
+        public bool WaitForRenderingToComplete(TimeSpan timeout)
+        {
+            var task = _renderTask;
+            if (task == null)
+            {
+                return true;
+            }
+
+            try
+            {
+                return task.Wait(timeout);
+            }
+            catch (AggregateException)
+            {
+                return true; //Task finished (faulted); nothing left to wait for
+            }
         }
 
         private void ExecutePostRenderFunctions()

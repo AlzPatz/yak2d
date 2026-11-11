@@ -105,7 +105,8 @@ namespace Yak2D.Core
         public void ProcessSingleUpdate(double updatePeriod, LoopProperties loopProps, IFramesPerSecondMonitor framesPerSecondMonitor, Func<float, bool> update, ITimer loopTimer)
         {
             var startTime = loopTimer.Seconds;
-            loopProps.Running = update((float)updatePeriod);
+            var continueRunning = update((float)updatePeriod);
+            loopProps.Running = loopProps.Running && continueRunning;
             var timeDelta = loopTimer.Seconds - startTime;
 
             _updatingTimeCount += timeDelta;

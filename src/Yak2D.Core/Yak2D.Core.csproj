@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Yak2D.Utility\Yak2D.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Yak2D.Tests" />
+  </ItemGroup>
+
 </Project>

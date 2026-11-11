@@ -156,7 +156,7 @@ namespace Yak2D.Core
                         _loopProperties.DoNotDrawFrameUnlessThereHasBeenOneUpdate = false;
                     }
 
-                    if (_graphics.RenderingComplete && !_systemComponents.CurrentlyReinitialisingDevices)
+                    if (_loopProperties.Running && _graphics.RenderingComplete && !_systemComponents.CurrentlyReinitialisingDevices)
                     {
                         if (_loopProperties.ProcessFractionalUpdatesBeforeDraw)
                         {
