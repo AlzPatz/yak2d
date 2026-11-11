@@ -29,6 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Yak2D.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Shaders\**" />
   </ItemGroup>
 

@@ -146,6 +146,9 @@ namespace Yak2D.Core
 
                 _updater.ProcessRequiredUpdates(timeSinceLastUpdate, _loopProperties, _framesPerSecondMonitor, Update, _timer);
 
+                //Finish the previous frame on this thread once its present task has ended: post-render callbacks and queued destruction
+                _graphics.TryCompleteFrame();
+
                 if (!_loopProperties.DoNotDrawFrameUnlessThereHasBeenOneUpdate || _loopProperties.HasThereBeenAnUpdateSinceTheLastDraw)
                 {
                     if (!originalUserRequest && _loopProperties.DoNotDrawFrameUnlessThereHasBeenOneUpdate)
