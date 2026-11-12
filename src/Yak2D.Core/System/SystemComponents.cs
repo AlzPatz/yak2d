@@ -9,6 +9,12 @@ namespace Yak2D.Core
 {
     public class SystemComponents : ISystemComponents
     {
+        static SystemComponents()
+        {
+            //Before SDL2, shaderc or spirv-cross load: Silk.NET 2.23 never searches runtimes/linux-x64/native on Ubuntu
+            SilkNativeLibraryPaths.Register();
+        }
+
         public GraphicsApi GraphicsApi { get => Device.BackendType; }
         public bool CurrentlyReinitialisingDevices { get; private set; }
 

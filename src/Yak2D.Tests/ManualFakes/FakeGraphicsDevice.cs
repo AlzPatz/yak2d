@@ -15,7 +15,9 @@ namespace Yak2D.Tests.ManualFakes
 
         public FakeGraphicsDevice()
         {
-            var backend = NeoVeldridStartup.GetPlatformDefaultBackend();
+            Yak2D.Core.SilkNativeLibraryPaths.Register();
+
+            var backend =NeoVeldridStartup.GetPlatformDefaultBackend();
 
             switch (backend)
             {
