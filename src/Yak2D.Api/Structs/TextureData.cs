@@ -20,6 +20,7 @@ namespace Yak2D
         /// <summary>
         /// Texture Pixel Data as normalised four component RGBA floats when used for texture creation or reading RGBA texture data
         /// If used to pass Float32 Pixel data back from the GPU, then the first component is used only
+        /// Ordered in rows with the top-left pixel at index 0 when loaded with ISurfaces.LoadTextureColourData: row 0 is the top of the image on every backend
         /// </summary>
         public Vector4[] Pixels { get; set; }
     }

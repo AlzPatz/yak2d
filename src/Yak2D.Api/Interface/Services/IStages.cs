@@ -143,12 +143,20 @@ namespace Yak2D
         /// When false (precompiled per-backend shaders) the texture element is named Sampler_&lt;Name&gt; and the sampler element Texture_&lt;Name&gt;,
         /// so a precompiled OpenGL shader declares uniform sampler2D Sampler_&lt;Name&gt;.
         /// A Data uniform's set has one UniformBuffer element named exactly Name.
+        /// Texture origin: when useSpirvCompile is true the framework inserts one line directly after the shader's #version line
+        /// (or as the first line if there is none): #define YAK2D_TEXTURE_ROWS_BOTTOM_UP 1 on OpenGL, where texture rows are stored bottom-up,
+        /// and #define YAK2D_TEXTURE_ROWS_BOTTOM_UP 0 on Vulkan, Direct3D11 and Metal. It is always defined, so use #if YAK2D_TEXTURE_ROWS_BOTTOM_UP.
+        /// The FTex input is already corrected per backend; the define is for texture coordinates the shader computes itself (world space tiling, atlas cells),
+        /// for example: #if YAK2D_TEXTURE_ROWS_BOTTOM_UP uv.y = 1.0 - uv.y; #endif.
+        /// Shaders that do not use it compile and behave as before.
+        /// Precompiled per-backend shaders (useSpirvCompile false) do not receive the define: a Shaders/OpenGL shader only ever runs on OpenGL,
+        /// so it can apply the flip directly.
         /// </remarks>
         /// <param name="fragmentShaderPathName">Shader code filename (no extension) including path"</param>
         /// <param name="assetType">Embedded in the binary or a file location"</param>
         /// <param name="uniformDescriptions">Description of shader uniforms (textures or data structs). One resource set per description, in order. A Texture uniform's set has the texture at binding 0 and the sampler at binding 1, named Texture_&lt;Name&gt; / Sampler_&lt;Name&gt; when useSpirvCompile is true, and Sampler_&lt;Name&gt; / Texture_&lt;Name&gt; for precompiled shaders. A Data uniform is one UniformBuffer element named Name</param>
         /// <param name="blendState">How source pixels are mixed with destination pixels on surfaces</param>
-        /// <param name="useSpirvCompile">Compile shader code at runtime from .glsl SPIRV shader</param>
+        /// <param name="useSpirvCompile">Compile shader code at runtime from .glsl SPIRV shader. On this path #define YAK2D_TEXTURE_ROWS_BOTTOM_UP 1 (OpenGL) or 0 (Vulkan, Direct3D11, Metal) is inserted directly after the #version line, for correcting computed texture coordinates; it is not provided to precompiled per-backend shaders</param>
         ICustomShaderStage CreateCustomShaderStage(string fragmentShaderPathName,
                                                    AssetSourceEnum assetType,
                                                    ShaderUniformDescription[] uniformDescriptions,

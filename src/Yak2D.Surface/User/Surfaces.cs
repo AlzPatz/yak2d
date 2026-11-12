@@ -148,7 +148,11 @@ namespace Yak2D.Surface
                 throw new Yak2DException("Surfaces -> CreateFloat32FromData(), pixel data array size does not match dimensions");
             }
 
-            return _surfaceManager.CreateFloat32TextureFromPixelData(textureWidth, textureHeight, pixels, samplerType);
+            //Row 0 is the top of the image on every backend: mirror rows where the backend stores them bottom-up (OpenGL), as file loads do
+            //The caller's array is never mutated (a new array is returned when mirrored)
+            var data = PixelRowMirror.MirrorOverXAxisIfGraphicsApiRequires(_systemComponents.Device.BackendType, textureWidth, textureHeight, pixels);
+
+            return _surfaceManager.CreateFloat32TextureFromPixelData(textureWidth, textureHeight, data, samplerType);
         }
 
         public ITexture CreateRgbaFromData(uint textureWidth,
@@ -179,6 +183,10 @@ namespace Yak2D.Surface
                 var value = pixels[p];
                 rgba[p] = RgbaBytes.FromFloats(value.X, value.Y, value.Z, value.W);
             }
+
+            //Row 0 is the top of the image on every backend: mirror rows where the backend stores them bottom-up (OpenGL), as file loads do
+            rgba = PixelRowMirror.MirrorOverXAxisIfGraphicsApiRequires(_systemComponents.Device.BackendType, textureWidth, textureHeight, rgba);
+
             return _surfaceManager.CreateRgbaTextureFromPixelData(textureWidth, textureHeight, rgba, samplerType, generateMipMaps, false);
         }
 

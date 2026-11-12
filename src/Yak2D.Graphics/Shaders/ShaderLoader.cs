@@ -50,6 +50,10 @@ namespace Yak2D.Graphics
                 2. a custom shader's Texture uniform occupies one set with the texture at binding 0 and the sampler at binding 1,
                 named Texture_<Name> and Sampler_<Name> on the SPIR-V path (precompiled OpenGL shaders keep Sampler_<Name> as the
                 sampler2D uniform name). OpenGL binds textures by element name, so the names must match what the shader source declares
+                3. ShaderLoaderFunctions.LoadShader inserts one line directly after the #version line (first line if there is none) of
+                every shader compiled on the SPIR-V path: #define YAK2D_TEXTURE_ROWS_BOTTOM_UP 1 on OpenGL / OpenGLES (texture rows
+                stored bottom-up) and #define YAK2D_TEXTURE_ROWS_BOTTOM_UP 0 on Vulkan, Direct3D11 and Metal. It is always defined so
+                shaders can use #if to correct uvs they compute themselves. Precompiled per-backend shaders are not modified
 
               Notes:
               * You may note significant padding in shader uniforms, and the avoidance of some vector types, particularly float/vec3s

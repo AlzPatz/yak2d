@@ -30,9 +30,9 @@ namespace Yak2D.Surface
 
         public TextureData GenerateTextureDataFromStream(Stream stream)
         {
-            var decoded = Decode(stream, out var width, out var height);
-
-            var image = MirrorOverXAxisIfGraphicsApiRequires(width, height, decoded);
+            //Not mirrored: Pixels row 0 is the top of the image on every backend. Any GL mirroring happens when
+            //the data is turned into a texture (ISurfaces.CreateRgbaFromData), so a round trip is mirrored once
+            var image = Decode(stream, out var width, out var height);
 
             var pixels = new Vector4[width * height];
 
@@ -77,25 +77,7 @@ namespace Yak2D.Surface
 
         private T[] MirrorOverXAxisIfGraphicsApiRequires<T>(uint width, uint height, T[] data)
         {
-            var backend = _systemComponents.Device.BackendType;
-            if (backend == GraphicsApi.OpenGL || backend == GraphicsApi.OpenGLES)
-            {
-
-                var bytes = new T[width * height];
-
-                for (var y = 0; y < height; y++)
-                {
-                    var flippedY = height - 1 - y;
-                    var StartOfLineInLinearIndex = flippedY * width;
-                    for (var x = 0; x < width; x++)
-                    {
-                        bytes[StartOfLineInLinearIndex + x] = data[(y * width) + x];
-                    }
-                }
-                return bytes;
-            }
-
-            return data;
+            return PixelRowMirror.MirrorOverXAxisIfGraphicsApiRequires(_systemComponents.Device.BackendType, width, height, data);
         }
 
         private Texture CreateTexture(RgbaByte[] pixels, uint width, uint height, bool mipMap)

@@ -73,6 +73,8 @@ namespace Yak2D
 
         /// <summary>
         /// Loads texture colour data from a .png image asset
+        /// The returned Pixels are ordered in rows with the top-left pixel at index 0: row 0 is the top of the image on every backend
+        /// (the data can be passed straight to CreateRgbaFromData, which mirrors rows itself where the backend needs it)
         /// </summary>
         /// <param name="path">Image (.png) asset name including path (no file extension)</param>
         /// <param name="assetType">Embedded in the binary or a file location</param>
@@ -83,10 +85,12 @@ namespace Yak2D
 
         /// <summary>
         /// Geneate a texture of floats (used in distortion stages) directly from an array
+        /// Index 0 is the top-left pixel and row 0 is the top of the image on every backend. Where the backend stores texture rows
+        /// bottom-up (OpenGL) the framework mirrors the rows itself, so callers must not pre-mirror. The caller's array is not modified
         /// </summary>
         /// <param name="textureWidth">Width in pixels</param>
         /// <param name="textureHeight">Height in pixels</param>
-        /// <param name="pixels">Pixel data, one dimensional array, texture top-left pixel at 0 index, data ordered in rows</param>
+        /// <param name="pixels">Pixel data, one dimensional array, texture top-left pixel at 0 index, data ordered in rows, row 0 is the top of the image on every backend</param>
         /// <param name="samplerType">Sampler filter to be when sampling the Texture</param>
         ITexture CreateFloat32FromData(uint textureWidth,
                                        uint textureHeight,
@@ -96,10 +100,13 @@ namespace Yak2D
 
         /// <summary>
         /// Geneate a texture of RGBA pixels directly from an array of Vector4s
+        /// Index 0 is the top-left pixel and row 0 is the top of the image on every backend. Where the backend stores texture rows
+        /// bottom-up (OpenGL) the framework mirrors the rows itself, as it does for loaded image files, so callers must not pre-mirror.
+        /// The caller's array is not modified
         /// </summary>
         /// <param name="textureWidth">Width in pixels</param>
         /// <param name="textureHeight">Height in pixels</param>
-        /// <param name="pixels">Pixel data, one dimensional array, texture top-left pixel at 0 index, data ordered in rows</param>
+        /// <param name="pixels">Pixel data, one dimensional array, texture top-left pixel at 0 index, data ordered in rows, row 0 is the top of the image on every backend</param>
         /// <param name="samplerType">Sampler filter to be when sampling the Texture</param>
         /// <param name="generateMipMaps">Should MipMaps be created</param>
         ITexture CreateRgbaFromData(uint textureWidth,

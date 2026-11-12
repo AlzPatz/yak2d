@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using NeoVeldrid;
 using Yak2D.Internal;
 
@@ -6,6 +7,12 @@ namespace Yak2D.Graphics
 {
     public class ShaderLoaderFunctions : IShaderLoaderFunctions
     {
+        //Public contract for SPIR-V (runtime compiled) custom shaders: always defined, 1 when the backend stores texture rows
+        //bottom-up (OpenGL, OpenGLES), 0 otherwise (Vulkan, Direct3D11, Metal). Inserted on the line after #version
+        public const string TextureOriginDefineName = "YAK2D_TEXTURE_ROWS_BOTTOM_UP";
+
+        private static readonly byte[] VersionDirective = Encoding.ASCII.GetBytes("#version");
+
         private readonly IFrameworkMessenger _frameworkMessenger;
         private readonly ISystemComponents _systemComponents;
         private readonly IAssembly _applicationAssembly;
@@ -75,9 +82,97 @@ namespace Yak2D.Graphics
                 return null;
             }
 
-            return useSpirvCompile ? 
+            if (useSpirvCompile)
+            {
+                //SPIR-V path only: precompiled per-backend shader bytes reach CreateShader unmodified
+                shaderBytes = InsertTextureOriginDefine(shaderBytes, _systemComponents.Device.BackendType);
+            }
+
+            return useSpirvCompile ?
                       _systemComponents.Factory.CreateShaderCompileFromSpirv(new ShaderDescription(stage, shaderBytes, shaderFileInfo.EntryPointMethod, true)):
                       _systemComponents.Factory.CreateShader(new ShaderDescription(stage, shaderBytes, shaderFileInfo.EntryPointMethod, true));
+        }
+
+        //Inserts exactly one line, "#define YAK2D_TEXTURE_ROWS_BOTTOM_UP 1" (OpenGL, OpenGLES) or "... 0" (all other backends),
+        //directly after the first line starting with #version (leading spaces / tabs / UTF-8 BOM allowed), or as the first line if
+        //there is no #version line. Works on the raw bytes so every other byte of the source is unchanged
+        public static byte[] InsertTextureOriginDefine(byte[] glslSource, GraphicsApi backend)
+        {
+            if (glslSource == null)
+            {
+                return null;
+            }
+
+            var bottomUp = backend == GraphicsApi.OpenGL || backend == GraphicsApi.OpenGLES;
+            var defineText = string.Concat("#define ", TextureOriginDefineName, bottomUp ? " 1" : " 0");
+
+            var bomLength = HasUtf8Bom(glslSource) ? 3 : 0;
+
+            var lineStart = bomLength;
+            while (lineStart <= glslSource.Length)
+            {
+                var lineEnd = System.Array.IndexOf(glslSource, (byte)'\n', lineStart);
+
+                if (LineStartsWithVersionDirective(glslSource, lineStart))
+                {
+                    if (lineEnd < 0)
+                    {
+                        //#version is the final line with no line ending
+                        return Splice(glslSource, glslSource.Length, string.Concat("\n", defineText, "\n"));
+                    }
+
+                    var newLine = lineEnd > 0 && glslSource[lineEnd - 1] == (byte)'\r' ? "\r\n" : "\n";
+                    return Splice(glslSource, lineEnd + 1, string.Concat(defineText, newLine));
+                }
+
+                if (lineEnd < 0)
+                {
+                    break;
+                }
+
+                lineStart = lineEnd + 1;
+            }
+
+            return Splice(glslSource, bomLength, string.Concat(defineText, "\n"));
+        }
+
+        private static bool HasUtf8Bom(byte[] source)
+        {
+            return source.Length >= 3 && source[0] == 0xEF && source[1] == 0xBB && source[2] == 0xBF;
+        }
+
+        private static bool LineStartsWithVersionDirective(byte[] source, int lineStart)
+        {
+            var index = lineStart;
+            while (index < source.Length && (source[index] == (byte)' ' || source[index] == (byte)'\t'))
+            {
+                index++;
+            }
+
+            if (index + VersionDirective.Length > source.Length)
+            {
+                return false;
+            }
+
+            for (var n = 0; n < VersionDirective.Length; n++)
+            {
+                if (source[index + n] != VersionDirective[n])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static byte[] Splice(byte[] source, int position, string text)
+        {
+            var insert = Encoding.ASCII.GetBytes(text);
+            var result = new byte[source.Length + insert.Length];
+            System.Array.Copy(source, 0, result, 0, position);
+            System.Array.Copy(insert, 0, result, position, insert.Length);
+            System.Array.Copy(source, position, result, position + insert.Length, source.Length - position);
+            return result;
         }
 
         public ShaderFileInfo GetShaderFileInfo(string name, IDevice device, bool spirv)
