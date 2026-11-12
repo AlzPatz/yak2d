@@ -41,7 +41,7 @@ void main(void)
     FTexturingType = TexturingType;
 
     FTexCoord0 = vec2(TexCoord0.x, TexCoord0.y);
-    FTexCoord1 = vec2(TexCoord1.x, 1.0 - TexCoord1.y);
+    FTexCoord1 = vec2(TexCoord1.x, TexCoord1.y);
 
     FTex0Weight = TexWeight0;
 
