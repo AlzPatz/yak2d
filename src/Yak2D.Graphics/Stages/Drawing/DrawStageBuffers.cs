@@ -227,11 +227,49 @@ namespace Yak2D.Graphics
 
         private float CalculateProcessedDepth(ref float depth, ref int layer)
         {
+            if (layer >= _maxNumberOfLayersForDepthScaling)
+            {
+                GrowMaxNumberOfLayersToFit(layer);
+            }
+
             //Depths are 1.0 = Back, 0.0 = Front. Layers however are 0-> Back to Front
             var layerStartFactor = 1.0f * layer * _layerDepthDelta;
             var layerStart = 1.0f - layerStartFactor;
             return layerStart - ((1.0f - depth) * _layerDepthDelta);
         }
+
+        //Grows the depth scaling max so that 'layer' maps inside the 0..1 clip range (a layer >= max would give z < 0 and be clipped, silently dropping the draw)
+        //The max is doubled until it exceeds the layer, rather than set straight to layer + 1:
+        // - each growth walks the whole staging array and uploads the whole vertex buffer (ReBaseDepthDataAndUploadToGpu),
+        //   so an app ramping through layers 10, 11, 12... pays O(log L) growths rather than one per new layer
+        // - the rebase ratio previousMax / currentMax is always a power of two (0.5 per doubling), which is exact in binary floating point,
+        //   so rebased depths match freshly computed ones without drift across repeated growths (ratios like 10/11, 11/12... would not)
+        //Negative layers never trigger growth (the condition is layer >= max) and keep their existing behaviour:
+        // - with validate = true, DrawQueue.AddIfValid rejects them ("Add draw request failed: a negative layer number is not valid")
+        // - with the default validate = false they are queued, and CalculateProcessedDepth gives z >= 1 (exactly 1.0 only for layer -1 at depth 0),
+        //   i.e. at or behind the far clip plane, so they are not drawn. The rebase only clamps values below 0, so z >= 1 stays >= 1 after a growth
+        private void GrowMaxNumberOfLayersToFit(int layer)
+        {
+            var newMax = _maxNumberOfLayersForDepthScaling < 1 ? 1 : _maxNumberOfLayersForDepthScaling;
+
+            while (newMax <= layer)
+            {
+                if (newMax > int.MaxValue / 2)
+                {
+                    newMax = int.MaxValue;
+                    break;
+                }
+                newMax *= 2;
+            }
+
+            if (newMax != _maxNumberOfLayersForDepthScaling)
+            {
+                ChangeMaxNumberOfLayers(newMax);
+            }
+        }
+
+        //Test seam only (exposed to Yak2D.Tests via InternalsVisibleTo)
+        internal float ReturnStagedVertexDepth(int index) => _verts[index].Position.Z;
 
         private void CopyAVertexToStagingArray(ref int index,
                             ref bool isWorld,
